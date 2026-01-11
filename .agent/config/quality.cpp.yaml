@@ -1,0 +1,43 @@
+# C++ Quality Profile
+# NOTE:
+# - Default commands use CMake.
+# - {module}: Subdirectory/Module name.
+# - {feature}: Feature filename.
+
+language: cpp
+version: "C++17"
+
+source:
+  extensions: [".cpp", ".hpp", ".h"]
+  structure: |
+    src/
+    ├── {module}/
+    │   ├── {feature}.cpp
+    │   └── {feature}.hpp
+    └── main.cpp
+    include/
+    └── {module}/
+        └── {feature}.h
+
+test:
+  extensions: [".cpp"]
+  structure: |
+    tests/
+    ├── unit/{module}/test_{function}.cpp
+    └── integration/test_{module}.cpp
+
+commands:
+  build: "cmake -B build && cmake --build build"
+  test: "ctest --test-dir build --output-on-failure"
+  lint: "clang-tidy src/**/*.cpp"
+  typecheck: null  # C++ is statically typed
+  security: "cppcheck --enable=all --error-exitcode=1 src/"
+
+dependencies:
+  install: "cmake -B build"
+
+style:
+  guide: "Google C++ Style"
+  linter: "clang-tidy"
+  type_annotations: "N/A (static typing)"
+  docstrings: "Doxygen comments required"

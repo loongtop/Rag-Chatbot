@@ -1,0 +1,149 @@
+# =========================================================================
+# Project Charter Template
+# Charter Agent Framework v0.3.0
+# =========================================================================
+# 使用方法:
+# 1. 复制此文件，重命名为 [项目名].charter.yaml
+# 2. 填写每个板块的占位符
+# 3. 删除不需要的注释
+# =========================================================================
+
+# 1. 项目概况 (Overview)
+# -------------------------------------------------------------------------
+meta:
+  id: ""           # 项目唯一编号 (格式: PRJ-YYYYMMDD-XXX)
+  name: "project-name"  # 项目名称 (英文, 用于 repo name)
+  owner: ""        # 项目发起人/验收人
+  version: "1.0"   # 任务书版本号
+
+# 2. 核心目标 (Core Objectives)
+# -------------------------------------------------------------------------
+objective:
+  problems:        # 要解决的核心痛点 (1-3个)
+    - ""
+  business_goals:  # 对应的商业价值 (可量化)
+    - ""
+
+# 3. 干系人 (Stakeholders)
+# -------------------------------------------------------------------------
+stakeholders:
+  users:           # 最终用户是谁? 他们的特征?
+    - ""
+
+# 4. 项目范围 (Scope)
+# -------------------------------------------------------------------------
+scope:
+  must_have:       # 本版本必须做
+    - ""
+  out_of_scope:    # 本版本明确不做
+    - ""
+
+# 5. 关键指标 (Metrics)
+# -------------------------------------------------------------------------
+metrics:
+  performance:     # 性能指标 (并发/延时)
+    - ""
+  security:        # 安全指标 (合规/认证)
+    - ""
+  stability:       # 稳定性 (可用性)
+    - ""
+  usability:       # 易用性 (学习成本)
+    - ""
+
+# 6. 约束与依赖 (Constraints & Dependencies)
+# -------------------------------------------------------------------------
+constraints:
+  resource:
+    budget: ""     # 预算上限
+    timeline: ""   # 交付截止日期
+  technology_boundary:
+    allowed: []    # 强制使用的技术
+    forbidden: []  # 禁止使用的技术
+
+dependencies:
+  external_systems: # 依赖的外部系统
+    - ""
+  resources:        # 依赖的外部资源
+    - ""
+
+# 7. 风险 (Risks)
+# -------------------------------------------------------------------------
+risks:
+  - ""             # 已知风险及应对
+
+# 8. 交付物 (Deliverables)
+# -------------------------------------------------------------------------
+deliverables:
+  mandatory:
+    - "可运行软件"
+    - "源代码"
+    - "测试报告"
+
+# 9. 环境配置 (Environments)
+# -------------------------------------------------------------------------
+environments:
+  dev:
+    database: "sqlite"           # 开发环境数据库
+    api_url: "http://localhost:8000"
+    logging_level: "DEBUG"
+    cache_enabled: false
+  
+  staging:
+    database: "postgresql"       # 测试环境数据库
+    api_url: "https://staging.example.com"
+    logging_level: "INFO"
+    cache_enabled: true
+  
+  production:
+    database: "postgresql-ha"    # 生产环境（高可用）
+    api_url: "https://api.example.com"
+    logging_level: "ERROR"
+    cache_enabled: true
+
+# 10. 质量要求 (Quality Requirements)
+# -------------------------------------------------------------------------
+quality_requirements:
+  code:
+    test_coverage: "95%"         # 测试覆盖率要求
+    type_coverage: "100%"        # 类型覆盖率（动态语言：类型注解；静态类型语言：可填 "N/A"）
+    complexity_limit: 10         # 圈复杂度上限
+    documentation: "required"    # 文档要求
+  
+  performance:
+    response_time_p95: "200ms"   # 95分位响应时间
+    throughput: "1000rps"        # 吞吐量要求
+    memory_limit: "512MB"        # 内存限制
+  
+  security:
+    vulnerability_scan: "required"
+    dependency_audit: "required"
+    secrets_detection: "required"
+
+# 11. 语言配置 (Language Configuration)
+# -------------------------------------------------------------------------
+# 单语言项目使用 language_profile
+language_profile: python  # python | java | cpp | swift
+# NOTE: Check .agent/config/quality.{profile}.yaml for available placeholders (e.g., {scheme})
+
+
+# 多语言/混合项目使用 components（覆盖 language_profile）
+# components:
+#   - name: "api-server"
+#     language_profile: python
+#     path: "services/api"
+#   - name: "core-engine"
+#     language_profile: cpp
+#     path: "libs/core"
+#   - name: "android-app"
+#     language_profile: java
+#     path: "apps/android"
+
+# 12. 冻结状态 (Freeze Status)
+# -------------------------------------------------------------------------
+# 当 Charter 完成讨论并确认后，使用 /charter-freeze 工作流锁定
+# 锁定后，所有 Agent 只能引用，不得修改 Charter 内容
+freeze:
+  frozen: false           # 设为 true 后，禁止修改任何 Charter 内容
+  checksum: ""            # SHA-256 校验和，由 /charter-freeze 自动填充
+  frozen_at: ""           # 冻结时间戳 (ISO 8601)
+  frozen_by: ""           # 冻结操作人

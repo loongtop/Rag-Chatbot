@@ -1,0 +1,40 @@
+# Java Quality Profile
+# NOTE:
+# - Default commands use Maven (mvn). If using Gradle, replace with `./gradlew` equivalents.
+# - {package}: Your source package path (e.g., com/example/project).
+# - {Feature}: Feature class name.
+
+language: java
+version: "17+"
+
+source:
+  extensions: [".java"]
+  structure: |
+    src/main/java/
+    └── {package}/
+        ├── {Feature}.java
+        └── utils/
+
+test:
+  extensions: [".java"]
+  structure: |
+    src/test/java/
+    └── {package}/
+        ├── {Feature}Test.java
+        └── integration/
+
+commands:
+  test: "mvn test jacoco:report -Djacoco.min.coverage={MinCoverage}"
+  lint: "mvn checkstyle:check"
+  build: "mvn clean package -DskipTests"
+  typecheck: null  # Java is statically typed (javac handles this during build)
+  security: "mvn dependency-check:check"
+
+dependencies:
+  install: "mvn dependency:resolve"
+
+style:
+  guide: "Google Java Style"
+  linter: "checkstyle"
+  type_annotations: "N/A (static typing)"
+  docstrings: "Javadoc required"

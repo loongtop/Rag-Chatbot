@@ -1,0 +1,39 @@
+# Swift Quality Profile
+# NOTE:
+# - `xcodebuild` scheme/destination vary by project; treat `{scheme}` and `{destination}` as placeholders.
+# - Typical destinations:
+#   - iOS Simulator: `platform=iOS Simulator,name=<Any iPhone Simulator>`
+#   - watchOS Simulator: `platform=watchOS Simulator,name=<Any Apple Watch Simulator>`
+#   - macOS: `platform=macOS`
+language: swift
+version: "5.9+"
+
+source:
+  extensions: [".swift"]
+  structure: |
+    {ProjectName}/
+    ├── {TargetName}/                 # iOS/macOS app target
+    ├── {TargetName}Watch/ (optional) # watchOS target
+    └── Shared/ (optional)
+
+test:
+  extensions: [".swift"]
+  structure: |
+    {TargetName}Tests/
+    └── {Feature}Tests.swift
+
+commands:
+  test: "xcodebuild test -scheme {scheme} -destination '{destination}'"
+  lint: "swiftlint lint --strict"
+  typecheck: null  # Swift is statically typed (typecheck is part of build)
+  security: "gitleaks detect --source . --no-git"
+  build: "xcodebuild clean build -scheme {scheme} -destination '{destination}'"
+  
+dependencies:
+  install: "brew install swiftlint gitleaks"
+
+style:
+  guide: "Swift API Design Guidelines"
+  linter: "SwiftLint"
+  type_annotations: inferred
+  docstrings: public_interfaces

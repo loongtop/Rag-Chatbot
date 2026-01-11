@@ -1,0 +1,37 @@
+# Python Quality Profile
+language: python
+version: "3.10+"
+
+source:
+  extensions: [".py"]
+  structure: |
+    src/
+    ├── {module}/
+    │   ├── __init__.py
+    │   ├── {feature}.py
+    │   └── utils.py
+    └── main.py
+
+test:
+  extensions: [".py"]
+  structure: |
+    tests/
+    ├── unit/{module}/test_{function}.py
+    ├── integration/test_{module}_integration.py
+    ├── conftest.py
+    └── pytest.ini
+
+commands:
+  test: "python -m pytest --cov=src --cov-report=term-missing --cov-fail-under=95"
+  lint: "ruff check src tests"
+  typecheck: "mypy src"
+  security: "bandit -r src"
+
+dependencies:
+  install: "pip install pytest pytest-cov ruff mypy bandit"
+
+style:
+  guide: "PEP 8"
+  linter: "ruff"
+  type_annotations: required
+  docstrings: required

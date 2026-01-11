@@ -1,0 +1,51 @@
+---
+description: Freeze a charter to prevent requirement drift
+---
+
+# Charter Freeze Workflow
+
+锁定 Charter 文件，防止后续流程中的需求漂移。
+
+## 使用场景
+
+当 charter.yaml 经过充分讨论并确认后，执行此工作流锁定 Charter。
+
+## 执行步骤
+
+### 1. 验证 Charter 完整性
+
+// turbo
+```bash
+grep -E "^meta:|^objective:|^scope:|^metrics:" charter.yaml
+```
+
+### 2. 生成校验和
+
+// turbo
+```bash
+sed '/^freeze:/,/^[a-z]/d' charter.yaml | shasum -a 256 | cut -d' ' -f1
+```
+
+### 3. 更新冻结状态
+
+修改 charter.yaml 中的 freeze 部分：
+```yaml
+freeze:
+  frozen: true
+  checksum: "{上一步生成的 checksum}"
+  frozen_at: "{当前 ISO 8601 时间戳}"
+  frozen_by: "{执行者}"
+```
+
+### 4. 验证冻结
+
+// turbo
+```bash
+grep -A4 "^freeze:" charter.yaml
+```
+
+## 注意事项
+
+- 冻结后如需修改 Charter，使用 `/charter-unfreeze` 解冻
+- 所有 Agent 在执行时应检查 `frozen: true`，若已冻结则禁止修改 Charter
+- 建议在 L1 分析开始前完成冻结

@@ -1,0 +1,78 @@
+# Quality Standards Configuration (Legacy)
+# 质量标准配置文件（历史保留）
+#
+# NOTE:
+# - This file is kept for backward compatibility and is Python-oriented.
+# - New projects should use language profiles selected via `charter.yaml`:
+#   - `.agent/config/quality.python.yaml`
+#   - `.agent/config/quality.cpp.yaml`
+#   - `.agent/config/quality.java.yaml`
+# - For mixed/monorepo projects, define `components` in `charter.yaml` and run checks per component.
+
+version: "0.1"
+
+# 代码质量要求
+code_quality:
+  test_coverage:
+    minimum: 95
+    target: 100
+    
+  complexity:
+    max_cyclomatic: 10
+    max_cognitive: 15
+    max_function_lines: 50
+    max_file_lines: 500
+    
+  type_coverage: 100
+  
+  documentation:
+    docstrings: required
+    examples: recommended
+
+# 质量检查工具
+tools:
+  testing:
+    - name: pytest
+      command: "pytest --cov=src --cov-fail-under=95"
+      required: true
+      
+  linting:
+    - name: ruff
+      command: "ruff check src tests"
+      required: true
+      
+  type_checking:
+    - name: mypy
+      command: "mypy src"
+      required: true
+      
+  security:
+    - name: bandit
+      command: "bandit -r src"
+      required: true
+    - name: safety
+      command: "safety check"
+      required: false
+
+# 测试类型要求
+test_requirements:
+  functional: 2      # 最少 2 个功能测试
+  boundary: 4        # 最少 4 个边界测试
+  exception: 3       # 最少 3 个异常测试
+  performance: 1     # 最少 1 个性能测试
+
+# 审查清单
+review_checklist:
+  code_quality:
+    - "复杂度 ≤ 10"
+    - "无重复代码 (DRY)"
+    - "命名清晰"
+    - "单一职责 (SRP)"
+  security:
+    - "无硬编码密钥"
+    - "输入验证完整"
+    - "SQL注入防护"
+  performance:
+    - "无明显瓶颈"
+    - "适当缓存"
+    - "查询优化"

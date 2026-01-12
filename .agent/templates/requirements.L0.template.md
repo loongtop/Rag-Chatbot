@@ -4,7 +4,6 @@ owner: architect
 layer: L0
 parent: charter.yaml
 source_checksum: "{checksum}"
-template_version: "v2.0"
 profile: "{profile}"
 ---
 

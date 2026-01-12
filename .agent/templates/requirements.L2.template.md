@@ -4,7 +4,6 @@ owner: architect
 layer: L2
 parent: docs/L1/{feature}/requirements.md
 source_checksum: "{checksum}"
-template_version: "v2.0"
 profile: "{profile}"
 feature: "{feature_name}"
 module: "{module_name}"

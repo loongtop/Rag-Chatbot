@@ -4,7 +4,6 @@ owner: architect
 layer: L0
 parent: charter.yaml
 source_checksum: "9bf2a6cdf4c711958850ff063d4702fdb071581b3bcdbb57e88c43b5413cef97"
-template_version: "v2.0"
 profile: "rag-web"
 ---
 

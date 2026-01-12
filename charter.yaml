@@ -40,20 +40,23 @@ scope:
   must_have:
     - "[SCOPE-MH-001] 嵌入式 Chatbot Widget：可集成到现有产品网站（提供最小集成示例）"
     - "[SCOPE-MH-002] 产品数据导入与查询：从 JSON 文件加载约 600 SKU；支持后台上传/替换与基础检索"
-    - "[SCOPE-MH-003] 知识库导入与索引：后台上传文档并写入 PostgreSQL + pgvector；支持重建索引与状态查看,还有排序功能"
+    - "[SCOPE-MH-003] 知识库导入与索引：后台上传文档并写入 PostgreSQL + pgvector；支持重建索引与状态查看；支持检索结果排序/重排"
     - "[SCOPE-MH-004] RAG 问答：回答默认附带来源引用（文档/产品字段）；无足够依据时优先澄清或拒答"
-    - "[SCOPE-MH-010] LLM Provider 可配置切换：支持在线 OpenAI-Compatible API（如 ChatGPT/DeepSeek）与本地 Ollama 两种模式"
     - "[SCOPE-MH-005] 产品推荐：基于用户需求输出 Top-N（默认 3）SKU，包含推荐理由与依据来源"
     - "[SCOPE-MH-006] 产品比较：支持 2–4 个 SKU，输出结构化对比（表格/卡片），字段可配置"
     - "[SCOPE-MH-007] 上下文感知：Widget 可传入当前页面 productId/skuId/url，后端用于检索与排序"
     - "[SCOPE-MH-008] 对话历史管理：支持多轮对话；记录引用、错误与 token 用量（用于成本与质量分析）"
     - "[SCOPE-MH-009] 后台管理 UI：产品 JSON 管理、文档上传、索引构建/状态、操作日志"
+    - "[SCOPE-MH-010] LLM Provider 可配置切换：支持在线 OpenAI-Compatible API（如 ChatGPT/DeepSeek）与本地 Ollama 两种模式"
+    - "[SCOPE-MH-011] 人工/AI 入口切换：用户可在输入界面选择“人工”或“AI”；默认使用 AI；选择“人工”时将对话转接至后台人工队列/工作台处理"
+    - "[SCOPE-MH-012] 语音交互：Widget 支持语音输入（STT）与语音输出（TTS）；STT/TTS Provider 可配置"
+    - "[SCOPE-MH-013] 多语言支持：Widget 与后台 UI 支持中文/英文；用户可选择输出语言（默认中文）"
+    - "[SCOPE-MH-014] 文件/图片输入：Widget 支持用户上传文件或图片作为对话输入；系统提取内容（文档解析/OCR/视觉）用于回答，并对类型/大小做限制"
+    - "[SCOPE-MH-015] 邮箱登录（验证码）：Widget 支持邮箱验证码登录/验证；登录后可将对话与浏览行为关联到用户（用于后台分析）；登录后解锁“寻价”与“联系人工客服”功能"
   out_of_scope:
-    - "[SCOPE-OOS-001] 用户身份认证（前台端使用现有网站认证系统，本项目不开发独立登录）"
+    - "[SCOPE-OOS-001] 不做完整认证/账号体系：不支持密码登录、第三方 OAuth/SSO、多因素认证、复杂权限管理（仅提供邮箱验证码登录作为最小能力）"
     - "[SCOPE-OOS-002] 订单处理和支付功能"
-    - "[SCOPE-OOS-003] 多语言支持（V1.0 仅支持中文）"
-    - "[SCOPE-OOS-004] 语音交互"
-    - "[SCOPE-OOS-005] 知识库自动爬取/自动同步（V1.0 仅支持手动上传/替换）"
+    - "[SCOPE-OOS-005] 知识库自动爬取/自动同步（V0.1 仅支持手动上传/替换）"
     - "[SCOPE-OOS-006] 自建 LLM 训练"
 
 # 5. 关键指标 (Metrics)
@@ -90,21 +93,27 @@ constraints:
       - "Redis"
       - "OpenAI API / Compatible LLM"
       - "Ollama（本地大模型运行时）"
+      - "STT/TTS Provider（语音能力，在线或本地）"
+      - "OCR/视觉/文档解析能力（文件/图片输入，在线或本地）"
+      - "SMTP/Email Provider（邮箱验证码登录）"
     forbidden:
       - "自建 LLM 训练"
-      - "Pinecone（V1.0 统一使用 pgvector）"
+      - "Pinecone（v0.1 统一使用 pgvector）"
       - "私有化部署专有数据库"
 
 dependencies:
   external_systems:
     - "现有产品网站（提供嵌入入口，并向 Widget 提供当前页面上下文：skuId/productId/url）"
-    - "（可选）用户认证系统（用于前台端登录态识别；方案 TBD）"
+    - "（可选）现有网站登录态/用户标识注入（无需实现 SSO，仅用于识别已登录用户；方案 TBD）"
   resources:
     - "产品数据 JSON（约 600 SKU；见 product_data_contract）"
     - "产品文档、FAQ、说明书等知识库原始资料（手动上传）"
     - "PostgreSQL（启用 pgvector 扩展）"
     - "在线 LLM：OpenAI-Compatible API 密钥（Provider/Model TBD）"
     - "本地 LLM：Ollama 服务与模型文件（模型选择 TBD）"
+    - "语音能力：STT/TTS Provider（在线或本地，方案 TBD）"
+    - "文件/图片输入：存储与内容提取能力（文档解析/OCR/视觉，方案 TBD）"
+    - "邮箱登录：邮件发送/验证码服务（SMTP/Provider TBD）"
 
 product_data_contract:
   source: "json_file"
@@ -136,6 +145,12 @@ risks:
   - "[RISK-003] 产品知识过期导致误导 - 建立知识库版本管理与有效期提示；回答附带引用与更新时间（TBD）"
   - "[RISK-004] Prompt Injection/数据外泄风险 - 输入输出过滤、引用转义、最小权限、审计日志"
   - "[RISK-005] 高并发场景下性能下降 - 实施缓存策略、异步处理与连接池优化"
+  - "[RISK-006] 用户上传文件/图片存在安全与合规风险（恶意内容/隐私）- 类型与大小限制、内容扫描、脱敏与保留期策略（TBD）"
+  - "[RISK-007] 语音/多语言能力引入额外延迟与成本 - 提供开关、缓存与降级策略（TBD）"
+  - "[RISK-008] 多语言检索/回答质量不稳定 - 选择支持中英的模型/Embedding，并建立评测集与回归测试（TBD）"
+  - "[RISK-009] 邮箱验证码登录可能被滥用（撞库/刷码/垃圾邮件）与产生隐私合规风险 - 频控、验证码策略、审计日志、保留期与告知机制（TBD）"
+  - "[RISK-010] 人工客服转接可能出现无人接待/响应慢 - 定义 SLA、排队策略、离线收集联系方式与回退 AI 策略（TBD）"
+  - "[RISK-011] 寻价与线索数据涉及隐私与合规（PII/商业敏感）- 最小化收集、脱敏、访问控制与留存策略（TBD）"
 
 # 8. 交付物 (Deliverables)
 # -------------------------------------------------------------------------
@@ -143,7 +158,7 @@ deliverables:
   mandatory:
     - "[DELIV-001] 可运行的 Chatbot 后端 API 服务（含 RAG、推荐、对比）"
     - "[DELIV-002] 可嵌入的前端 Widget 组件（含集成示例）"
-    - "[DELIV-003] 后台管理 UI（产品 JSON 管理、文档上传、索引构建/状态、日志）"
+    - "[DELIV-003] 后台管理 UI（产品 JSON 管理、文档上传、索引构建/状态、日志、人工客服转接处理、寻价/线索管理）"
     - "[DELIV-004] 知识库索引构建能力（可通过后台触发，或提供等价 CLI/任务）"
     - "[DELIV-005] 部署文档和集成指南"
     - "[DELIV-006] 源代码"
@@ -186,7 +201,7 @@ quality_requirements:
     documentation: "required"
 
   performance:
-    response_time_p95: "2000ms"
+    response_time_p95: "1500ms"
     throughput: "100rps"
     memory_limit: "1GB"
 
@@ -209,7 +224,7 @@ components:
   - name: "admin-dashboard"
     language_profile: typescript
     path: "apps/admin"
-    description: "知识库与产品数据管理后台"
+    description: "知识库/产品数据/人工客服/寻价线索管理后台"
 
 # 12. 其他约定（可选）(Optional Conventions)
 # -------------------------------------------------------------------------
@@ -226,6 +241,12 @@ acceptance_criteria:
   - "[ACC-005] Widget 提供最小集成示例，并可把 `skuId/productId/url` 传给后端用于上下文"
   - "[ACC-006] 满足本 charter 的关键指标与质量门禁（可用性/性能/安全）或在测试报告中说明偏差原因"
   - "[ACC-007] 可通过配置在在线 LLM 与本地 Ollama 两种模式间切换，并完成基础对话/RAG 流程"
+  - "[ACC-008] Widget 默认使用 AI 对话；用户选择“人工”后，对话可转接到后台人工处理入口（转接通道/工作台形态 TBD）"
+  - "[ACC-009] 语音输入/输出可用（STT/TTS 可配置），并可驱动同一对话/RAG 流程"
+  - "[ACC-010] 中文/英文模式可用（UI 与回答），并确保引用/推荐/对比输出与选择语言一致"
+  - "[ACC-011] Widget 支持文件/图片上传并提取内容参与回答；失败时给出清晰错误提示"
+  - "[ACC-012] 邮箱验证码登录可用；登录后可触发“寻价”与“联系人工客服”入口，并可在后台按用户维度查看关联数据（合规细节 TBD）"
+  - "[ACC-013] 登录用户可提交“寻价”请求并形成可追踪记录（在后台可查看/处理/导出；具体字段与流程 TBD）"
 
 open_questions:
   - "[TBD-001] LLM Provider/Model 选择（OpenAI/Claude/兼容方案）与成本上限分配（TBD）"
@@ -234,6 +255,12 @@ open_questions:
   - "[TBD-004] 对话与日志留存策略：数据保留期、脱敏范围、合规要求（TBD）"
   - "[TBD-005] 推荐/比较的“字段配置”来源：固定配置/后台可配/按类目不同（TBD）"
   - "[TBD-006] Widget 资源体积与加载口径（gzip、缓存策略、CDN）（TBD）"
+  - "[TBD-007] STT/TTS Provider 选择与部署方式（在线/本地）及成本/延迟预算（TBD）"
+  - "[TBD-008] 文件/图片上传支持格式、大小上限、存储方式与数据保留期（合规）（TBD）"
+  - "[TBD-009] 多语言策略：语言检测/选择规则、知识库中英混合或翻译层、评测口径（TBD）"
+  - "[TBD-010] 邮箱登录方案：验证码策略、发送渠道（SMTP/第三方）、防刷机制、用户数据与行为分析的合规边界（TBD）"
+  - "[TBD-011] 人工客服转接方案：工作台形态、排队/通知机制、响应 SLA、离线处理与回退策略（TBD）"
+  - "[TBD-012] 寻价功能定义：收集字段、触发条件、是否对接 CRM/工单、处理流程与权限（TBD）"
 
 traceability:
   mode: "strict"            # strict | assist | off
@@ -242,7 +269,7 @@ traceability:
 # 13. 冻结状态 (Freeze Status)
 # -------------------------------------------------------------------------
 freeze:
-  frozen: false
-  checksum: ""
-  frozen_at: ""
-  frozen_by: ""
+  frozen: true
+  checksum: "9bf2a6cdf4c711958850ff063d4702fdb071581b3bcdbb57e88c43b5413cef97"
+  frozen_at: "2026-01-11T22:04:48-05:00"
+  frozen_by: "leocui"

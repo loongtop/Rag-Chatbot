@@ -10,7 +10,7 @@
 #
 # Version Naming Convention:
 #   - CAF version: v0.4.0 (framework release)
-#   - schema_version: v1.0 (this schema)
+#   - schema_version: v0.4.0 (this schema)
 #
 # =============================================================================
 
@@ -32,9 +32,9 @@ properties:
   # ---------------------------------------------------------------------------
   schema_version:
     type: string
-    pattern: "^v\\d+\\.\\d+$"
-    description: "Registry schema version (e.g., v1.0). NOT the CAF or template version."
-    examples: ["v1.0"]
+    pattern: "^v\\d+\\.\\d+\\.\\d+$"
+    description: "Registry schema version (e.g., v0.4.0). Matches CAF version."
+    examples: ["v0.4.0"]
 
   layer:
     type: string

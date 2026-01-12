@@ -31,7 +31,7 @@ function: "{function_name}"
 # Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
 # =============================================================================
 
-schema_version: "v1.0"
+schema_version: "v0.4.0"
 layer: L3
 parent: "docs/L2/{feature}/{module}/requirements.md"
 source_checksum: "{checksum}"

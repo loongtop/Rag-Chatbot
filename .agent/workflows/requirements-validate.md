@@ -8,7 +8,7 @@ Validates a requirements document against the Registry Schema rules, ensuring 10
 
 ## Prerequisites
 
-- Requirements document contains `requirements-registry` block with `schema_version: "v1.0"`
+- Requirements document contains `requirements-registry` block with `schema_version: "v0.4.0"`
 - Registry block is populated
 - For L0: `docs/L0/split-report.md` must exist
 - For L1+: Parent layer requirements document must exist
@@ -198,7 +198,7 @@ When `--fix` is specified:
 
 | Issue | Auto-Fix Action |
 |-------|-----------------|
-| Missing `schema_version` | Add `schema_version: "v1.0"` |
+| Missing `schema_version` | Add `schema_version: "v0.4.0"` |
 | Missing `status` on requirements | Add `status: draft` |
 | Missing `tbd_refs: []` | Add empty array |
 | Empty `acceptance[]` on P2 | No fix (allowed) |

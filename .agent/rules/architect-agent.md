@@ -35,7 +35,7 @@ trigger: always_on
 
 | 层级 | 名称 | 输出产物 | 模板 |
 |------|------|----------|------|
-| L0 | Charter | requirements.md, subtasks.md | `requirements.template.md` |
+| L0 | Charter | requirements.md, subtasks.md | `requirements.L0.template.md` |
 | L1 | Features | requirements.md, interfaces.md, subtasks.md | `requirements.L1.template.md` |
 | L2 | Modules | requirements.md, interfaces.md, subtasks.md, **execution-tracker.md** | `requirements.L2.template.md` |
 | L3 | Functions | requirements.md (叶子节点，包含接口+测试规格) | `requirements.L3.template.md` |

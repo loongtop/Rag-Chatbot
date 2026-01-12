@@ -2,90 +2,174 @@
 status: draft
 owner: architect
 layer: L2
-parent: docs/L1/{parent_feature}/requirements.md
+parent: docs/L1/{feature}/requirements.md
+source_checksum: "{checksum}"
+template_version: "v2.0"
+profile: "{profile}"
+feature: "{feature_name}"
+module: "{module_name}"
 ---
 
 # L2 Requirements: {module_name}
 
-> 本模块需求必须可追溯到上游 L1 Feature（段落/句子级映射）。任何接口必须可追溯到至少一条 REQ。
+> ⚠️ **Document Structure (Template v2.0)**
+>
+> | Section | Type | Edit Policy |
+> |---------|------|-------------|
+> | `requirements-registry` block | Source | ✅ Editable |
+> | Body text | Generated | 🔒 Readonly |
+> | Appendices | Generated | 🔒 Readonly |
 
-## 0. Traceability（L1 → L2）
+---
 
-| L1 REQ-ID / Section | Covered By (L2 REQ-ID / Interface) | Status | Notes |
-|---------------------|-------------------------------------|--------|-------|
-| `REQ-L1-001` | `REQ-L2-001`, `interfaces.md#...` | ✅/❌ | |
+## — BEGIN REGISTRY —
 
-## 1. Module Overview (模块概述)
+```requirements-registry
+# =============================================================================
+# L2 Requirements Registry - Module Level
+# Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
+# =============================================================================
 
-简述此模块的核心职责和在系统中的位置。
+schema_version: "v1.0"
+layer: L2
+parent: "docs/L1/{feature}/requirements.md"
+source_checksum: "{checksum}"
+profile: "{profile}"
 
-## 2. Features (功能列表)
+# -----------------------------------------------------------------------------
+# Requirements (Module-level decomposition of L1)
+# -----------------------------------------------------------------------------
+requirements:
+  - id: REQ-L2-001
+    priority: P0
+    statement: "模块应当..."
+    sources:
+      - id: "REQ-L1-001"
+        path: "docs/L1/{feature}/requirements.md#REQ-L1-001"
+    acceptance:
+      - "验收条件1"
+    status: draft
+    section: functional
+    tbd_refs: []
+    derived: false
 
-### Feature 2.1: {feature_name}
-- **REQ-ID**: `REQ-L2-001`
-- **描述**: 功能说明
-- **优先级**: P0 / P1 / P2
-- **状态**: ⬜ 未开始 / 🟡 进行中 / ✅ 已完成
-- **Source**: `REQ-L1-001` / `docs/L1/...#...`
-- **验收标准**: 可验证条件...
+# -----------------------------------------------------------------------------
+# Interfaces (Module-level interface refinement)
+# -----------------------------------------------------------------------------
+interfaces:
+  - name: "{interface_name}"
+    type: API  # API | Event | Data | Internal
+    description: "模块接口描述（至少10个字符）"
+    sources:
+      - path: "docs/L1/{feature}/requirements.md#interface_name"
+    contract:
+      input: |
+        {
+          "field": "type"
+        }
+      output: |
+        {
+          "field": "type"
+        }
+      errors:
+        - code: "ERR_001"
+          description: "错误描述"
+    consumers:
+      - "{consumer_module}"
+    providers:
+      - "{provider_module}"
 
-### Feature 2.2: {feature_name}
-- **REQ-ID**: `REQ-L2-002`
-- **描述**: 功能说明
-- **优先级**: P0 / P1 / P2
-- **状态**: ⬜ 未开始 / 🟡 进行中 / ✅ 已完成
-- **Source**: `REQ-L1-xxx`
-- **验收标准**: 可验证条件...
+# -----------------------------------------------------------------------------
+# TBDs
+# -----------------------------------------------------------------------------
+tbds:
+  - id: TBD-L2-001
+    question: "待定问题"
+    sources:
+      - path: "docs/L1/{feature}/requirements.md#TBD-L1-001"
+    impact: L
+    owner: ""
+    target_layer: L3
+    status: open
+    related_reqs:
+      - REQ-L2-001
 
-## 3. Interfaces (接口定义)
-
-### 对外接口 (Public API)
-
+# -----------------------------------------------------------------------------
+# Exclusions
+# -----------------------------------------------------------------------------
+exclusions: []
 ```
-function_name(param1: Type, param2: Type) -> ReturnType
-    描述: 功能说明
-    参数: 参数说明
-    返回: 返回值说明
-    异常: 可能抛出的异常
-    关联需求: REQ-L2-00x
-```
 
-### 内部接口 (Internal)
+## — END REGISTRY —
 
-```
-_internal_function(param: Type) -> ReturnType
-```
+---
 
-## 4. Data Models (数据模型)
+<!-- GENERATED CONTENT BELOW - DO NOT EDIT MANUALLY -->
 
-```
-struct/class ModelName:
-    field1: Type  # 说明
-    field2: Type  # 说明
-```
+## 1. 模块概述
 
-## 5. Dependencies (依赖关系)
+### 1.1 模块职责
 
-### 外部依赖
-- 第三方库: [名称, 版本, 用途]
+{模块在 Feature 中的职责 - 从 Registry 自动生成}
 
-### 内部依赖
-- 模块: [描述依赖关系]
+_Source_: `docs/L1/{feature}/requirements.md#REQ-L1-0xx`  
+_Covered by_: `REQ-L2-001`
 
-## 6. Execution Tracker (执行追踪)
+### 1.2 依赖关系
 
-| 子任务 | 路径 | 状态 | 负责 Agent | 备注 |
-|--------|------|------|------------|------|
-| Subtask 1 | `docs/L3/...` | ⬜ | architect | |
-| Subtask 2 | `docs/L3/...` | ⬜ | architect | |
+{模块依赖 - 从 Registry interfaces[] 自动生成}
 
-## 7. Integration Points (集成点)
+---
 
-- 与 {其他模块} 的集成方式: [描述]
-- 集成测试策略: [描述]
+## 2. 功能需求
 
-## 8. Gate Check（门禁）
+{模块功能需求叙述}
 
-- [ ] 覆盖矩阵完整：相关 L1 内容已映射到 L2（或 N/A + 原因）
-- [ ] 100% L2 Feature/需求条目包含 `REQ-ID` + `Source`
-- [ ] 100% 对外接口关联至少 1 条 `REQ-L2-*`
+---
+
+## 3. 接口详细设计
+
+{接口详细定义 - 从 Registry interfaces[] 自动生成}
+
+---
+
+## 4. 数据模型
+
+{数据结构定义}
+
+---
+
+## 附录
+
+### 附录 A：需求表
+
+| REQ-ID | Priority | Statement | Sources | Acceptance | Status |
+|--------|----------|-----------|---------|------------|--------|
+| {从 Registry 渲染} | | | | | |
+
+### 附录 B：溯源矩阵（L1 → L2）
+
+| L1 Item | Covered By | Status | Notes |
+|---------|------------|--------|-------|
+| {从 Registry 渲染} | | | |
+
+### 附录 C：TBD/待定项
+
+| TBD-ID | Question | Sources | Impact | Owner | Target | Status |
+|--------|----------|---------|--------|-------|--------|--------|
+| {从 Registry 渲染} | | | | | | |
+
+### 附录 D：接口表
+
+| Name | Type | Input | Output | Errors | Consumers | Providers |
+|------|------|-------|--------|--------|-----------|-----------|
+| {从 Registry 渲染} | | | | | | |
+
+---
+
+## 门禁检查
+
+- [ ] Registry 所有条目有非空 `sources[]`
+- [ ] L1 需求 100% 覆盖
+- [ ] 接口 contract 完整（含 errors）
+- [ ] 无交叉引用错位

@@ -3,76 +3,171 @@ status: draft
 owner: architect
 layer: L1
 parent: docs/L0/requirements.md
+source_checksum: "{checksum}"
+template_version: "v2.0"
+profile: "{profile}"
+feature: "{feature_name}"
 ---
 
 # L1 Requirements: {feature_name}
 
-> 本 L1 Feature 必须可追溯到上游 L0 需求（逐句/逐条映射）。任何新增内容必须有来源，否则视为需求漂移。
+> ⚠️ **Document Structure (Template v2.0)**
+>
+> | Section | Type | Edit Policy |
+> |---------|------|-------------|
+> | `requirements-registry` block | Source | ✅ Editable |
+> | Body text | Generated | 🔒 Readonly |
+> | Appendices | Generated | 🔒 Readonly |
 
-## 0. Traceability（L0 → L1）
+---
 
-### 覆盖矩阵
+## — BEGIN REGISTRY —
 
-| L0 REQ-ID / Source | Covered By (L1 REQ-ID / Section) | Status | Notes |
-|--------------------|----------------------------------|--------|-------|
-| `REQ-L0-001` | `REQ-L1-001` | ✅/❌ | |
+```requirements-registry
+# =============================================================================
+# L1 Requirements Registry - Feature Level
+# Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
+# =============================================================================
 
-### 上游引用清单（可选）
+schema_version: "v1.0"
+layer: L1
+parent: "docs/L0/requirements.md"
+source_checksum: "{checksum}"
+profile: "{profile}"
 
-- Covered L0 Requirements: `REQ-L0-001`, `REQ-L0-002`
+# -----------------------------------------------------------------------------
+# Requirements (Feature-level decomposition of L0)
+# -----------------------------------------------------------------------------
+requirements:
+  - id: REQ-L1-001
+    priority: P0
+    statement: "Feature 应当..."
+    sources:
+      - id: "REQ-L0-001"
+        path: "docs/L0/requirements.md#REQ-L0-001"
+    acceptance:
+      - "验收条件1"
+    status: draft
+    section: functional
+    tbd_refs: []
+    derived: false
 
-## 1. Goals (目标)
+# -----------------------------------------------------------------------------
+# Interfaces (L1 introduces interface definitions)
+# -----------------------------------------------------------------------------
+interfaces:
+  - name: "{interface_name}"
+    type: API  # API | Event | Data | Internal
+    description: "接口描述（至少10个字符）"
+    sources:
+      - path: "docs/L0/requirements.md#REQ-L0-0xx"
+    contract:
+      input: "{input_schema}"
+      output: "{output_schema}"
+    consumers:
+      - "{module_name}"
+    providers:
+      - "{module_name}"
 
-明确此功能要实现的核心目标：
+# -----------------------------------------------------------------------------
+# TBDs
+# -----------------------------------------------------------------------------
+tbds:
+  - id: TBD-L1-001
+    question: "待定问题"
+    sources:
+      - path: "docs/L0/requirements.md#TBD-L0-001"
+    impact: M
+    owner: ""
+    target_layer: L2
+    status: open
+    related_reqs:
+      - REQ-L1-001
 
-- [ ] Goal 1: 描述
-- [ ] Goal 2: 描述
+# -----------------------------------------------------------------------------
+# Exclusions
+# -----------------------------------------------------------------------------
+exclusions: []
+```
 
-## 1.1 Feature Requirements（需求条目）
+## — END REGISTRY —
 
-| REQ-ID | Priority | Requirement | Source (L0) | Acceptance Criteria |
-|--------|----------|-------------|-------------|---------------------|
-| REQ-L1-001 | P0/P1/P2 | 本功能应当... | `REQ-L0-001` | ... |
+---
 
-## 2. Non-Goals (非目标)
+<!-- GENERATED CONTENT BELOW - DO NOT EDIT MANUALLY -->
 
-本版本明确不做的事项：
+## 1. Feature 概述
 
-- 非目标 1: 原因
-- 非目标 2: 原因
+### 1.1 功能定位
 
-## 3. Constraints (约束条件)
+{Feature 在系统中的定位 - 从 Registry 自动生成}
 
-- 技术约束: [描述]
-- 资源约束: [描述]
-- 时间约束: [描述]
+_Source_: `docs/L0/requirements.md#REQ-L0-0xx`  
+_Covered by_: `REQ-L1-001`
 
-## 4. Assumptions (假设)
+### 1.2 范围边界
 
-- 假设 1: [描述]
-- 假设 2: [描述]
+{Feature 的范围边界 - 从 Registry 自动生成}
 
-## 5. Risks (风险)
+---
 
-| 风险 | 概率 | 影响 | 缓解措施 |
-|------|------|------|----------|
-| 风险 1 | H/M/L | H/M/L | 措施 |
+## 2. 功能需求
 
-## 6. Success Criteria (成功标准)
+{Feature 功能需求叙述}
 
-- [ ] 标准 1: 可验证的条件
-- [ ] 标准 2: 可验证的条件
+详见附录 A。
 
-## 7. Dependencies (依赖)
+---
 
-### 上游依赖
-- 依赖于: {其他 L1 模块}
+## 3. 接口定义
 
-### 下游依赖
-- 被依赖于: {其他 L1 模块}
+{接口概述 - 从 Registry interfaces[] 自动生成}
 
-## 8. Gate Check（门禁）
+详见附录 D（接口表）。
 
-- [ ] 覆盖矩阵完整：相关 L0 需求逐条映射到 L1（或 N/A + 原因）
-- [ ] 100% L1 需求条目包含 `Source`（引用 L0 `REQ-ID` 或 `charter.yaml#...`）
-- [ ] 未引入无来源的新需求
+---
+
+## 4. 非功能需求
+
+### 4.1 性能
+{性能约束}
+
+### 4.2 安全
+{安全约束}
+
+---
+
+## 附录
+
+### 附录 A：需求表
+
+| REQ-ID | Priority | Statement | Sources | Acceptance | Status |
+|--------|----------|-----------|---------|------------|--------|
+| {从 Registry 渲染} | | | | | |
+
+### 附录 B：溯源矩阵（L0 → L1）
+
+| L0 Item | Covered By | Status | Notes |
+|---------|------------|--------|-------|
+| {从 Registry 渲染} | | | |
+
+### 附录 C：TBD/待定项
+
+| TBD-ID | Question | Sources | Impact | Owner | Target | Status |
+|--------|----------|---------|--------|-------|--------|--------|
+| {从 Registry 渲染} | | | | | | |
+
+### 附录 D：接口表
+
+| Name | Type | Description | Input | Output | Consumers | Providers |
+|------|------|-------------|-------|--------|-----------|-----------|
+| {从 Registry 渲染} | | | | | | |
+
+---
+
+## 门禁检查
+
+- [ ] Registry 所有条目有非空 `sources[]`
+- [ ] L0 需求 100% 覆盖（REQ / TBD / Exclusion）
+- [ ] 接口定义完整（有 contract）
+- [ ] 无交叉引用错位

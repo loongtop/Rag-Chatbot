@@ -15,34 +15,23 @@
 | `/charter-status` | Check project progress |
 | `/charter-quality` | Run quality gates |
 | `/requirements-split` | Create split-report.md + traceability matrix |
-| `/requirements-render` | **[v2]** Registry → body + appendices |
-| `/requirements-validate` | **[v2]** Coverage/traceability/acceptance gates |
+| `/requirements-render` | Registry → body + appendices |
+| `/requirements-validate` | Coverage/traceability/acceptance gates |
 
 ---
 
 ## Layer-Specific Templates
 
-### v2 Templates (Recommended - CAF v0.4.0+)
-
-> Use v2 when `template_version: "v2.0"` in frontmatter. Registry block is single source of truth.
-
-| Layer | Template | Key Contents |
-|-------|----------|--------------|
-| L0 | `requirements.L0.v2.template.md` | Registry (requirements/tbds/exclusions) + SRS body |
-| L1 | `requirements.L1.v2.template.md` | Registry + interfaces[] |
-| L2 | `requirements.L2.v2.template.md` | Registry + interfaces[] + module design |
-| L3 | `requirements.L3.v2.template.md` | Registry + Function Spec + Test Spec |
-
-### v1 Templates (Legacy)
+> Registry block is single source of truth. All templates use embedded Registry.
 
 | Layer | Template | Key Contents |
 |-------|----------|--------------|
 | Any | `split-report.template.md` | Splitability + Traceability matrix |
-| L0 | `requirements.template.md` | General requirements |
-| L1 | `requirements.L1.template.md` | Goals, Constraints, Risks |
-| L2 | `requirements.L2.template.md` | Features, Interfaces, Data Models |
+| L0 | `requirements.L0.template.md` | Registry (requirements/tbds/exclusions) + SRS body |
+| L1 | `requirements.L1.template.md` | Registry + interfaces[] |
+| L2 | `requirements.L2.template.md` | Registry + interfaces[] + module design |
 | L2 | `execution-tracker.template.md` | Progress tracking |
-| L3 | `requirements.L3.template.md` | Function Spec + Test Spec (TDD) |
+| L3 | `requirements.L3.template.md` | Registry + Function Spec + Test Spec |
 
 ---
 
@@ -69,7 +58,23 @@ status: draft | ready | in_progress | done
 owner: requirements-split | architect | designer | coder | tester | reviewer | integrator
 layer: L0 | L1 | L2 | L3
 parent: {parent_path}
+source_checksum: "{sha256}"
+profile: "{profile}"
 ---
+```
+
+---
+
+## Registry Block Structure
+
+```requirements-registry
+schema_version: "v1.0"
+layer: L0 | L1 | L2 | L3
+parent: "{parent_path}"
+requirements: [...]
+tbds: [...]
+exclusions: [...]
+interfaces: [...]  # L1/L2 only
 ```
 
 ---
@@ -101,11 +106,11 @@ Gate_Check:
 
 1. **Freeze First**: 在 L1 前执行 `/charter-freeze`
 2. **Single Module**: 每次只推进一个 Feature/Module
-3. **Use v2 Templates**: 新项目使用 `*.v2.template.md` + Registry 块
+3. **Use Templates**: 使用层级特定模板 + Registry 块
 4. **TDD Mode**: L3 先 Test Spec 后实现
 5. **Gate Check**: 每个模块完成后检查
 6. **Traceability First**: 先写 `split-report.md`，再写 requirements/interfaces（每条都要 Source）
-7. **Render + Validate**: v2 模板完成后执行 `/requirements-render` + `/requirements-validate`
+7. **Render + Validate**: 完成后执行 `/requirements-render` + `/requirements-validate`
 
 ---
 
@@ -114,5 +119,4 @@ Gate_Check:
 | Component | Version |
 |-----------|--------|
 | CAF | v0.4.0 |
-| template_version | v2.0 |
 | schema_version | v1.0 |

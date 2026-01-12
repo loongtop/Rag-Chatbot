@@ -40,10 +40,12 @@ Test Spec (TDD)
 
 | Layer | Name | Outputs | Template |
 |-------|------|---------|----------|
-| L0 | Charter | requirements.md, subtasks.md | `requirements.template.md` |
+| L0 | Charter | requirements.md, subtasks.md | `requirements.L0.template.md` |
 | L1 | Features | requirements.md, interfaces.md, subtasks.md | `requirements.L1.template.md` |
 | L2 | Modules | requirements.md, interfaces.md, **execution-tracker.md** | `requirements.L2.template.md` |
 | L3 | Functions | requirements.md (含 Function Spec + Test Spec) | `requirements.L3.template.md` |
+
+> **v0.4.0 必须**: 生成 requirements.md 后执行 `/requirements-render` + `/requirements-validate`
 
 ### Traceability Gate（推荐启用）
 

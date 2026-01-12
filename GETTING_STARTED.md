@@ -1,4 +1,4 @@
-# Charter Agent Framework v0.3.0 详细使用指南
+# Charter Agent Framework v0.4.0 详细使用指南
 
 本文档提供从零开始使用 Charter Agent Framework 实现软件的完整、详细步骤。
 
@@ -253,10 +253,12 @@ freeze:
 
 | 层级 | 名称 | 粒度 | 模板 |
 |------|------|------|------|
-| L0 | Charter | 整个项目 | `requirements.template.md` |
+| L0 | Charter | 整个项目 | `requirements.L0.template.md` |
 | L1 | Features | 功能模块 | `requirements.L1.template.md` |
 | L2 | Modules | 子模块 | `requirements.L2.template.md` |
 | L3 | Functions | 具体函数 | `requirements.L3.template.md` |
+
+> **v0.4.0**: 所有模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
 
 ### Step 5.2：L0 分解（Charter → Features）
 
@@ -266,9 +268,10 @@ freeze:
 /requirements-split source_path=charter.yaml target_dir=docs/L0
 
 请按 architect-agent 角色分析 charter.yaml。
-1. 在 docs/L0/ 创建 requirements.md（使用 requirements.template.md）
+1. 在 docs/L0/ 创建 requirements.md（使用 requirements.L0.template.md）
    - 每条需求必须有 REQ-ID + Source（可追溯到 charter.yaml）
 2. 在 docs/L0/ 创建 subtasks.md，列出 L1 功能模块
+3. 执行 /requirements-render L0 和 /requirements-validate L0
 ```
 
 **检查产出**：
@@ -477,6 +480,8 @@ Phase 2: Design ✅ → Code ✅ → Tests ✅
 | `/charter-status` | 随时 | 查看进度 |
 | `/charter-quality` | 每个模块完成后 | Gate 检查 |
 | `/requirements-split` | 每次层级迁移前 | 生成 split-report.md（溯源覆盖矩阵） |
+| `/requirements-render` | 生成 requirements.md 后 | 从 Registry 渲染正文+附录 |
+| `/requirements-validate` | 生成 requirements.md 后 | 覆盖率/溯源/可验收检查 |
 
 ---
 

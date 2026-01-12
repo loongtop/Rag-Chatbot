@@ -61,10 +61,12 @@ L3 阶段必须采用测试先行：
 | Layer | Template |
 |-------|----------|
 | Any | `split-report.template.md` |
-| L0 | `requirements.template.md` |
+| L0 | `requirements.L0.template.md` |
 | L1 | `requirements.L1.template.md` |
 | L2 | `requirements.L2.template.md` + `execution-tracker.template.md` |
 | L3 | `requirements.L3.template.md` |
+
+> **v0.4.0 必须**: 所有模板使用 Registry 块作为唯一事实源。生成后执行 `/requirements-render` + `/requirements-validate`。
 
 ---
 

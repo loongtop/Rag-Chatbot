@@ -3,10 +3,10 @@
 # Charter Agent Framework v0.4.0
 # =============================================================================
 #
-# Purpose: Define which SRS sections (from requirements_templates.md) are
+# Purpose: Define which SRS sections (from .agent/docs/srs-template.md) are
 # applicable for different project types. This avoids N/A noise in documents.
 #
-# Section Reference (requirements_templates.md):
+# Section Reference (.agent/docs/srs-template.md):
 #   §1:   Introduction
 #   §2:   Overall Description
 #   §3.1: External Interface Requirements

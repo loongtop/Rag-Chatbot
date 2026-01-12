@@ -124,7 +124,7 @@ _Covered by_: `REQ-L0-9xx` (Constraints)
 |------|--------------|------|
 | `charter.yaml` | `{checksum}` | 项目任务书（已冻结） |
 | `docs/L0/split-report.md` | - | Charter → L0 拆分报告 |
-| `requirements_templates.md` | - | SRS 模板参考 |
+| `.agent/docs/srs-template.md` | - | SRS 模板参考 |
 
 ### 1.5 文档概述
 

@@ -1,6 +1,8 @@
 # 软件需求说明书（SRS）通用模版
 **Software Requirements Specification Template**
 
+> 说明：本文件是 Charter Agent Framework v0.4.0 的 SRS 章节参考，用于 `.agent/config/srs-profiles.yaml` 的章节编号约定；不参与需求覆盖率/溯源门禁。
+
 ---
 
 ## 文档信息

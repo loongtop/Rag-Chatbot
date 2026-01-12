@@ -44,8 +44,19 @@ freeze:
 grep -A4 "^freeze:" charter.yaml
 ```
 
+### 5. （推荐）物理只读锁定（POSIX）
+
+在 macOS/Linux 等 POSIX 系统上，建议同步将文件设为只读，降低误改风险。
+
+// turbo
+```bash
+chmod a-w charter.yaml
+ls -l charter.yaml
+```
+
 ## 注意事项
 
 - 冻结后如需修改 Charter，使用 `/charter-unfreeze` 解冻
 - 所有 Agent 在执行时应检查 `frozen: true`，若已冻结则禁止修改 Charter
 - 建议在 L1 分析开始前完成冻结
+- `chmod` 是本地工作区保护手段，不是强安全机制；必要时可手动恢复写权限或用 `/charter-unfreeze`

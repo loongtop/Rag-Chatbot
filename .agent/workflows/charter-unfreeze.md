@@ -21,14 +21,24 @@ description: Unfreeze a charter to allow modifications
 grep -A4 "^freeze:" charter.yaml
 ```
 
-### 2. 验证解冻必要性
+### 2. （如已只读）恢复写权限（POSIX）
+
+如果之前执行过 `/charter-freeze` 的物理只读锁定，解冻前需要先恢复写权限。
+
+// turbo
+```bash
+chmod u+w charter.yaml
+ls -l charter.yaml
+```
+
+### 3. 验证解冻必要性
 
 在解冻前，请确认：
 - [ ] 确实需要修改 Charter 内容
 - [ ] 已评估对现有工作的影响
 - [ ] 已备份当前 charter.yaml
 
-### 3. 执行解冻
+### 4. 执行解冻
 
 修改 charter.yaml 中的 freeze 部分：
 ```yaml
@@ -39,11 +49,11 @@ freeze:
   frozen_by: ""
 ```
 
-### 4. 进行必要修改
+### 5. 进行必要修改
 
 修改 charter.yaml 的相关内容。
 
-### 5. 重新冻结
+### 6. 重新冻结
 
 修改完成后，执行 `/charter-freeze` 重新锁定。
 

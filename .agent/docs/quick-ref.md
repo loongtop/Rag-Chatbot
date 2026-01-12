@@ -10,8 +10,8 @@
 |---------|-------------|
 | `/charter-init` | Initialize new project |
 | `/charter-validate` | Validate charter.yaml |
-| `/charter-freeze` | Lock charter (before L1) |
-| `/charter-unfreeze` | Unlock for modifications |
+| `/charter-freeze` | Lock charter (before L1); recommended `chmod a-w charter.yaml` |
+| `/charter-unfreeze` | Unlock for modifications; if needed `chmod u+w charter.yaml` |
 | `/charter-status` | Check project progress |
 | `/charter-quality` | Run quality gates |
 | `/requirements-split` | Create split-report.md + traceability matrix |

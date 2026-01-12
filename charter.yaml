@@ -11,7 +11,7 @@ meta:
   id: "PRJ-20260111-001"
   name: "rag-chatbot"
   owner: "Product Team"
-  version: "1.0"
+  version: "v0.1"
   description: "嵌入式产品知识库 RAG Chatbot（推荐/对比/后台管理）"
 
 # 2. 核心目标 (Core Objectives)
@@ -40,8 +40,9 @@ scope:
   must_have:
     - "[SCOPE-MH-001] 嵌入式 Chatbot Widget：可集成到现有产品网站（提供最小集成示例）"
     - "[SCOPE-MH-002] 产品数据导入与查询：从 JSON 文件加载约 600 SKU；支持后台上传/替换与基础检索"
-    - "[SCOPE-MH-003] 知识库导入与索引：后台上传文档并写入 PostgreSQL + pgvector；支持重建索引与状态查看"
+    - "[SCOPE-MH-003] 知识库导入与索引：后台上传文档并写入 PostgreSQL + pgvector；支持重建索引与状态查看,还有排序功能"
     - "[SCOPE-MH-004] RAG 问答：回答默认附带来源引用（文档/产品字段）；无足够依据时优先澄清或拒答"
+    - "[SCOPE-MH-010] LLM Provider 可配置切换：支持在线 OpenAI-Compatible API（如 ChatGPT/DeepSeek）与本地 Ollama 两种模式"
     - "[SCOPE-MH-005] 产品推荐：基于用户需求输出 Top-N（默认 3）SKU，包含推荐理由与依据来源"
     - "[SCOPE-MH-006] 产品比较：支持 2–4 个 SKU，输出结构化对比（表格/卡片），字段可配置"
     - "[SCOPE-MH-007] 上下文感知：Widget 可传入当前页面 productId/skuId/url，后端用于检索与排序"
@@ -59,7 +60,7 @@ scope:
 # -------------------------------------------------------------------------
 metrics:
   performance:
-    - "[MET-PERF-001] 端到端首次响应时间 p95 <= 2s（包含 LLM；口径以服务端为准）"
+    - "[MET-PERF-001] 端到端首次响应时间 p95 <= 1.5s（包含 LLM；口径以服务端为准）"
     - "[MET-PERF-002] RAG 检索延迟 p95 <= 500ms（pgvector 查询；口径以服务端为准）"
     - "[MET-PERF-003] 并发会话支持 >= 100（连接保持 5 分钟；压测脚本与环境 TBD）"
   security:
@@ -79,7 +80,7 @@ metrics:
 # -------------------------------------------------------------------------
 constraints:
   resource:
-    budget: "云服务月成本 < $500（含 LLM token、数据库、日志/监控、存储与带宽）"
+    budget: "云服务月成本 < $5000（含 LLM token、数据库、日志/监控、存储与带宽）"
     timeline: "2026-02-28"
   technology_boundary:
     allowed:
@@ -88,6 +89,7 @@ constraints:
       - "PostgreSQL + pgvector"
       - "Redis"
       - "OpenAI API / Compatible LLM"
+      - "Ollama（本地大模型运行时）"
     forbidden:
       - "自建 LLM 训练"
       - "Pinecone（V1.0 统一使用 pgvector）"
@@ -101,7 +103,8 @@ dependencies:
     - "产品数据 JSON（约 600 SKU；见 product_data_contract）"
     - "产品文档、FAQ、说明书等知识库原始资料（手动上传）"
     - "PostgreSQL（启用 pgvector 扩展）"
-    - "LLM API 密钥（Provider/Model TBD）"
+    - "在线 LLM：OpenAI-Compatible API 密钥（Provider/Model TBD）"
+    - "本地 LLM：Ollama 服务与模型文件（模型选择 TBD）"
 
 product_data_contract:
   source: "json_file"
@@ -222,6 +225,7 @@ acceptance_criteria:
   - "[ACC-004] 索引构建过程可观测（状态/日志/失败原因）；失败不影响基础对话能力"
   - "[ACC-005] Widget 提供最小集成示例，并可把 `skuId/productId/url` 传给后端用于上下文"
   - "[ACC-006] 满足本 charter 的关键指标与质量门禁（可用性/性能/安全）或在测试报告中说明偏差原因"
+  - "[ACC-007] 可通过配置在在线 LLM 与本地 Ollama 两种模式间切换，并完成基础对话/RAG 流程"
 
 open_questions:
   - "[TBD-001] LLM Provider/Model 选择（OpenAI/Claude/兼容方案）与成本上限分配（TBD）"

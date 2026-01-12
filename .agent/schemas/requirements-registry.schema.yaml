@@ -1,0 +1,399 @@
+# =============================================================================
+# Requirements Registry Schema
+# Charter Agent Framework v0.4.0
+# Schema Version: v1.0
+# =============================================================================
+# 
+# Purpose: Define the structure for the embedded Registry block in requirements
+# documents. The Registry is the SINGLE SOURCE OF TRUTH - all generated content
+# (body text, appendices) derives from this block.
+#
+# Version Naming Convention:
+#   - CAF version: v0.4.0 (framework release)
+#   - template_version: v2.0 (document template)
+#   - schema_version: v1.0 (this schema)
+#
+# =============================================================================
+
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "https://charter-agent-framework/schemas/requirements-registry/v1.0"
+title: "Requirements Registry Schema"
+description: "Schema for the embedded requirements registry block (single source of truth)"
+type: object
+
+required:
+  - schema_version
+  - layer
+  - parent
+  - requirements
+
+properties:
+  # ---------------------------------------------------------------------------
+  # Metadata
+  # ---------------------------------------------------------------------------
+  schema_version:
+    type: string
+    pattern: "^v\\d+\\.\\d+$"
+    description: "Registry schema version (e.g., v1.0). NOT the CAF or template version."
+    examples: ["v1.0"]
+
+  layer:
+    type: string
+    enum: [L0, L1, L2, L3]
+    description: "Requirements layer (L0=System, L1=Feature, L2=Module, L3=Function)"
+
+  parent:
+    type: string
+    description: "Parent document path (e.g., charter.yaml, docs/L0/requirements.md)"
+    examples: ["charter.yaml", "docs/L0/requirements.md"]
+
+  source_checksum:
+    type: string
+    pattern: "^[a-f0-9]{64}$"
+    description: "SHA-256 checksum of parent document for audit trail"
+
+  profile:
+    type: string
+    description: "SRS profile for section applicability (e.g., rag-web, java-distributed)"
+    examples: ["rag-web", "java-distributed", "cpp-embedded", "mobile-app"]
+
+  # ---------------------------------------------------------------------------
+  # Requirements (Core)
+  # ---------------------------------------------------------------------------
+  requirements:
+    type: array
+    description: "List of requirements - the normative content"
+    items:
+      $ref: "#/definitions/Requirement"
+
+  # ---------------------------------------------------------------------------
+  # TBDs (To Be Determined)
+  # ---------------------------------------------------------------------------
+  tbds:
+    type: array
+    description: "List of open questions and to-be-determined items"
+    items:
+      $ref: "#/definitions/TBD"
+
+  # ---------------------------------------------------------------------------
+  # Exclusions (N/A with reason)
+  # ---------------------------------------------------------------------------
+  exclusions:
+    type: array
+    description: "Charter items explicitly excluded with documented reason (N/A + reason)"
+    items:
+      $ref: "#/definitions/Exclusion"
+
+  # ---------------------------------------------------------------------------
+  # Interfaces (L1/L2 only)
+  # ---------------------------------------------------------------------------
+  interfaces:
+    type: array
+    description: "Interface definitions between modules/features (L1/L2 only)"
+    items:
+      $ref: "#/definitions/Interface"
+
+# =============================================================================
+# Definitions
+# =============================================================================
+definitions:
+  # ---------------------------------------------------------------------------
+  # Source Reference (dual anchor: ID + path)
+  # ---------------------------------------------------------------------------
+  SourceRef:
+    type: object
+    description: "Reference to upstream source. ID is preferred (stable), path is fallback."
+    required:
+      - path
+    properties:
+      id:
+        type: string
+        description: "Stable anchor ID from Charter (e.g., SCOPE-MH-001, PROB-001)"
+        examples: ["SCOPE-MH-001", "PROB-001", "MET-PERF-001", "REQ-L0-001"]
+      path:
+        type: string
+        description: "Path to source item. Supports YAML paths (charter.yaml#scope.must_have[0]) and REQ/TBD anchors (docs/L0/requirements.md#REQ-L0-001)"
+        pattern: "^[a-zA-Z0-9_\\-./]+#([a-zA-Z0-9_.\\[\\]-]+|REQ-L[0-3]-\\d{3}|TBD-L[0-3]-\\d{3}|interface_[a-zA-Z0-9_]+)$"
+        examples: 
+          - "charter.yaml#scope.must_have[0]"
+          - "docs/L0/requirements.md#REQ-L0-001"
+          - "docs/L1/feature/requirements.md#TBD-L1-003"
+          - "docs/L1/feature/requirements.md#interface_chat_api"
+
+  # ---------------------------------------------------------------------------
+  # Requirement
+  # ---------------------------------------------------------------------------
+  Requirement:
+    type: object
+    description: "A single requirement entry"
+    required:
+      - id
+      - priority
+      - statement
+      - sources
+      - status
+      - section
+    properties:
+      id:
+        type: string
+        pattern: "^REQ-L[0-3]-\\d{3}$"
+        description: "Unique requirement ID (e.g., REQ-L0-001)"
+        examples: ["REQ-L0-001", "REQ-L1-042", "REQ-L2-103"]
+
+      priority:
+        type: string
+        enum: [P0, P1, P2]
+        description: "Priority level: P0=Must Have, P1=Should Have, P2=Nice to Have"
+
+      statement:
+        type: string
+        minLength: 10
+        description: "Normative requirement text using 'shall/should/应当' phrasing"
+
+      sources:
+        type: array
+        minItems: 1
+        items:
+          $ref: "#/definitions/SourceRef"
+        description: "At least one source reference required (ID preferred, path fallback)"
+
+      acceptance:
+        type: array
+        items:
+          type: string
+          minLength: 5
+        description: "Acceptance criteria. P0/P1 requirements MUST have non-empty criteria."
+
+      status:
+        type: string
+        enum: [draft, ready, in_progress, done]
+        description: "Current status of this requirement"
+
+      section:
+        type: string
+        enum:
+          - functional
+          - performance
+          - security
+          - reliability
+          - usability
+          - constraint
+          - quality_gate
+          - interface
+          - data
+        description: "SRS section category"
+
+      tbd_refs:
+        type: array
+        items:
+          type: string
+          pattern: "^TBD-L[0-3]-\\d{3}$"
+        description: "References to related TBD items"
+
+      derived:
+        type: boolean
+        default: false
+        description: "True if this requirement is derived (not directly from Charter)"
+
+      rationale:
+        type: string
+        description: "Required when derived=true. Explains why this requirement was added."
+
+      tags:
+        type: array
+        items:
+          type: string
+        description: "Optional tags for filtering/grouping"
+
+  # ---------------------------------------------------------------------------
+  # TBD (To Be Determined)
+  # ---------------------------------------------------------------------------
+  TBD:
+    type: object
+    description: "An open question or to-be-determined item"
+    required:
+      - id
+      - question
+      - sources
+      - impact
+    properties:
+      id:
+        type: string
+        pattern: "^TBD-L[0-3]-\\d{3}$"
+        description: "Unique TBD ID (e.g., TBD-L0-001)"
+        examples: ["TBD-L0-001", "TBD-L1-015"]
+
+      question:
+        type: string
+        minLength: 10
+        description: "The open question or undefined aspect"
+
+      sources:
+        type: array
+        minItems: 1
+        items:
+          $ref: "#/definitions/SourceRef"
+        description: "Source of this TBD (which Charter item raised this question)"
+
+      impact:
+        type: string
+        enum: [H, M, L]
+        description: "Impact level: H=High (blocks progress), M=Medium, L=Low"
+
+      owner:
+        type: string
+        description: "Person/role responsible for resolving this TBD"
+
+      target_layer:
+        type: string
+        enum: [L0, L1, L2, L3, external]
+        description: "Layer where this TBD should be resolved"
+
+      status:
+        type: string
+        enum: [open, in_progress, resolved, deferred]
+        default: open
+        description: "Resolution status"
+
+      resolution:
+        type: string
+        description: "Resolution details (filled when status=resolved)"
+
+      related_reqs:
+        type: array
+        items:
+          type: string
+          pattern: "^REQ-L[0-3]-\\d{3}$"
+        description: "Requirements affected by this TBD"
+
+  # ---------------------------------------------------------------------------
+  # Exclusion (N/A with reason)
+  # ---------------------------------------------------------------------------
+  Exclusion:
+    type: object
+    description: "Charter item explicitly excluded from requirements (N/A + reason)"
+    required:
+      - source
+      - reason
+      - category
+    properties:
+      source:
+        $ref: "#/definitions/SourceRef"
+        description: "The Charter item being excluded"
+
+      reason:
+        type: string
+        minLength: 10
+        description: "Justification for exclusion (cannot be empty)"
+
+      category:
+        type: string
+        enum:
+          - process_config      # e.g., traceability mode, freeze status
+          - not_applicable      # e.g., C++ sections for Python project
+          - deferred            # planned for future version
+          - out_of_scope        # explicitly out of scope
+          - superseded          # replaced by another item
+        description: "Category of exclusion"
+
+      approved_by:
+        type: string
+        description: "Who approved this exclusion (for audit)"
+
+  # ---------------------------------------------------------------------------
+  # Interface (L1/L2 - API/Event/Data contracts)
+  # ---------------------------------------------------------------------------
+  Interface:
+    type: object
+    description: "Interface definition for module/feature boundaries"
+    required:
+      - name
+      - type
+      - description
+      - sources
+    properties:
+      name:
+        type: string
+        pattern: "^[a-zA-Z][a-zA-Z0-9_]*$"
+        description: "Interface name (e.g., chat_api, product_event)"
+        examples: ["chat_api", "product_search", "user_auth_event"]
+
+      type:
+        type: string
+        enum: [API, Event, Data, Internal]
+        description: "Interface type: API (REST/gRPC), Event (async message), Data (shared schema), Internal"
+
+      description:
+        type: string
+        minLength: 10
+        description: "What this interface does"
+
+      sources:
+        type: array
+        minItems: 1
+        items:
+          $ref: "#/definitions/SourceRef"
+        description: "Source requirements this interface fulfills"
+
+      contract:
+        type: object
+        description: "Input/output schema and error definitions"
+        properties:
+          input:
+            type: string
+            description: "Input schema (JSON Schema or TypeScript type)"
+          output:
+            type: string
+            description: "Output schema"
+          errors:
+            type: array
+            items:
+              type: object
+              properties:
+                code:
+                  type: string
+                description:
+                  type: string
+
+      consumers:
+        type: array
+        items:
+          type: string
+        description: "Modules/features that consume this interface"
+
+      providers:
+        type: array
+        items:
+          type: string
+        description: "Modules/features that provide this interface"
+
+      version:
+        type: string
+        pattern: "^v\\d+(\\.\\d+)?$"
+        description: "Interface version for compatibility tracking"
+
+# =============================================================================
+# Validation Rules (for /requirements-validate workflow)
+# =============================================================================
+# These rules are enforced by the validation workflow:
+#
+# 1. Coverage Rule:
+#    - Every item in split-report.md Source Inventory must appear in:
+#      requirements[].sources[], OR tbds[].sources[], OR exclusions[].source
+#
+# 2. Traceability Rule:
+#    - Every sources[].path must resolve to an existing item in parent document
+#    - Every sources[].id must match a valid Charter anchor ID
+#
+# 3. Acceptance Rule:
+#    - requirements[] with priority P0 or P1 MUST have non-empty acceptance[]
+#    - Acceptance criteria cannot be just "TBD" or similar placeholders
+#
+# 4. Consistency Rule:
+#    - Every tbd_refs[] reference must exist in tbds[].id
+#    - Every related_reqs[] reference must exist in requirements[].id
+#
+# 5. Derived Rule:
+#    - If derived=true, rationale MUST be non-empty
+#    - Derived requirements must still have at least one source (parent req)
+# =============================================================================

@@ -12,6 +12,21 @@ description: Freeze a charter to prevent requirement drift
 
 ## 执行步骤
 
+### 0. 前置验证（必须）
+
+执行 `/charter-validate`，只有验证通过后才能继续冻结：
+
+```
+/charter-validate
+```
+
+**判断结果**：
+- ✅ **PASS** → 继续执行 Step 1
+- ❌ **FAIL** → **终止冻结**，输出错误信息，要求修复 `charter.yaml` 后重试
+- ⚠️ **WARNING** → 可继续，但提示用户确认是否忽略警告
+
+> 冻结一个有问题的 Charter 会导致错误传播到整个 L0→L1→L2→L3 分解链。
+
 ### 1. 验证 Charter 完整性
 
 // turbo
@@ -56,6 +71,7 @@ ls -l charter.yaml
 
 ## 注意事项
 
+- 冻结前**必须**先通过 `/charter-validate` 验证
 - 冻结后如需修改 Charter，使用 `/charter-unfreeze` 解冻
 - 所有 Agent 在执行时应检查 `frozen: true`，若已冻结则禁止修改 Charter
 - 建议在 L1 分析开始前完成冻结

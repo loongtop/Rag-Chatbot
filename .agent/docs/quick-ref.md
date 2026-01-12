@@ -60,6 +60,7 @@ layer: L0 | L1 | L2 | L3
 parent: {parent_path}
 source_checksum: "{sha256}"
 profile: "{profile}"
+schema_version: "v1.0"
 ---
 ```
 

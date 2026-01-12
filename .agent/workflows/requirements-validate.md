@@ -8,7 +8,7 @@ Validates a requirements document against the Registry Schema rules, ensuring 10
 
 ## Prerequisites
 
-- Requirements document exists with `template_version: "v2.0"`
+- Requirements document contains `requirements-registry` block with `schema_version: "v1.0"`
 - Registry block is populated
 - For L0: `docs/L0/split-report.md` must exist
 - For L1+: Parent layer requirements document must exist
@@ -174,7 +174,7 @@ After validation, update the Gate Check section in the document:
 Requirements Validation Report
 Document: docs/L0/requirements.md
 Layer: L0
-Template: v2.0
+Schema: v1.0
 Timestamp: 2026-01-12T12:30:00Z
 ===============================================
 

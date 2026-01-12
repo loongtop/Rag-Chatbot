@@ -8,8 +8,8 @@ Renders the generated sections (body text + appendices) of a requirements docume
 
 ## Prerequisites
 
-- Requirements document exists with `template_version: "v2.0"` in frontmatter
-- Registry block (`requirements-registry`) is populated
+- Requirements document contains `requirements-registry` block with `schema_version: "v1.0"`
+- Registry block is populated
 - Profile is set in frontmatter or Registry
 
 ## Usage

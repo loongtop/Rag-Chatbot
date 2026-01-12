@@ -22,10 +22,18 @@
 
 ---
 
+## 溯源门禁（Traceability-First）
+
+在生成任意层级的 `requirements.md` / `interfaces.md` 之前，先产出同目录 `split-report.md`：
+- 覆盖矩阵：上游条目 → 下游 REQ/接口（或 N/A + 原因）
+- 规则：下游每条需求/接口必须带 `Source`，不得凭空新增
+ - 工作流：`/requirements-split`
+
 ## Agent 触发条件
 
 | Agent | 触发条件 | 产出 |
 |-------|---------|------|
+| Requirements Split | before writing requirements/interfaces | split-report.md |
 | Architect | charter.yaml + `freeze.frozen=true` | requirements.md, subtasks.md |
 | Tester (P1) | L3 requirements.md `status=ready` | Test Spec (补充) |
 | Designer | L3 requirements.md `status=done` | design.md |
@@ -52,6 +60,7 @@ L3 阶段必须采用测试先行：
 
 | Layer | Template |
 |-------|----------|
+| Any | `split-report.template.md` |
 | L0 | `requirements.template.md` |
 | L1 | `requirements.L1.template.md` |
 | L2 | `requirements.L2.template.md` + `execution-tracker.template.md` |
@@ -80,3 +89,4 @@ Gate_Check:
 | 错误模板 | 层级不匹配 | 检查 layer 字段 |
 | 跨模块并行 | AI 发散 | 用 execution-tracker 追踪 |
 | 改冻结 Charter | 违规 | 先 `/charter-unfreeze` |
+| 无来源新增需求 | 需求漂移 | 先写 split-report 覆盖矩阵，并为每条需求/接口填写 Source |

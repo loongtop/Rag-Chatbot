@@ -1,6 +1,6 @@
 # Agent Collaboration
 
-六大 Agent 协作模型：专业分工，产物驱动。
+七大 Agent 协作模型：专业分工，产物驱动。
 
 ---
 
@@ -8,6 +8,7 @@
 
 | Agent | Phase | Role | Trigger |
 |-------|-------|------|---------|
+| **Requirements Split** | Decomposition | 可拆分性分析 & 溯源门禁 | before writing requirements/interfaces |
 | **Architect** | Decomposition | 需求分析 & 任务分解 | charter.yaml exists |
 | **Designer** | Transition | L3 详细设计 | requirements.md (L3) done |
 | **Coder** | Implementation | 代码生成 | design.md done |
@@ -18,6 +19,11 @@
 ---
 
 ## Responsibilities
+
+### Requirements Split
+- 在 Charter→L0、L0→L1、L1→L2 迁移前执行
+- 输出: split-report.md（覆盖矩阵、拆分决策、TBD）
+- 门禁: 下游每条需求/接口必须带 Source，可追溯到上游
 
 ### Architect
 - 提取需求，分解任务 (L0→L1→L2→L3)
@@ -54,7 +60,7 @@
 ## Communication Protocol
 
 ```
-Architect ──artifacts──► Designer ──artifacts──► Coder
+Requirements Split ──split-report──► Architect ──artifacts──► Designer ──artifacts──► Coder
                                                    │
                                               artifacts
                                                    │

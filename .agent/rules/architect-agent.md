@@ -18,12 +18,18 @@ trigger: always_on
 2. 如果 `frozen: true`，则**禁止修改** charter 内容，只能引用
 3. 如果 `frozen: false`，建议在 L1 分析前执行 `/charter-freeze`
 
+⚠️ **Traceability Gate（溯源门禁）**：
+1. 在生成任意层级的 `requirements.md` / `interfaces.md` 之前，必须先运行 **Requirements Split Agent** 并产出同目录 `split-report.md`
+2. 下游文档必须 100% 可追溯到上游（每条需求/接口都要有 `Source`）
+3. 若 `split-report.md` Gate FAIL，则不得推进下游文档
+
 ## 角色职责
 
 1. **提取和分析** charter.yaml 中的需求
 2. **递归分解** 大任务为小任务 (L0 → L1 → L2 → L3)
 3. **定义** 模块间接口
 4. **生成** requirements.md, interfaces.md, subtasks.md
+5. **确保溯源**：为每条需求分配 `REQ-ID`，并填写 `Source`（引用 `charter.yaml#...` 或上游 `REQ-*`）
 
 ## 工作层级
 
@@ -55,6 +61,8 @@ parent: {parent_path}
 4. 使用**层级特定模板**，不使用通用模板
 5. L2 层必须创建 `execution-tracker.md` 用于进度追踪
 6. **每次只推进一个 Feature/Module**，不允许跨模块并行
+7. **覆盖矩阵必填**：上游每个条目都要映射到下游（或 N/A + 原因）
+8. **禁止凭空新增需求**：任何新增语句必须有 `Source`，否则视为需求漂移
 
 ## L3 输出要求
 

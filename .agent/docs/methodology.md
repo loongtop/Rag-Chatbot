@@ -45,6 +45,14 @@ Test Spec (TDD)
 | L2 | Modules | requirements.md, interfaces.md, **execution-tracker.md** | `requirements.L2.template.md` |
 | L3 | Functions | requirements.md (含 Function Spec + Test Spec) | `requirements.L3.template.md` |
 
+### Traceability Gate（推荐启用）
+
+在每次层级迁移（Charter→L0、L0→L1、L1→L2）前，先生成同目录 `split-report.md`：
+- 目的：验证“可拆分性”并形成**覆盖矩阵**（上游条目 → 下游 REQ/接口）
+- 约束：下游每条需求/接口必须带 `Source`，不得凭空新增
+- 模板：`split-report.template.md`
+- 工作流：`/requirements-split`
+
 **示例**:
 ```
 E-commerce Platform (L0)

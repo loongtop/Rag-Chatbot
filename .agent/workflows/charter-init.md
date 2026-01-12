@@ -28,6 +28,7 @@ description: Initialize a new Charter Framework project
 
 3. **创建初始文档**
    - 在 `docs/L0/` 创建 `requirements.md`
+   - （推荐）在 `docs/L0/` 创建 `split-report.md`（用于溯源/拆分门禁）
 
 4. **提示用户**
    - 编辑 `charter.yaml` 填写项目详情

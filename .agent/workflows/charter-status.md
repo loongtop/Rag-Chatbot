@@ -17,9 +17,9 @@ description: Check project progress through Charter phases
    
    | 层级 | 检查项 | 位置 |
    |------|--------|------|
-   | L0 | requirements.md, subtasks.md | `docs/L0/` |
-   | L1 | requirements.md, interfaces.md, subtasks.md | `docs/L1/*/` |
-   | L2 | requirements.md, interfaces.md, execution-tracker.md | `docs/L2/*/` |
+   | L0 | requirements.md, subtasks.md, split-report.md(可选) | `docs/L0/` |
+   | L1 | requirements.md, interfaces.md, subtasks.md, split-report.md(可选) | `docs/L1/*/` |
+   | L2 | requirements.md, interfaces.md, execution-tracker.md, split-report.md(可选) | `docs/L2/*/` |
    | L3 | requirements.md (含 Function Spec + Test Spec) | `docs/L3/*/` |
 
 3. **检查 Phase 2 (实现阶段)**

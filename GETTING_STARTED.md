@@ -262,21 +262,30 @@ freeze:
 
 告诉 AI：
 ```
+请先运行 /requirements-split：
+/requirements-split source_path=charter.yaml target_dir=docs/L0
+
 请按 architect-agent 角色分析 charter.yaml。
 1. 在 docs/L0/ 创建 requirements.md（使用 requirements.template.md）
+   - 每条需求必须有 REQ-ID + Source（可追溯到 charter.yaml）
 2. 在 docs/L0/ 创建 subtasks.md，列出 L1 功能模块
 ```
 
 **检查产出**：
 - `docs/L0/requirements.md` - 系统级需求
 - `docs/L0/subtasks.md` - L1 子任务列表
+- `docs/L0/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
 ### Step 5.3：L1 分解（Features）
 
 对于 L0 subtasks.md 中列出的每个功能，告诉 AI：
 ```
+请先运行 /requirements-split：
+/requirements-split source_path=docs/L0/requirements.md target_dir=docs/L1/{功能名}
+
 请分解 L1 功能 "{功能名}"。
 1. 在 docs/L1/{功能名}/ 创建 requirements.md（使用 requirements.L1.template.md）
+   - L0→L1 必须逐条映射（每条需求必须有 Source=REQ-L0-xxx）
 2. 创建 interfaces.md 定义对外接口
 3. 创建 subtasks.md 列出 L2 子模块
 ```
@@ -285,13 +294,18 @@ freeze:
 - `docs/L1/{功能名}/requirements.md` - 包含 goals, non_goals, constraints, risks
 - `docs/L1/{功能名}/interfaces.md` - 接口定义
 - `docs/L1/{功能名}/subtasks.md` - L2 子任务列表
+- `docs/L1/{功能名}/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
 ### Step 5.4：L2 分解（Modules）
 
 对于 L1 subtasks.md 中列出的每个模块，告诉 AI：
 ```
+请先运行 /requirements-split：
+/requirements-split source_path=docs/L1/{功能名}/requirements.md target_dir=docs/L2/{模块名}
+
 请分解 L2 模块 "{模块名}"。
 1. 在 docs/L2/{模块名}/ 创建 requirements.md（使用 requirements.L2.template.md）
+   - L1→L2 可按段落/句子映射，但每条必须有 Source=REQ-L1-xxx
 2. 创建 interfaces.md 定义模块接口
 3. 创建 subtasks.md 列出 L3 函数
 4. 在 docs/L2/ 创建 execution-tracker.md 追踪进度
@@ -300,6 +314,7 @@ freeze:
 **检查产出**：
 - `docs/L2/{模块名}/requirements.md` - 包含 features, interfaces, data_models
 - `docs/L2/execution-tracker.md` - 进度追踪表
+- `docs/L2/{模块名}/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
 ### Step 5.5：L3 分解（Functions - Function Spec）
 
@@ -461,6 +476,7 @@ Phase 2: Design ✅ → Code ✅ → Tests ✅
 | `/charter-unfreeze` | 需要改 charter 时 | 解锁 charter |
 | `/charter-status` | 随时 | 查看进度 |
 | `/charter-quality` | 每个模块完成后 | Gate 检查 |
+| `/requirements-split` | 每次层级迁移前 | 生成 split-report.md（溯源覆盖矩阵） |
 
 ---
 
@@ -492,18 +508,23 @@ my-awesome-project/
 ├── docs/
 │   ├── L0/
 │   │   ├── requirements.md
+│   │   ├── split-report.md
 │   │   └── subtasks.md
 │   ├── L1/
 │   │   ├── UserAuth/
 │   │   │   ├── requirements.md
 │   │   │   ├── interfaces.md
+│   │   │   ├── split-report.md
 │   │   │   └── subtasks.md
 │   │   └── TaskManagement/
 │   │       └── ...
 │   ├── L2/
 │   │   ├── execution-tracker.md
 │   │   ├── Login/
-│   │   │   └── ...
+│   │   │   ├── requirements.md
+│   │   │   ├── interfaces.md
+│   │   │   ├── split-report.md
+│   │   │   └── subtasks.md
 │   │   └── Register/
 │   │       └── ...
 │   └── L3/

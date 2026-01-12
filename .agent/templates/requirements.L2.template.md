@@ -2,10 +2,18 @@
 status: draft
 owner: architect
 layer: L2
-parent: L1/{parent_feature}
+parent: docs/L1/{parent_feature}/requirements.md
 ---
 
 # L2 Requirements: {module_name}
+
+> 本模块需求必须可追溯到上游 L1 Feature（段落/句子级映射）。任何接口必须可追溯到至少一条 REQ。
+
+## 0. Traceability（L1 → L2）
+
+| L1 REQ-ID / Section | Covered By (L2 REQ-ID / Interface) | Status | Notes |
+|---------------------|-------------------------------------|--------|-------|
+| `REQ-L1-001` | `REQ-L2-001`, `interfaces.md#...` | ✅/❌ | |
 
 ## 1. Module Overview (模块概述)
 
@@ -14,14 +22,20 @@ parent: L1/{parent_feature}
 ## 2. Features (功能列表)
 
 ### Feature 2.1: {feature_name}
+- **REQ-ID**: `REQ-L2-001`
 - **描述**: 功能说明
 - **优先级**: P0 / P1 / P2
 - **状态**: ⬜ 未开始 / 🟡 进行中 / ✅ 已完成
+- **Source**: `REQ-L1-001` / `docs/L1/...#...`
+- **验收标准**: 可验证条件...
 
 ### Feature 2.2: {feature_name}
+- **REQ-ID**: `REQ-L2-002`
 - **描述**: 功能说明
 - **优先级**: P0 / P1 / P2
 - **状态**: ⬜ 未开始 / 🟡 进行中 / ✅ 已完成
+- **Source**: `REQ-L1-xxx`
+- **验收标准**: 可验证条件...
 
 ## 3. Interfaces (接口定义)
 
@@ -33,6 +47,7 @@ function_name(param1: Type, param2: Type) -> ReturnType
     参数: 参数说明
     返回: 返回值说明
     异常: 可能抛出的异常
+    关联需求: REQ-L2-00x
 ```
 
 ### 内部接口 (Internal)
@@ -68,3 +83,9 @@ struct/class ModelName:
 
 - 与 {其他模块} 的集成方式: [描述]
 - 集成测试策略: [描述]
+
+## 8. Gate Check（门禁）
+
+- [ ] 覆盖矩阵完整：相关 L1 内容已映射到 L2（或 N/A + 原因）
+- [ ] 100% L2 Feature/需求条目包含 `REQ-ID` + `Source`
+- [ ] 100% 对外接口关联至少 1 条 `REQ-L2-*`

@@ -7,6 +7,11 @@ parent: L2/{parent_module}
 
 # L3 Requirements: {function_name}
 
+## 0. Traceability（L2 → L3）
+
+- Related Requirements: `REQ-L2-001`
+- Source: `REQ-L2-001` / `docs/L2/.../requirements.md#...`
+
 ## 1. Function Specification (函数规格)
 
 ### 签名 (Signature)
@@ -109,6 +114,7 @@ FUNCTION function_name(param1, param2):
 ---
 
 **Gate Check**: 
+- [ ] 关联上游 `REQ-L2-*`（Traceability 完整）
 - [ ] Function Spec 完整
 - [ ] Test Spec 完整
 - [ ] 可直接转化为 design.md

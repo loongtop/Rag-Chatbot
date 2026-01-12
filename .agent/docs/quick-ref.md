@@ -14,6 +14,7 @@
 | `/charter-unfreeze` | Unlock for modifications |
 | `/charter-status` | Check project progress |
 | `/charter-quality` | Run quality gates |
+| `/requirements-split` | Create split-report.md + traceability matrix |
 
 ---
 
@@ -21,6 +22,7 @@
 
 | Layer | Template | Key Contents |
 |-------|----------|--------------|
+| Any | `split-report.template.md` | Splitability + Traceability matrix |
 | L0 | `requirements.template.md` | General requirements |
 | L1 | `requirements.L1.template.md` | Goals, Constraints, Risks |
 | L2 | `requirements.L2.template.md` | Features, Interfaces, Data Models |
@@ -33,6 +35,7 @@
 
 | Agent | Trigger | Output |
 |-------|---------|--------|
+| Requirements Split | before writing requirements/interfaces | split-report.md |
 | Architect | charter.yaml exists + `freeze.frozen=true` | requirements.md, subtasks.md |
 | Tester (P1) | L3 requirements.md `status=ready` | Test Spec (填写) |
 | Designer | L3 requirements.md `status=done` | design.md |
@@ -48,7 +51,7 @@
 ```yaml
 ---
 status: draft | ready | in_progress | done
-owner: architect | designer | coder | tester | reviewer | integrator
+owner: requirements-split | architect | designer | coder | tester | reviewer | integrator
 layer: L0 | L1 | L2 | L3
 parent: {parent_path}
 ---
@@ -86,3 +89,4 @@ Gate_Check:
 3. **Use Layer Templates**: 使用层级特定模板
 4. **TDD Mode**: L3 先 Test Spec 后实现
 5. **Gate Check**: 每个模块完成后检查
+6. **Traceability First**: 先写 `split-report.md`，再写 requirements/interfaces（每条都要 Source）

@@ -217,14 +217,17 @@ components:
     language_profile: python
     path: "apps/api"
     description: "RAG Chatbot 后端 API 服务"
+    decomposition_strategy: "full"
   - name: "chat-widget"
     language_profile: typescript
     path: "apps/widget"
     description: "可嵌入的 Chatbot 前端组件"
+    decomposition_strategy: "full"
   - name: "admin-dashboard"
     language_profile: typescript
     path: "apps/admin"
     description: "知识库/产品数据/人工客服/寻价线索管理后台"
+    decomposition_strategy: "full"
 
 # 12. 其他约定（可选）(Optional Conventions)
 # -------------------------------------------------------------------------

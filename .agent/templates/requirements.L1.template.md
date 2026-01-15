@@ -5,10 +5,12 @@ layer: L1
 parent: docs/L0/requirements.md
 source_checksum: "{checksum}"
 profile: "{profile}"
-feature: "{feature_name}"
+component: "{component_name}"           # v0.5.2 新增：组件名
+language_profile: "{python|typescript}" # v0.5.2 新增：语言配置
+decomposition_strategy: "full"          # v0.5.2 新增：分解策略
 ---
 
-# L1 Requirements: {feature_name}
+# L1 Requirements: {component_name}
 
 > ⚠️ **Document Structure (Template v2.0)**
 >
@@ -17,6 +19,11 @@ feature: "{feature_name}"
 > | `requirements-registry` block | Source | ✅ Editable |
 > | Body text | Generated | 🔒 Readonly |
 > | Appendices | Generated | 🔒 Readonly |
+>
+> **组件信息** (v0.5.2):
+> - 组件名: `{component_name}`
+> - 语言配置: `{language_profile}`
+> - 分解策略: `{decomposition_strategy}`
 
 ---
 
@@ -24,26 +31,43 @@ feature: "{feature_name}"
 
 ```requirements-registry
 # =============================================================================
-# L1 Requirements Registry - Feature Level
-# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
+# L1 Requirements Registry - Component Level (v0.5.2)
+# Schema: v1.0 | Template: v2.0 | CAF: v0.5.2
 # =============================================================================
 
-schema_version: "v0.5.0"
+schema_version: "v0.5.2"
 layer: L1
 parent: "docs/L0/requirements.md"
 source_checksum: "{checksum}"
 profile: "{profile}"
+component: "{component_name}"
+language_profile: "{language_profile}"
 
 # -----------------------------------------------------------------------------
-# Requirements (Feature-level decomposition of L0)
+# Requirements (Component-level decomposition of L0)
 # -----------------------------------------------------------------------------
 requirements:
-  - id: REQ-L1-001
+  # --- 模块 1 ---
+  - id: REQ-L1-{COMP}-001
     priority: P0
-    statement: "Feature 应当..."
+    statement: "Component 应当提供 XXX 功能..."
     sources:
-      - id: "REQ-L0-001"
-        path: "docs/L0/requirements.md#REQ-L0-001"
+      - id: "REQ-L0-{XXX}-001"
+        path: "docs/L0/requirements.md#REQ-L0-{XXX}-001"
+    acceptance:
+      - "验收条件1"
+    status: draft
+    section: functional
+    tbd_refs: []
+    derived: false
+
+  # --- 模块 2 ---
+  - id: REQ-L1-{COMP}-002
+    priority: P1
+    statement: "Component 应当提供 YYY 功能..."
+    sources:
+      - id: "REQ-L0-{YYY}-001"
+        path: "docs/L0/requirements.md#REQ-L0-{YYY}-001"
     acceptance:
       - "验收条件1"
     status: draft
@@ -52,36 +76,24 @@ requirements:
     derived: false
 
 # -----------------------------------------------------------------------------
-# Interfaces (L1 introduces interface definitions)
+# Interfaces (L1 defines component interfaces)
 # -----------------------------------------------------------------------------
 interfaces:
   - name: "{interface_name}"
     type: API  # API | Event | Data | Internal
-    description: "接口描述（至少10个字符）"
+    description: "接口描述"
     sources:
       - path: "docs/L0/requirements.md#REQ-L0-0xx"
     contract:
       input: "{input_schema}"
       output: "{output_schema}"
-    consumers:
-      - "{module_name}"
-    providers:
-      - "{module_name}"
+    consumers: ["{other_component}"]
+    providers: ["{component_name}"]
 
 # -----------------------------------------------------------------------------
 # TBDs
 # -----------------------------------------------------------------------------
-tbds:
-  - id: TBD-L1-001
-    question: "待定问题"
-    sources:
-      - path: "docs/L0/requirements.md#TBD-L0-001"
-    impact: M
-    owner: ""
-    target_layer: L2
-    status: open
-    related_reqs:
-      - REQ-L1-001
+tbds: []
 
 # -----------------------------------------------------------------------------
 # Exclusions
@@ -93,34 +105,46 @@ exclusions: []
 
 ---
 
-<!-- GENERATED CONTENT BELOW - DO NOT EDIT MANUALLY -->
+## 1. 组件概述
 
-## 1. Feature 概述
+### 1.1 组件定位
 
-### 1.1 功能定位
+**组件名**: `{component_name}`  
+**语言配置**: `{language_profile}`  
+**上游来源**: `docs/L0/requirements.md`
 
-{Feature 在系统中的定位 - 从 Registry 自动生成}
+{组件在系统中的定位描述}
 
-_Source_: `docs/L0/requirements.md#REQ-L0-0xx`  
-_Covered by_: `REQ-L1-001`
+**所属 L0 需求**:
+- REQ-L0-{XXX}-*（来源）
+- REQ-L0-{YYY}-*（来源）
 
 ### 1.2 范围边界
 
-{Feature 的范围边界 - 从 Registry 自动生成}
+**包含**:
+- 功能模块 1
+- 功能模块 2
+
+**不包含**:
+- 其他组件的功能（通过接口调用）
+
+### 1.3 接口依赖
+
+| 接口类型 | 提供/依赖 | 说明 |
+|----------|----------|------|
+| REST API | 提供 | 对外暴露的服务接口 |
+| LLM Provider | 依赖 | 大模型调用 |
+| pgvector | 依赖 | 向量检索 |
 
 ---
 
 ## 2. 功能需求
 
-{Feature 功能需求叙述}
-
-详见附录 A。
+详见附录 A（需求表）。
 
 ---
 
 ## 3. 接口定义
-
-{接口概述 - 从 Registry interfaces[] 自动生成}
 
 详见附录 D（接口表）。
 
@@ -128,11 +152,11 @@ _Covered by_: `REQ-L1-001`
 
 ## 4. 非功能需求
 
-### 4.1 性能
-{性能约束}
+### 4.1 性能约束
+- 继承自 L0-PERF-*
 
-### 4.2 安全
-{安全约束}
+### 4.2 安全约束
+- 继承自 L0-SEC-*
 
 ---
 
@@ -140,33 +164,33 @@ _Covered by_: `REQ-L1-001`
 
 ### 附录 A：需求表
 
-| REQ-ID | Priority | Statement | Sources | Acceptance | Status |
-|--------|----------|-----------|---------|------------|--------|
-| {从 Registry 渲染} | | | | | |
+| REQ-ID | Priority | Statement | Sources | Status |
+|--------|----------|-----------|---------|--------|
+| REQ-L1-{COMP}-001 | P0 | ... | REQ-L0-* | draft |
+| REQ-L1-{COMP}-002 | P1 | ... | REQ-L0-* | draft |
 
 ### 附录 B：溯源矩阵（L0 → L1）
 
-| L0 Item | Covered By | Status | Notes |
-|---------|------------|--------|-------|
-| {从 Registry 渲染} | | | |
+| L0 Item | Covered By | Status |
+|---------|------------|--------|
+| REQ-L0-{XXX}-001 | REQ-L1-{COMP}-001 | ✅ |
+| REQ-L0-{YYY}-001 | REQ-L1-{COMP}-002 | ✅ |
 
 ### 附录 C：TBD/待定项
 
-| TBD-ID | Question | Sources | Impact | Owner | Target | Status |
-|--------|----------|---------|--------|-------|--------|--------|
-| {从 Registry 渲染} | | | | | | |
+无
 
 ### 附录 D：接口表
 
-| Name | Type | Description | Input | Output | Consumers | Providers |
-|------|------|-------------|-------|--------|-----------|-----------|
-| {从 Registry 渲染} | | | | | | |
+| Name | Type | Description | Consumers | Providers |
+|------|------|-------------|-----------|-----------|
+| {interface_name} | API | ... | {other} | {component} |
 
 ---
 
 ## 门禁检查
 
 - [ ] Registry 所有条目有非空 `sources[]`
-- [ ] L0 需求 100% 覆盖（REQ / TBD / Exclusion）
-- [ ] 接口定义完整（有 contract）
+- [ ] L0 需求 100% 覆盖
+- [ ] 接口定义完整
 - [ ] 无交叉引用错位

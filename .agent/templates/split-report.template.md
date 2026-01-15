@@ -144,7 +144,25 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3 | L0→代码
 | REQ-L0-CON-TECH-ALLOWED | 允许: Python, TypeScript, PostgreSQL+pgvector | technology_boundary.allowed | allowed |
 | REQ-L0-CON-TECH-FORBIDDEN | 禁止: 自建 LLM 训练, Pinecone, 私有化数据库 | technology_boundary.forbidden | forbidden |
 
-## 11. TBD & Questions（待定项）
+## 11. 组件接口矩阵（v0.5.2 新增）
+
+> L1 层级分解时，定义组件间的接口依赖关系
+
+| 组件 | 提供接口 | 依赖接口 | 说明 |
+|------|----------|----------|------|
+| api-server | REST API, RAG Service | LLM Provider, pgvector | 后端核心服务 |
+| chat-widget | Widget UI, Voice IO | api-server REST API | 前端交互组件 |
+| admin-dashboard | Admin UI, KB Management | api-server REST API | 后台管理界面 |
+
+**接口类型说明**：
+- `REST API`: HTTP JSON 接口
+- `RAG Service`: 内部检索增强生成服务
+- `Widget UI`: 前端组件接口
+- `Voice IO`: 语音输入输出接口
+- `LLM Provider`: 大模型调用接口
+- `pgvector`: 向量数据库接口
+
+## 12. TBD & Questions（待定项）
 
 > 任何不明确/不可验证/不可实现的内容必须进入 TBD，并带来源。
 
@@ -156,7 +174,7 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3 | L0→代码
 | TBD-006 | Widget 资源体积与加载口径 | L | `charter.yaml#[TBD-006]` | L2 |
 | TBD-010 | 邮箱登录验证码方案 | M | `charter.yaml#[TBD-010]` | L1 |
 
-## 12. Gate Check（门禁检查）
+## 13. Gate Check（门禁检查）
 
 - [ ] 上游每个条目：都有映射或 `N/A + 原因`
 - [ ] 下游每个 `REQ-ID`：都有至少一个 `Source`

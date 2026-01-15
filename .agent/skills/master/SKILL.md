@@ -127,6 +127,68 @@ description: "Charter Agent Framework 主入口 Skill。当用户提到项目、
 - 仍保持 Charter → 需求的追溯性
 - `REQ-L0-001` 可直接追溯到 `REQ-L3-001`（跨层链接）
 
+## 组件级分解策略（v0.5.2 新增）
+
+可在 `charter.yaml#components` 中为每个组件指定分解策略：
+
+```yaml
+# charter.yaml 示例
+components:
+  - name: "api-server"
+    language_profile: python
+    decomposition_strategy: "full"    # L0→L1→L2→L3
+  - name: "chat-widget"
+    language_profile: typescript
+    decomposition_strategy: "full"    # L0→L1→L2→L3
+  - name: "admin-dashboard"
+    language_profile: typescript
+    decomposition_strategy: "full"    # L0→L1→L2→L3
+```
+
+**策略优先级**：
+```
+1. components[].decomposition_strategy  # 组件级配置（最高）
+2. granularity 参数                     # 命令行参数
+3. auto 自动评估                        # 默认行为
+```
+
+**分解策略说明**：
+
+| 策略 | 分解路径 | 适用场景 |
+|------|----------|----------|
+| `full` | L0→L1→L2→L3 | 复杂组件（API/Widget/Admin） |
+| `medium` | L0→L2→L3 | 中等复杂度组件 |
+| `light` | L0→L3 | 简单组件/工具模块 |
+| `direct` | L0→代码 | 胶水代码/配置 |
+
+**自动推断规则**（当 components 未指定策略时）：
+
+| 组件特征 | 默认策略 |
+|----------|----------|
+| 涉及 RAG/LLM/多模块协作 | `full` |
+| 涉及语音/多语言/多模态 | `full` |
+| 纯 CRUD 管理功能 | `medium` |
+| 单一工具函数 | `light` |
+| 配置/胶水代码 | `direct` |
+
+## 组件接口矩阵（v0.5.2 新增）
+
+定义各组件之间的接口依赖关系，用于 L1 层级分解：
+
+| 组件 | 提供接口 | 依赖接口 | 说明 |
+|------|----------|----------|------|
+| api-server | REST API, RAG Service | LLM Provider, pgvector | 后端核心服务 |
+| chat-widget | Widget UI, Voice IO | api-server REST API | 前端交互组件 |
+| admin-dashboard | Admin UI, KB Management | api-server REST API | 后台管理界面 |
+
+**接口类型说明**：
+- `REST API`: HTTP JSON 接口
+- `RAG Service`: 内部检索增强生成服务
+- `Widget UI`: 前端组件接口
+- `Voice IO`: 语音输入输出接口
+- `LLM Provider`: 大模型调用接口
+- `pgvector`: 向量数据库接口
+
 ## 输出格式
 
 完成后返回结构化摘要：

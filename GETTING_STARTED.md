@@ -1,4 +1,4 @@
-# Charter Agent Framework v0.4.0 详细使用指南
+# Charter Agent Framework v0.5.0 详细使用指南
 
 本文档提供从零开始使用 Charter Agent Framework 实现软件的完整、详细步骤。
 
@@ -102,16 +102,21 @@ my-awesome-project/
 | `meta` | ✅ | 项目基本信息（名称、负责人、版本） |
 | `objective` | ✅ | 核心问题和商业目标 |
 | `scope` | ✅ | 必做事项和不做事项 |
-| `stakeholders` | ❌ | 干系人和用户画像 |
-| `metrics` | ❌ | 性能、安全、稳定性指标 |
-| `constraints` | ❌ | 预算、时间、技术约束 |
-| `dependencies` | ❌ | 外部系统和资源依赖 |
-| `risks` | ❌ | 已知风险及应对 |
+| `stakeholders` | ⚠️ 建议 | 干系人和用户画像 |
+| `metrics` | ⚠️ 建议 | 性能、安全、稳定性指标（影响测试门禁） |
+| `constraints` | ⚠️ 建议 | 预算、时间、技术约束 |
+| `dependencies` | ⚠️ 建议 | 外部系统和资源依赖 |
+| `risks` | ⚠️ 建议 | 已知风险及应对 |
 | `deliverables` | ✅ | 交付物列表 |
-| `environments` | ❌ | 开发/测试/生产环境配置 |
+| `environments` | ⚠️ 建议 | 开发/测试/生产环境配置 |
 | `quality_requirements` | ✅ | 代码质量、性能、安全要求 |
-| `language_profile` | ✅ | 编程语言（python/java/cpp/swift） |
-| `freeze` | 自动 | 冻结状态（由工作流管理） |
+| `language_profile` 或 `components` | ✅ | 编程语言（python/java/cpp/swift） |
+| `freeze` | 自动 | 冻结状态（由 /charter-freeze 管理） |
+
+> **说明**：
+> - ✅ = 必填，不提供会阻塞后续流程
+> - ⚠️ 建议 = 非强制，但缺少会影响质量门禁评估
+> - 自动 = 由工作流自动管理，无需手动填写
 
 ### Step 3.2：填写 Meta 部分
 
@@ -258,7 +263,7 @@ freeze:
 | L2 | Modules | 子模块 | `requirements.L2.template.md` |
 | L3 | Functions | 具体函数 | `requirements.L3.template.md` |
 
-> **v0.4.0**: 所有模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
+> **v0.5.0**: 所有模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
 
 ### Step 5.2：L0 分解（Charter → Features）
 

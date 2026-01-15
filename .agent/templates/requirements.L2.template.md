@@ -26,10 +26,10 @@ module: "{module_name}"
 ```requirements-registry
 # =============================================================================
 # L2 Requirements Registry - Module Level
-# Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
 # =============================================================================
 
-schema_version: "v0.4.0"
+schema_version: "v0.5.0"
 layer: L2
 parent: "docs/L1/{feature}/requirements.md"
 source_checksum: "{checksum}"

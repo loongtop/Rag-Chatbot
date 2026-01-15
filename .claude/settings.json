@@ -1,0 +1,26 @@
+{
+  "description": "Charter Agent Framework - Skills 配置",
+  "version": "1.0.0",
+  "skills": {
+    "master": {
+      "description": "主协调 Skill，智能路由到正确的 Workflow 或 Subagent",
+      "path": "../.agent/skills/master/SKILL.md"
+    },
+    "code-generator": {
+      "description": "根据 design.md 自动生成代码",
+      "path": "../.agent/skills/code-generator/SKILL.md"
+    },
+    "test-generator": {
+      "description": "根据 design.md 自动生成测试用例",
+      "path": "../.agent/skills/test-generator/SKILL.md"
+    },
+    "quick-check": {
+      "description": "代码质量快速检查",
+      "path": "../.agent/skills/quick-check/SKILL.md"
+    },
+    "context-injector": {
+      "description": "上下文注入，切换模块时自动触发",
+      "path": "../.agent/skills/context-injector/SKILL.md"
+    }
+  }
+}

@@ -28,10 +28,10 @@ function: "{function_name}"
 ```requirements-registry
 # =============================================================================
 # L3 Requirements Registry - Function Level (Leaf Node)
-# Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
 # =============================================================================
 
-schema_version: "v0.4.0"
+schema_version: "v0.5.0"
 layer: L3
 parent: "docs/L2/{feature}/{module}/requirements.md"
 source_checksum: "{checksum}"

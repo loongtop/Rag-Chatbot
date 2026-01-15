@@ -25,10 +25,10 @@ feature: "{feature_name}"
 ```requirements-registry
 # =============================================================================
 # L1 Requirements Registry - Feature Level
-# Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
 # =============================================================================
 
-schema_version: "v0.4.0"
+schema_version: "v0.5.0"
 layer: L1
 parent: "docs/L0/requirements.md"
 source_checksum: "{checksum}"

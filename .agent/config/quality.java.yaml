@@ -1,8 +1,11 @@
 # Java Quality Profile
 # NOTE:
 # - Default commands use Maven (mvn). If using Gradle, replace with `./gradlew` equivalents.
-# - {package}: Your source package path (e.g., com/example/project).
-# - {Feature}: Feature class name.
+# - Placeholders:
+#   - {package}: Your source package path (e.g., com/example/project)
+#   - {Feature}: Feature class name
+#   - {MinCoverage}: Minimum coverage percentage (default: 95, from charter.yaml quality_requirements.code.test_coverage)
+#   - {ProjectName}: Maven project name (from pom.xml <artifactId>)
 
 language: java
 version: "17+"
@@ -24,11 +27,14 @@ test:
         └── integration/
 
 commands:
+  # 使用 charter.yaml 中的 coverage 要求，默认 95%
   test: "mvn test jacoco:report -Djacoco.min.coverage={MinCoverage}"
   lint: "mvn checkstyle:check"
   build: "mvn clean package -DskipTests"
-  typecheck: null  # Java is statically typed (javac handles this during build)
+  typecheck: null  # Java 是静态类型语言，编译时检查
   security: "mvn dependency-check:check"
+  # 示例：使用 Gradle
+  # test: "./gradlew test jacocoTestReport -PminCoverage={MinCoverage}"
 
 dependencies:
   install: "mvn dependency:resolve"

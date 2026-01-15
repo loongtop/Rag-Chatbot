@@ -16,18 +16,30 @@
 
 冻结后，所有 Agent 只能**引用**，不得**修改** Charter。
 
-### 2. 单模块推进
+### 2. 单模块推进（Single Module）
 
-每次只处理**一个 Feature/Module**，不允许跨模块并行。
+单个 Agent 实例**每次只处理一个 Feature/Module**。
+
+**多人协作时可并行**：不同成员可同时处理不同模块，每个模块需独立维护 `execution-tracker.md`，L1 集成门禁统一验证。
 
 ---
 
 ## 溯源门禁（Traceability-First）
 
-在生成任意层级的 `requirements.md` / `interfaces.md` 之前，先产出同目录 `split-report.md`：
-- 覆盖矩阵：上游条目 → 下游 REQ/接口（或 N/A + 原因）
-- 规则：下游每条需求/接口必须带 `Source`，不得凭空新增
- - 工作流：`/requirements-split`
+根据 `charter.yaml` 的 `traceability.mode` 配置决定行为：
+
+| mode | split-report | Source 要求 | 阻塞 |
+|------|--------------|-------------|------|
+| `strict` | 必须 | 必填 | 阻塞 |
+| `assist` | 推荐 | 建议 | 不阻塞 |
+| `off` | 跳过 | 无要求 | 不阻塞 |
+
+生成下一层 `requirements.md` / `interfaces.md` 前：
+- 产出同目录 `split-report.md`
+- 生成覆盖矩阵：上游条目 → 下游 REQ/接口（或 N/A + 原因）
+- 工作流：`/requirements-split`
+
+---
 
 ## Agent 触发条件
 
@@ -66,7 +78,7 @@ L3 阶段必须采用测试先行：
 | L2 | `requirements.L2.template.md` + `execution-tracker.template.md` |
 | L3 | `requirements.L3.template.md` |
 
-> **v0.4.0 必须**: 所有模板使用 Registry 块作为唯一事实源。生成后执行 `/requirements-render` + `/requirements-validate`。
+> **v0.5.0 必须**: 所有模板使用 Registry 块作为唯一事实源。生成后执行 `/requirements-render` + `/requirements-validate`。
 
 ---
 

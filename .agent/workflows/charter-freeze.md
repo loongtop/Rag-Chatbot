@@ -36,9 +36,43 @@ grep -E "^meta:|^objective:|^scope:|^metrics:" charter.yaml
 
 ### 2. 生成校验和
 
-// turbo
+使用以下命令生成校验和（排除 `freeze` 区块）：
+
+**方法 A：Python（推荐，跨平台兼容）**
 ```bash
-sed '/^freeze:/,/^[a-z]/d' charter.yaml | shasum -a 256 | cut -d' ' -f1
+python3 -c "
+import yaml
+import hashlib
+import json
+from datetime import datetime, timezone
+
+with open('charter.yaml', 'r') as f:
+    data = yaml.safe_load(f)
+
+# 移除 freeze 区块
+data.pop('freeze', None)
+
+# 生成稳定的 JSON 表示（确保跨平台一致）
+content = json.dumps(data, sort_keys=True, ensure_ascii=False)
+checksum = hashlib.sha256(content.encode('utf-8')).hexdigest()
+print(checksum)
+"
+```
+
+**方法 B：sed（POSIX 系统）**
+```bash
+# 使用 Python 生成临时文件（更可靠）
+python3 -c "
+import yaml
+import json
+with open('charter.yaml') as f:
+    data = yaml.safe_load(f)
+data.pop('freeze', None)
+with open('.charter-temp.yaml', 'w') as f:
+    yaml.dump(data, f, default_flow_style=False, sort_keys=True, allow_unicode=True)
+"
+shasum -a 256 .charter-temp.yaml | cut -d' ' -f1
+rm -f .charter-temp.yaml
 ```
 
 ### 3. 更新冻结状态

@@ -75,12 +75,23 @@ Integrator ◄──artifacts── Reviewer ◄──artifacts── Tester
 
 ---
 
-## Parallel Execution
+## 并行执行（Multi-Module Development）
 
-独立的 L1 功能可并行开发：
+**规则**：
+- 单个 Agent 实例**每次只处理一个 Module/Feature**
+- 多人/多 Agent 实例可并行处理**不同**模块
+- 每个并行分支需独立维护 `execution-tracker.md`
+- L1 集成门禁统一验证所有模块后通过
 
 ```
-Feature A (Auth)    ─┐
-Feature B (Cart)    ─┼─► Parallel Development
-Feature C (Payment) ─┘
+模块 A (Auth) execution-tracker ─┐
+模块 B (Cart) execution-tracker ─┼─► 并行开发 → L1 统一集成门禁
+模块 C (Payment) execution-tracker ─┘
 ```
+
+**限制**：
+- ❌ 单个 Agent 不应同时处理多个模块
+- ✅ 多人协作时可并行，每个负责独立模块
+- ⚠️ 并行开发的模块需独立验收后统一集成
+
+---

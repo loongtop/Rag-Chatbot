@@ -26,10 +26,10 @@ profile: "{profile}"
 ```requirements-registry
 # =============================================================================
 # Requirements Registry (Single Source of Truth)
-# Schema: v1.0 | Template: v2.0 | CAF: v0.4.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
 # =============================================================================
 
-schema_version: "v0.4.0"
+schema_version: "v0.5.0"
 layer: L0
 parent: "charter.yaml"
 source_checksum: "{checksum}"

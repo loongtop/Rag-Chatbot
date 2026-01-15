@@ -60,7 +60,7 @@ layer: L0 | L1 | L2 | L3
 parent: {parent_path}
 source_checksum: "{sha256}"
 profile: "{profile}"
-schema_version: "v0.4.0"
+schema_version: "v0.5.0"
 ---
 ```
 
@@ -69,7 +69,7 @@ schema_version: "v0.4.0"
 ## Registry Block Structure
 
 ```requirements-registry
-schema_version: "v0.4.0"
+schema_version: "v0.5.0"
 layer: L0 | L1 | L2 | L3
 parent: "{parent_path}"
 requirements: [...]
@@ -119,5 +119,5 @@ Gate_Check:
 
 | Component | Version |
 |-----------|--------|
-| CAF | v0.4.0 |
-| schema_version | v0.4.0 |
+| CAF | v0.5.0 |
+| schema_version | v0.5.0 |

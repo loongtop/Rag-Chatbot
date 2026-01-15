@@ -1,10 +1,17 @@
 # Swift Quality Profile
 # NOTE:
-# - `xcodebuild` scheme/destination vary by project; treat `{scheme}` and `{destination}` as placeholders.
-# - Typical destinations:
-#   - iOS Simulator: `platform=iOS Simulator,name=<Any iPhone Simulator>`
-#   - watchOS Simulator: `platform=watchOS Simulator,name=<Any Apple Watch Simulator>`
+# - Placeholders:
+#   - {ProjectName}: Xcode project name (without .xcodeproj)
+#   - {TargetName}: Target name (e.g., MyApp, MyAppWatch)
+#   - {scheme}: Build scheme name (usually equals {TargetName})
+#   - {destination}: Platform destination
+#
+# Typical destinations:
+#   - iOS Simulator: `platform=iOS Simulator,name=iPhone 15`
+#   - watchOS Simulator: `platform=watchOS Simulator,name=Apple Watch Series 9`
 #   - macOS: `platform=macOS`
+#   - 通用: `generic/platform=iOS Simulator`
+
 language: swift
 version: "5.9+"
 
@@ -23,12 +30,18 @@ test:
     └── {Feature}Tests.swift
 
 commands:
-  test: "xcodebuild test -scheme {scheme} -destination '{destination}'"
+  # 覆盖率需要额外配置（使用 `--enable-code-coverage`）
+  test: "xcodebuild test -scheme {scheme} -destination '{destination}' CODE_COVERAGE=YES"
   lint: "swiftlint lint --strict"
-  typecheck: null  # Swift is statically typed (typecheck is part of build)
+  typecheck: null  # Swift 是静态类型语言，编译时检查
   security: "gitleaks detect --source . --no-git"
   build: "xcodebuild clean build -scheme {scheme} -destination '{destination}'"
-  
+
+  # 常用命令速查
+  # 测试 (iOS Simulator): xcodebuild test -scheme MyApp -destination 'platform=iOS Simulator,name=iPhone 15'
+  # 构建 (Release): xcodebuild archive -scheme MyApp -destination 'generic/platform=iOS'
+  # lint: swiftlint
+
 dependencies:
   install: "brew install swiftlint gitleaks"
 

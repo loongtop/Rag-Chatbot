@@ -14,24 +14,37 @@ description: Validate charter.yaml format and completeness
    ```
 
 2. **检查必需字段**
-   验证以下顶级字段存在（与 charter.template.yaml 一致）:
-   - `meta` (id, name, owner, version)
-   - `objective` (problems, business_goals)
-   - `scope` (must_have, out_of_scope)
-   - `metrics` (performance, security, stability)
-   - `environments` (dev, staging, production)
-   - `quality_requirements` (code, performance, security)
-   - `language_profile` 或 `components`（二选一必填）
+
+   | 字段 | 类型 | 说明 |
+   |------|------|------|
+   | `meta` | 必填 | id, name, owner, version |
+   | `objective` | 必填 | problems, business_goals |
+   | `scope` | 必填 | must_have, out_of_scope |
+   | `deliverables` | 必填 | mandatory 列表 |
+   | `quality_requirements` | 必填 | code, performance, security |
+   | `language_profile` 或 `components` | 必填 | 二选一 |
+   | `metrics` | 建议 | performance, security, stability, usability |
+   | `environments` | 建议 | dev, staging, production 配置 |
+   | `stakeholders` | 可选 | 用户画像 |
+   | `constraints` | 可选 | resource, technology_boundary |
+   | `dependencies` | 可选 | external_systems, resources |
+   | `risks` | 可选 | 风险及应对措施 |
 
 3. **验证 YAML 语法**
    ```bash
-   python -c "import yaml; yaml.safe_load(open('charter.yaml'))"
+   # 方式 A：Python（需要 PyYAML）
+   python3 -c "import yaml; yaml.safe_load(open('charter.yaml'))"
+   
+   # 方式 B：yq（无 Python 依赖）
+   yq eval '.' charter.yaml > /dev/null
    ```
+
+   > **依赖说明**: `yaml.safe_load` 需要 PyYAML 库（`pip install pyyaml`）。
 
 4. **报告结果**
    - ✅ 通过: 所有必需字段存在且格式正确
-   - ❌ 错误: 必须修复才能继续
-   - ⚠️ 警告: 建议改进但不阻塞
+   - ❌ 错误: 缺少必需字段，必须修复
+   - ⚠️ 警告: 建议补充但不阻塞（metrics, environments 等）
 
 ## 使用示例
 

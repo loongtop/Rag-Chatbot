@@ -4,15 +4,9 @@ description: Render requirements document body and appendices from Registry bloc
 
 # /requirements-render Workflow
 
-Renders the generated sections (body text + appendices) of a requirements document from its embedded Registry block.
+> ⚠️ **重要说明**: 此工作流描述了复杂的数据转换逻辑，推荐实现为 CLI 工具（如 `caf-render`）。LLM 应仅调用工具，而非直接执行此逻辑。
 
-## Prerequisites
-
-- Requirements document contains `requirements-registry` block with `schema_version: "v0.4.0"`
-- Registry block is populated
-- Profile is set in frontmatter or Registry
-
-## Usage
+## 使用方式
 
 ```
 /requirements-render <layer> [path]
@@ -20,119 +14,47 @@ Renders the generated sections (body text + appendices) of a requirements docume
 
 **Arguments:**
 - `layer`: L0 | L1 | L2 | L3
-- `path`: (optional) Specific document path. If omitted, uses default location.
+- `path`: (可选) 文档路径，省略时使用默认位置
 
-**Examples:**
-```
-/requirements-render L0
-/requirements-render L1 docs/L1/chat-widget/requirements.md
-```
+## 推荐 CLI 实现
 
-## Workflow Steps
+```bash
+# 推荐使用专用 CLI 工具
+caf-render --layer L0 --input docs/L0/requirements.md
+caf-render --layer L1 --input docs/L1/chat-widget/requirements.md
 
-### 1. Load Registry Block
-
-1. Open target requirements document
-2. Parse the `requirements-registry` fenced code block
-3. Validate against `.agent/schemas/requirements-registry.schema.yaml`
-4. If validation fails, abort with error report
-
-### 2. Load Profile Configuration
-
-1. Read `profile` from Registry or frontmatter
-2. Load profile from `.agent/config/srs-profiles.yaml`
-3. Determine applicable sections
-
-### 3. Render Body Text (§1-§5)
-
-For each applicable SRS section:
-
-1. **§1 Introduction**: Generate from `parent`, `source_checksum`, profile
-2. **§2 Overall Description**: Generate from `requirements[].sources[]` grouped by Charter section
-3. **§3 Specific Requirements**: Generate summaries pointing to Appendix A
-4. **§4 Input/Output**: Extract from relevant requirements
-5. **§5 Quality Gates**: Extract from `section: quality_gate` requirements
-
-Each paragraph MUST include:
-```markdown
-_Source_: `{sources[].path}`  
-_Covered by_: `{requirement.id}`
+# 或通过 Python 脚本调用
+python -m caf.tools.render requirements.md --output docs/L0/requirements.md
 ```
 
-### 4. Render Appendix A (Requirements Table)
+## 核心逻辑
 
-Transform `requirements[]` into table:
+### 1. 读取 Registry 块
 
-```markdown
-| REQ-ID | Priority | Statement | Sources | Acceptance | Status |
-|--------|----------|-----------|---------|------------|--------|
-| {id} | {priority} | {statement} | {sources[].id or path} | {acceptance[]} | {status} |
-```
+从 requirements.md 中提取 `requirements-registry` 代码块。
 
-Sort by: `section` → `priority` → `id`
+### 2. 生成内容
 
-### 5. Render Appendix B (Traceability Matrix)
+基于 Registry 数据生成文档正文和附录：
 
-1. Collect all unique `sources[].path` from `requirements[]`, `tbds[]`, `exclusions[]`
-2. Group by Charter item
-3. Generate matrix:
+| 章节 | 内容 |
+|------|------|
+| §1 Introduction | 项目信息、来源 |
+| §2 Overall Description | 需求来源汇总 |
+| §3 Specific Requirements | 需求摘要 |
+| 附录 A | 需求表格 |
+| 附录 B | 溯源矩阵 |
+| 附录 C | TBD 表格 |
+| 附录 D | 接口表格（L1/L2） |
 
-```markdown
-| Charter Item | Covered By | Status | Notes |
-|--------------|------------|--------|-------|
-| {source.path} | {REQ-IDs / TBD-IDs / N/A} | ✅ | {exclusion.reason if N/A} |
-```
+### 3. 写入规则
 
-### 6. Render Appendix C (TBD Table)
+1. 找到 `<!-- GENERATED CONTENT BELOW -->` 标记
+2. 替换该标记之后、Gate Check 之前的**所有内容**
+3. **保留** Registry 块和显式标记为可编辑的部分
 
-Transform `tbds[]` into table:
+## 注意事项
 
-```markdown
-| TBD-ID | Question | Sources | Impact | Owner | Target Layer | Status |
-|--------|----------|---------|--------|-------|--------------|--------|
-| {id} | {question} | {sources[]} | {impact} | {owner} | {target_layer} | {status} |
-```
-
-### 7. Render Appendix D (Interfaces Table) - L1/L2 Only
-
-If `interfaces[]` exists:
-
-```markdown
-| Name | Type | Description | Input | Output | Consumers | Providers |
-|------|------|-------------|-------|--------|-----------|-----------|
-| {name} | {type} | {description} | {contract.input} | {contract.output} | {consumers[]} | {providers[]} |
-```
-
-### 8. Update Generated Content Region
-
-1. Locate `<!-- GENERATED CONTENT BELOW -->` marker
-2. Replace all content until end of file (before Gate Check)
-3. Preserve Registry block and any editable sections
-
-### 9. Trigger Validation
-
-After render completes, automatically trigger:
-```
-/requirements-validate <layer> [path]
-```
-
-## Output
-
-- Updated requirements document with rendered body and appendices
-- Validation report (from chained `/requirements-validate`)
-
-## Error Handling
-
-| Error | Action |
-|-------|--------|
-| Registry schema invalid | Abort, show validation errors |
-| Profile not found | Warn, use `fullstack-web` as fallback |
-| Missing required sections | Warn in output, continue render |
-| Circular references | Abort, show reference chain |
-
-## Notes
-
-- Generated content is marked `DO NOT EDIT MANUALLY`
-- Re-running render overwrites all generated sections
-- Manual edits to generated sections will be lost
-- Only edit the Registry block and explicitly editable sections (Function Spec, Test Spec in L3)
+- 生成内容标记为 `<!-- GENERATED -->`，手动编辑会被覆盖
+- 重新运行会覆盖所有生成内容
+- 手动编辑仅限 Registry 块和显式标记的可编辑区域

@@ -45,13 +45,23 @@ Test Spec (TDD)
 | L2 | Modules | requirements.md, interfaces.md, **execution-tracker.md** | `requirements.L2.template.md` |
 | L3 | Functions | requirements.md (含 Function Spec + Test Spec) | `requirements.L3.template.md` |
 
-> **v0.4.0 必须**: 生成 requirements.md 后执行 `/requirements-render` + `/requirements-validate`
+> **v0.5.0 必须**: 生成 requirements.md 后执行 `/requirements-render` + `/requirements-validate`
 
-### Traceability Gate（推荐启用）
+### Traceability Gate（可配置）
 
-在每次层级迁移（Charter→L0、L0→L1、L1→L2）前，先生成同目录 `split-report.md`：
-- 目的：验证“可拆分性”并形成**覆盖矩阵**（上游条目 → 下游 REQ/接口）
-- 约束：下游每条需求/接口必须带 `Source`，不得凭空新增
+Traceability Gate 的行为由 `charter.yaml` 中的 `traceability.mode` 控制：
+
+| mode | 行为 |
+|------|------|
+| `strict` | **必须**：生成下一层文档前必须先生成 `split-report.md` 且 Gate PASS |
+| `assist` | **推荐**：建议使用，但 Gate FAIL 不阻塞（仅警告） |
+| `off` | **跳过**：不执行溯源门禁 |
+
+**默认行为**：使用 `strict` 模式以确保需求可追溯。
+
+在每次层级迁移（Charter→L0、L0→L1、L1→L2）前，根据 `traceability.mode` 决定是否生成 `split-report.md`：
+- 目的：验证"可拆分性"并形成**覆盖矩阵**（上游条目 → 下游 REQ/接口）
+- 约束（strict 模式）：下游每条需求/接口必须带 `Source`，不得凭空新增
 - 模板：`split-report.template.md`
 - 工作流：`/requirements-split`
 
@@ -68,9 +78,10 @@ E-commerce Platform (L0)
 ```
 
 **递归粒度规则**：
-- 每次只推进**一个 Feature/Module**
-- 不允许跨模块并行
-- 使用 `execution-tracker.md` 追踪进度
+- 单个 Agent 实例**每次只推进一个 Feature/Module**
+- 多人/多实例可并行处理不同模块（需独立 execution-tracker）
+- L2 层的 execution-tracker 汇总所有 L3 完成状态
+- L1 集成门禁统一验证所有模块
 
 ---
 

@@ -38,12 +38,64 @@ Test Spec (TDD)
 
 将复杂需求逐层分解为可实现的函数规格。
 
-| Layer | Name | Outputs | Template |
-|-------|------|---------|----------|
-| L0 | Charter | requirements.md, subtasks.md | `requirements.L0.template.md` |
-| L1 | Features | requirements.md, interfaces.md, subtasks.md | `requirements.L1.template.md` |
-| L2 | Modules | requirements.md, interfaces.md, **execution-tracker.md** | `requirements.L2.template.md` |
-| L3 | Functions | requirements.md (含 Function Spec + Test Spec) | `requirements.L3.template.md` |
+| Layer | Name | Outputs | Template | Granularity Support |
+|-------|------|---------|----------|---------------------|
+| L0 | Charter | requirements.md, subtasks.md | `requirements.L0.template.md` | - |
+| L1 | Features | requirements.md, interfaces.md, subtasks.md | `requirements.L1.template.md` | Optional |
+| L2 | Modules | requirements.md, interfaces.md, **execution-tracker.md** | `requirements.L2.template.md` | Optional |
+| L3 | Functions | requirements.md (含 Function Spec + Test Spec) | `requirements.L3.template.md` | Required |
+
+> **v0.5.0 特性**：L1/L2 层可根据复杂度跳过，使用 `granularity=medium/light/direct` 参数。
+
+### 自适应分解粒度（v0.5.0 新增）
+
+```yaml
+granularity 参数:
+  - auto:   自动评估复杂度选择路径（推荐）
+  - full:   强制 L0→L1→L2→L3
+  - medium: L0→L2→L3（跳过 L1）
+  - light:  L0→L3（跳过 L1/L2）
+  - direct: L0→代码（仅配置/胶水代码）
+```
+
+### 复杂度评估
+
+```python
+评估维度 = {
+    "scope_items": len(charter.scope.must_have),
+    "components": len(charter.components),
+    "cross_deps": count_cross_module_dependencies(),
+}
+
+if scope_items > 20 OR components > 3 OR cross_deps > 2:
+    granularity = "full"
+elif scope_items > 10 OR components > 1:
+    granularity = "medium"
+else:
+    granularity = "light"
+```
+
+### 产物路径对比
+
+```
+# full (L0→L1→L2→L3)
+docs/
+├── L0/requirements.md
+├── L1/feature-a/requirements.md
+├── L2/feature-a/module-x/requirements.md
+└── L3/feature-a/module-x/func-y/requirements.md
+
+# medium (L0→L2→L3)
+docs/
+├── L0/requirements.md
+└── L2/feature-a/module-x/requirements.md
+    └── L3/ (嵌套)
+
+# light (L0→L3)
+docs/
+├── L0/requirements.md
+└── L3/feature-a/func-x/requirements.md
+```
 
 > **v0.5.0 必须**: 生成 requirements.md 后执行 `/requirements-render` + `/requirements-validate`
 

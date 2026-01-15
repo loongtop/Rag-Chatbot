@@ -2,12 +2,13 @@
 status: draft
 owner: architect
 layer: L3
-parent: docs/L2/{feature}/{module}/requirements.md
+parent: docs/L{parent_layer}/{feature}/{module}/requirements.md
 source_checksum: "{checksum}"
 profile: "{profile}"
 feature: "{feature_name}"
 module: "{module_name}"
 function: "{function_name}"
+decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3
 ---
 
 # L3 Requirements: {function_name}
@@ -20,6 +21,8 @@ function: "{function_name}"
 > | Function Spec | Source | ✅ Editable (by Architect) |
 > | Test Spec | Source | ✅ Editable (by Tester Phase 1) |
 > | Body text | Generated | 🔒 Readonly |
+>
+> **分解路径**: `{decomposition_path}` (由 `/requirements-split granularity=` 决定)
 
 ---
 
@@ -33,7 +36,7 @@ function: "{function_name}"
 
 schema_version: "v0.5.0"
 layer: L3
-parent: "docs/L2/{feature}/{module}/requirements.md"
+parent: "docs/L{parent_layer}/{feature}/{module}/requirements.md"
 source_checksum: "{checksum}"
 profile: "{profile}"
 
@@ -45,8 +48,8 @@ requirements:
     priority: P0
     statement: "函数应当..."
     sources:
-      - id: "REQ-L2-001"
-        path: "docs/L2/{feature}/{module}/requirements.md#REQ-L2-001"
+      - id: "REQ-L{parent_layer}-001"
+        path: "docs/L{parent_layer}/{feature}/{module}/requirements.md#REQ-L{parent_layer}-001"
     acceptance:
       - "验收条件1"
     status: draft

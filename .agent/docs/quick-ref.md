@@ -6,17 +6,55 @@
 
 ## Workflow Commands
 
-| Command | Description |
-|---------|-------------|
-| `/charter-init` | Initialize new project |
-| `/charter-validate` | Validate charter.yaml |
-| `/charter-freeze` | Lock charter (before L1); recommended `chmod a-w charter.yaml` |
-| `/charter-unfreeze` | Unlock for modifications; if needed `chmod u+w charter.yaml` |
-| `/charter-status` | Check project progress |
-| `/charter-quality` | Run quality gates |
-| `/requirements-split` | Create split-report.md + traceability matrix |
-| `/requirements-render` | Registry → body + appendices |
-| `/requirements-validate` | Coverage/traceability/acceptance gates |
+| Command | Description | Parameters |
+|---------|-------------|------------|
+| `/charter-init` | Initialize new project | `--profile rag-web` |
+| `/charter-validate` | Validate charter.yaml | |
+| `/charter-freeze` | Lock charter (before L1) | recommended `chmod a-w charter.yaml` |
+| `/charter-unfreeze` | Unlock for modifications | if needed `chmod u+w charter.yaml` |
+| `/charter-status` | Check project progress | |
+| `/charter-quality` | Run quality gates | |
+| `/requirements-split` | Create split-report.md + traceability matrix | `granularity=auto/full/medium/light/direct` |
+| `/requirements-render` | Registry → body + appendices | |
+| `/requirements-validate` | Coverage/traceability/acceptance gates | |
+
+### Granularity 参数（v0.5.0）
+
+| 值 | 分解路径 | 适用场景 |
+|---|---------|----------|
+| `auto` | **自动评估**复杂度选择 | 默认，推荐 |
+| `full` | L0→L1→L2→L3 | 复杂系统，多模块 |
+| `medium` | L0→L2→L3 | 中等系统，跳过 L1 |
+| `light` | L0→L3 | 简单功能，跳过 L1/L2 |
+| `direct` | L0→代码 | 纯配置/胶水代码 |
+
+```bash
+# 自动评估（推荐）
+/requirements-split source_path=charter.yaml target_dir=docs/L0
+
+# 强制全链路
+/requirements-split granularity=full
+
+# 轻量分解
+/requirements-split granularity=light
+```
+
+### REQ-ID 分类规则（v0.5.0）
+
+| 分类 | ID 前缀 | 判定规则 |
+|------|---------|----------|
+| 组件专属 | `REQ-L0-{COMP}-*` | 基于 charter.yaml#components |
+| 共享功能 | `REQ-L0-SHARED-*` | 跨组件功能 |
+| 性能 | `REQ-L0-PERF-*` | MET-PERF-* |
+| 安全 | `REQ-L0-SEC-*` | MET-SEC-* |
+| 稳定 | `REQ-L0-STAB-*` | MET-STAB-* |
+| 易用 | `REQ-L0-UX-*` | MET-UX-* |
+| 约束 | `REQ-L0-CON-*` | constraints |
+
+**组件前缀示例**:
+- `api-server` → API
+- `chat-widget` → WGT
+- `admin-dashboard` → ADM
 
 ---
 

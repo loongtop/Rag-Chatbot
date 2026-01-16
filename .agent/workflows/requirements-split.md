@@ -635,3 +635,207 @@ def classify_ui_requirement(req):
 | L2 Target | `direct_l2` 必须指定目标组件 |
 | Coverage | 所有 L0 需求都有明确策略 |
 
+---
+
+## 15. Risks 映射规则（v0.6.2）
+
+Charter 中的 `risks[]` 必须映射到 L0 层，确保风险可追溯。
+
+### REQ-ID 前缀
+
+| 类型 | ID 格式 | 说明 |
+|------|---------|------|
+| 风险缓解 | `REQ-L0-RISK-*` | 对应 charter.yaml#risks 的缓解措施 |
+
+### 映射规则
+
+```python
+def extract_risks(charter):
+    """
+    将 risks 转换为风险缓解需求
+    
+    规则:
+    - 每个 RISK-XXX 必须生成对应的 REQ-L0-RISK-XXX
+    - 需求 statement 描述缓解措施（而非风险本身）
+    - 原始风险描述保留在 sources 中
+    """
+    requirements = []
+    
+    for idx, risk in enumerate(charter.risks):
+        risk_id = extract_id(risk)  # e.g., "RISK-001"
+        mitigation = extract_mitigation(risk)  # 提取缓解措施
+        
+        requirements.append({
+            "id": f"REQ-L0-RISK-{str(idx+1).zfill(3)}",
+            "priority": "P0" if "成本" in risk or "安全" in risk else "P1",
+            "statement": f"实施风险缓解: {mitigation}",
+            "sources": [{
+                "id": risk_id,
+                "path": f"charter.yaml#risks[{idx}]"
+            }],
+            "section": "risk_mitigation"
+        })
+    
+    return requirements
+
+
+def extract_mitigation(risk_text):
+    """
+    从风险描述中提取缓解措施
+    
+    格式: "[RISK-XXX] 风险描述 - 缓解措施"
+    """
+    if " - " in risk_text:
+        return risk_text.split(" - ", 1)[1]
+    return risk_text
+```
+
+### 示例
+
+| Charter Risk | REQ-ID | Statement |
+|--------------|--------|-----------|
+| `[RISK-001] LLM API 成本可能超出预算 - 实施 Token 用量监控、缓存与限流策略` | REQ-L0-RISK-001 | 实施风险缓解: Token 用量监控、缓存与限流策略 |
+| `[RISK-004] Prompt Injection/数据外泄风险 - 输入输出过滤、引用转义...` | REQ-L0-RISK-004 | 实施风险缓解: 输入输出过滤、引用转义、最小权限、审计日志 |
+
+### split-report 必填
+
+| 字段 | 说明 |
+|------|------|
+| Section 5.6 | Risks Inventory（风险清单） |
+| Section 6.4 | Risks → Requirements 映射表 |
+| Section 8 | Traceability Matrix 包含 risks 行 |
+
+---
+
+## 16. Dependencies 映射规则（v0.6.2）
+
+Charter 中的 `dependencies` 必须转换为可验证的依赖约束。
+
+### REQ-ID 前缀
+
+| 类型 | ID 格式 | 说明 |
+|------|---------|------|
+| 外部依赖 | `REQ-L0-DEP-*` | 必须满足的外部系统/资源依赖 |
+
+### 映射规则
+
+```python
+def extract_dependencies(charter):
+    """
+    将 dependencies 转换为依赖约束需求
+    """
+    requirements = []
+    idx = 1
+    
+    # External Systems
+    for ext in charter.dependencies.external_systems:
+        requirements.append({
+            "id": f"REQ-L0-DEP-{str(idx).zfill(3)}",
+            "priority": "P0",
+            "statement": f"依赖外部系统: {ext}",
+            "sources": [{
+                "path": f"charter.yaml#dependencies.external_systems"
+            }],
+            "section": "dependency",
+            "acceptance": [
+                "依赖系统可用性验证",
+                "接口契约已确认"
+            ]
+        })
+        idx += 1
+    
+    # Required Resources
+    for res in charter.dependencies.resources:
+        requirements.append({
+            "id": f"REQ-L0-DEP-{str(idx).zfill(3)}",
+            "priority": "P0",
+            "statement": f"依赖资源: {res}",
+            "sources": [{
+                "path": f"charter.yaml#dependencies.resources"
+            }],
+            "section": "dependency"
+        })
+        idx += 1
+    
+    return requirements
+```
+
+### 示例
+
+| Charter Dependency | REQ-ID | Statement |
+|--------------------|--------|-----------|
+| 现有产品网站（提供嵌入入口） | REQ-L0-DEP-001 | 依赖外部系统: 现有产品网站（提供嵌入入口） |
+| PostgreSQL（启用 pgvector 扩展） | REQ-L0-DEP-003 | 依赖资源: PostgreSQL + pgvector |
+
+---
+
+## 17. Data Contracts 处理（v0.6.2）
+
+Charter 中的数据契约（如 `product_data_contract`, `widget_context_contract`）需要特殊处理。
+
+### 处理方式
+
+| 契约类型 | 处理方式 | 说明 |
+|----------|----------|------|
+| `*_contract` | → `docs/L2/interfaces.md` 的 `IFC-*` 条目 | 在 L2 层定义具体接口 |
+| 或 | → TBD（若细节未确定） | 标记为待定 |
+
+### 映射规则
+
+```python
+def extract_data_contracts(charter):
+    """
+    提取数据契约，转换为接口条目或 TBD
+    """
+    contracts = []
+    
+    for key in charter.keys():
+        if key.endswith("_contract"):
+            contract = charter[key]
+            
+            # 如果有足够细节 → 生成 IFC 条目
+            if "minimum_fields" in contract:
+                contracts.append({
+                    "id": f"IFC-{key.upper()}",
+                    "type": "Data",
+                    "name": key,
+                    "description": f"数据契约: {key}",
+                    "source": f"charter.yaml#{key}"
+                })
+            # 否则 → 标记为 TBD
+            else:
+                contracts.append({
+                    "type": "tbd",
+                    "id": f"TBD-CONTRACT-{key.upper()}",
+                    "question": f"数据契约 {key} 的具体定义",
+                    "source": f"charter.yaml#{key}"
+                })
+    
+    return contracts
+```
+
+### split-report 必填
+
+| 字段 | 说明 |
+|------|------|
+| Section 5.7 | Contracts Inventory（契约清单） |
+| Section 6.5 | Contracts → IFC/TBD 映射 |
+
+---
+
+## 18. Gate Check 完整清单（v0.6.2）
+
+Charter → L0 的完整门禁检查：
+
+| Check | 规则 | v0.6.2 新增 |
+|-------|------|-------------|
+| Scope 覆盖 | `must_have[]` 100% 映射到 REQ-L0-* | |
+| Metrics 覆盖 | `metrics.*[]` 100% 映射到 REQ-L0-{PERF/SEC/STAB/UX}-* | |
+| Constraints 覆盖 | `constraints.*` 100% 映射到 REQ-L0-CON-* | |
+| Exclusions 覆盖 | `out_of_scope[]` 100% 记录 | |
+| TBD 覆盖 | `open_questions[]` 100% 映射到 TBD-L0-* | |
+| **Risks 覆盖** | `risks[]` 100% 映射到 REQ-L0-RISK-* | ✅ |
+| **Dependencies 覆盖** | `dependencies.*[]` 100% 映射到 REQ-L0-DEP-* | ✅ |
+| **Contracts 覆盖** | `*_contract` 100% 映射到 IFC/TBD | ✅ |
+
+

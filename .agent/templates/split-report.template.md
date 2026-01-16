@@ -71,9 +71,45 @@ decomposition_path: L0→L1→L2 | L0→L2 | L0→L1 | L0→L2(single)
 
 > 逐条列出将被分析的上游条目（可引用原句/原段落或 YAML 路径）
 
-| SRC-ID | Upstream Item | Type | Notes |
-|--------|---------------|------|-------|
-| SRC-001 | `{quote_or_pointer}` | requirement / metric / constraint / risk / tbd / out_of_scope | |
+### 5.1 Scope Must-Have
+| SRC-ID | Upstream Item | Type | Component |
+|--------|---------------|------|-----------|
+| SRC-001 | `{quote_or_pointer}` | requirement | {COMP} |
+
+### 5.2 Metrics
+| SRC-ID | Upstream Item | Type | Category |
+|--------|---------------|------|----------|
+| SRC-0XX | `{quote_or_pointer}` | metric | PERF/SEC/STAB/UX |
+
+### 5.3 Constraints
+| SRC-ID | Upstream Item | Type | Category |
+|--------|---------------|------|----------|
+| SRC-0XX | `{quote_or_pointer}` | constraint | resource/allowed/forbidden |
+
+### 5.4 Out of Scope
+| SRC-ID | Upstream Item | Type |
+|--------|---------------|------|
+| SRC-0XX | `{quote_or_pointer}` | exclusion |
+
+### 5.5 Open Questions / TBD
+| SRC-ID | Upstream Item | Type | Impact |
+|--------|---------------|------|--------|
+| SRC-0XX | `{quote_or_pointer}` | tbd | H/M/L |
+
+### 5.6 Risks（v0.6.2）
+| SRC-ID | Upstream Item | Type | Mitigation |
+|--------|---------------|------|------------|
+| SRC-0XX | `{risk_description}` | risk | {mitigation_action} |
+
+### 5.7 Dependencies（v0.6.2）
+| SRC-ID | Upstream Item | Type | Category |
+|--------|---------------|------|----------|
+| SRC-0XX | `{dependency}` | dependency | external_system/resource |
+
+### 5.8 Contracts（v0.6.2）
+| SRC-ID | Upstream Item | Type | Status |
+|--------|---------------|------|--------|
+| SRC-0XX | `{contract_name}` | contract | defined/tbd |
 
 ## 6. Mapping & Split Decisions（映射与拆分决策）
 

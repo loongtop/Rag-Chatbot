@@ -33,11 +33,13 @@ version: v0.6.3
 
 渲染文档 `— END REGISTRY —` 之后的 Body 部分。
 
-```markdown
+````markdown
 ## — BEGIN REGISTRY —
+
 ```architecture-registry
 ...
-`` `
+```
+
 ## — END REGISTRY —
 
 <!-- 以下由 /architecture-render 生成 -->
@@ -48,7 +50,7 @@ version: v0.6.3
 |----|-----------|-----------|
 | ARCH-DB-001 | 使用 pgvector | 满足向量检索需求 |
 ...
-```
+````
 
 ### 2. openapi
 

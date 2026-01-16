@@ -58,28 +58,33 @@ Charter → L0 → L1 → L2 → [Architecture] → /spec → Code
 
 ## 架构 Registry 格式
 
-每个架构文件必须包含 `architecture-registry` 块：
+每个架构文件必须包含 `architecture-registry` 代码块（code fence）：
 
-```yaml
-architecture-registry:
-  schema_version: "v0.6.3"
-  type: "overview"  # overview | database | flows | api
-  
-  items:
-    - id: ARCH-OV-001
-      statement: "系统采用前后端分离架构"
-      sources:
-        - id: "IFC-CHAT-API"
-          path: "docs/L2/interfaces.md#IFC-CHAT-API"
-      rationale: "支持独立部署和扩展"
-      
-    - id: ARCH-DB-001
-      statement: "使用 PostgreSQL + pgvector 存储向量"
-      sources:
-        - id: "REQ-L2-API-001"
-          path: "docs/L2/api-server/requirements.md#REQ-L2-API-001"
-      rationale: "满足 RAG 检索需求"
+````markdown
+## — BEGIN REGISTRY —
+
+```architecture-registry
+schema_version: "v0.6.3"
+type: "overview"  # overview | database | flows | api
+
+items:
+  - id: ARCH-OV-001
+    statement: "系统采用前后端分离架构"
+    sources:
+      - id: "IFC-CHAT-API"
+        path: "docs/L2/interfaces.md#IFC-CHAT-API"
+    rationale: "支持独立部署和扩展"
+    
+  - id: ARCH-DB-001
+    statement: "使用 PostgreSQL + pgvector 存储向量"
+    sources:
+      - id: "REQ-L2-API-001"
+        path: "docs/L2/api-server/requirements.md#REQ-L2-API-001"
+    rationale: "满足 RAG 检索需求"
 ```
+
+## — END REGISTRY —
+````
 
 ## ID 命名规则
 

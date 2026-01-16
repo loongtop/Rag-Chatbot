@@ -350,5 +350,5 @@ paths:
 **生成命令**:
 
 ```bash
-/architecture-render type=openapi output=docs/architecture/openapi.yaml
+/architecture-render output_type=openapi
 ```

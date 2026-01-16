@@ -24,8 +24,9 @@ version: v0.6.3
 
 ### 1. Registry 格式验证
 
-```yaml
-# 必须使用 code fence 格式
+必须使用 code fence 格式：
+
+````
 ```architecture-registry
 schema_version: "v0.6.3"
 items:
@@ -34,8 +35,8 @@ items:
     sources:
       - id: "REQ-*" | "IFC-*"
         path: "..."
-`` `
 ```
+````
 
 ### 2. Sources 覆盖验证
 

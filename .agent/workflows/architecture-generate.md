@@ -74,17 +74,17 @@ version: v0.6.3
 ```yaml
 # 可在项目级覆盖的参数
 embedding:
-  dim: 1536                    # {{embedding_dim}}
-  model: "text-embedding-ada-002"  # {{embedding_model}}
+  dim: 1536                    # {{embedding.dim}}
+  model: "text-embedding-ada-002"  # {{embedding.model}}
 
 chunking:
-  strategy: "recursive"        # {{chunking_strategy}}
-  size: 500                    # {{chunk_size}}
-  overlap: 50                  # {{chunk_overlap}}
+  strategy: "recursive"        # {{chunking.strategy}}
+  size: 500                    # {{chunking.size}}
+  overlap: 50                  # {{chunking.overlap}}
 
 vector:
-  index_type: "hnsw"           # {{index_type}}
-  distance: "cosine"           # {{distance_function}}
+  index_type: "hnsw"           # {{vector.index_type}}
+  distance: "cosine"           # {{vector.distance}}
 ```
 
 ## 使用示例

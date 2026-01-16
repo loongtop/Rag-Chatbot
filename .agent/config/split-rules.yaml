@@ -1,0 +1,169 @@
+# =============================================================================
+# CAF Split Classification Rules
+# Charter Agent Framework v0.6.2
+# =============================================================================
+# 
+# 此配置定义 L0→L1 分解时的分类规则，支持多语言关键词匹配。
+# 格式: "中文|english|français" - 用 | 分隔多语言版本
+#
+# =============================================================================
+
+schema_version: "v0.6.2"
+
+# -----------------------------------------------------------------------------
+# L0 Category Mappings
+# -----------------------------------------------------------------------------
+# 定义 L0 需求类别的处理策略
+
+l0_category_strategy:
+  # 业务功能类别 → 建 L1 Feature
+  feature_categories:
+    - "API"
+    - "ADM"
+    - "SHARED"
+    - "SVC"
+    - "BIZ"
+  
+  # 界面功能类别 → 需要二次判定
+  ui_categories:
+    - "WGT"
+    - "UI"
+    - "FE"
+    - "WEB"
+    - "APP"
+  
+  # 非功能需求类别 → 继承
+  inherit_categories:
+    - "PERF"
+    - "SEC"
+    - "STAB"
+    - "UX"
+    - "CON"
+    - "RISK"
+    - "DEP"
+
+# -----------------------------------------------------------------------------
+# UI Requirement Classification Keywords
+# -----------------------------------------------------------------------------
+# 用于区分"有业务逻辑的界面需求" vs "纯展示/交互需求"
+
+ui_classification:
+  # 有业务逻辑 → strategy: "feature"
+  business_keywords:
+    - "登录|login|connexion"
+    - "验证|verify|validate|vérifier"
+    - "切换|switch|toggle|basculer"
+    - "上传|upload|télécharger"
+    - "处理|process|handle|traiter"
+    - "提交|submit|soumettre"
+    - "认证|authenticate|authentifier"
+    - "授权|authorize|autoriser"
+    - "配置|configure|setting|configurer"
+    - "管理|manage|admin|gérer"
+    - "保存|save|store|enregistrer"
+    - "发送|send|envoyer"
+    - "选择|select|choose|sélectionner"
+    - "创建|create|new|créer"
+    - "删除|delete|remove|supprimer"
+    - "编辑|edit|modify|modifier"
+  
+  # 纯展示/交互 → strategy: "direct_l2"
+  ui_only_keywords:
+    - "样式|style|css|style"
+    - "布局|layout|mise en page"
+    - "动画|animation|animate|animation"
+    - "加载|loading|spinner|chargement"
+    - "响应式|responsive|réactif"
+    - "显示|display|show|afficher"
+    - "渲染|render|rendre"
+    - "嵌入|embed|integrate|intégrer"
+    - "集成|integration|intégration"
+    - "主题|theme|thème"
+    - "颜色|color|colour|couleur"
+    - "字体|font|typography|police"
+    - "图标|icon|icône"
+    - "占位符|placeholder|espace réservé"
+
+# -----------------------------------------------------------------------------
+# Risk Mitigation Keywords
+# -----------------------------------------------------------------------------
+# 用于从风险描述中识别缓解措施
+
+risk_mitigation:
+  # 分隔符 - 用于分割风险描述和缓解措施
+  separators:
+    - " - "
+    - " – "
+    - " → "
+    - ": "
+  
+  # 缓解措施动词 - 用于验证提取的内容是否为缓解措施
+  action_verbs:
+    - "实施|implement|mettre en œuvre"
+    - "建立|establish|établir"
+    - "监控|monitor|surveiller"
+    - "限制|limit|restrict|limiter"
+    - "优化|optimize|optimiser"
+    - "评估|evaluate|assess|évaluer"
+    - "验证|verify|validate|vérifier"
+    - "审计|audit|auditer"
+
+# -----------------------------------------------------------------------------
+# Priority Keywords
+# -----------------------------------------------------------------------------
+# 用于自动判断需求优先级
+
+priority_detection:
+  # P0 关键词（关键/核心/必须）
+  p0_keywords:
+    - "必须|must|required|doit"
+    - "核心|core|essential|fondamental"
+    - "关键|critical|crucial|critique"
+    - "安全|security|secure|sécurité"
+    - "成本|cost|budget|coût"
+  
+  # P1 关键词（重要/应该）
+  p1_keywords:
+    - "应该|should|devrait"
+    - "重要|important|important"
+    - "建议|recommend|suggested|recommandé"
+  
+  # P2 关键词（可选/次要）
+  p2_keywords:
+    - "可选|optional|optionnel"
+    - "次要|minor|secondary|mineur"
+    - "未来|future|later|futur"
+
+# -----------------------------------------------------------------------------
+# Section Detection
+# -----------------------------------------------------------------------------
+# 用于自动检测需求所属 section
+
+section_keywords:
+  functional:
+    - "功能|function|feature|fonctionnalité"
+    - "行为|behavior|behaviour|comportement"
+    - "能力|capability|capacité"
+  
+  performance:
+    - "性能|performance|performance"
+    - "延迟|latency|delay|latence"
+    - "吞吐|throughput|débit"
+    - "并发|concurrent|concurrence"
+  
+  security:
+    - "安全|security|secure|sécurité"
+    - "加密|encrypt|chiffrer"
+    - "认证|auth|authentification"
+    - "权限|permission|permission"
+  
+  reliability:
+    - "可用性|availability|disponibilité"
+    - "稳定|stable|stability|stable"
+    - "恢复|recovery|recover|récupération"
+    - "降级|degradation|dégradation"
+  
+  usability:
+    - "易用|usability|easy|facilité"
+    - "用户体验|UX|user experience|expérience utilisateur"
+    - "无障碍|accessibility|accessibilité"

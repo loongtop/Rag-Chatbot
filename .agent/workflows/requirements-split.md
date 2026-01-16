@@ -521,9 +521,38 @@ def get_profiles(charter):
 
 ---
 
-## 14. L0 → L1 分类规则（v0.6.1）
+## 14. L0 → L1 分类规则（v0.6.2）
 
 在 L0→L1 分解时，需判断每条 L0 需求的处理策略。
+
+> **配置文件**: `.agent/config/split-rules.yaml`
+>
+> 分类规则支持多语言关键词匹配（格式: `"中文|english|français"`）
+
+### 辅助函数
+
+```python
+def load_config(path):
+    """加载 YAML 配置文件"""
+    import yaml
+    with open(path, 'r', encoding='utf-8') as f:
+        return yaml.safe_load(f)
+
+
+def parse_multilang_keywords(keyword_list):
+    """
+    解析多语言关键词
+    
+    输入: ["登录|login|connexion", "验证|verify"]
+    输出: ["登录", "login", "connexion", "验证", "verify"]
+    """
+    keywords = []
+    for item in keyword_list:
+        keywords.extend(item.split('|'))
+    return keywords
+```
+
+### 需求分类决策树
 
 ### 需求分类决策树
 
@@ -559,41 +588,49 @@ def classify_l0_to_l1(l0_req):
     """
     category = l0_req.id.split('-')[2]  # e.g., "WGT" from "REQ-L0-WGT-001"
     
+    # 从配置文件加载分类规则
+    config = load_config(".agent/config/split-rules.yaml")
+    
     # Rule 1: 非功能需求 → 继承
-    if category in ["PERF", "SEC", "STAB", "UX", "CON"]:
+    if category in config['l0_category_strategy']['inherit_categories']:
         return "inherit"
     
     # Rule 2: 业务功能 → 建 Feature
-    if category in ["API", "ADM", "SHARED"]:
+    if category in config['l0_category_strategy']['feature_categories']:
         return "feature"
     
     # Rule 3: 界面功能 → 二次判定
-    if category in ["WGT", "UI", "FE"]:
-        return classify_ui_requirement(l0_req)
+    if category in config['l0_category_strategy']['ui_categories']:
+        return classify_ui_requirement(l0_req, config)
     
     # Default: 建 Feature（保守策略）
     return "feature"
 
 
-def classify_ui_requirement(req):
+def classify_ui_requirement(req, config=None):
     """
     界面需求的 L1 决策
+    
+    配置文件: .agent/config/split-rules.yaml
     """
+    if config is None:
+        config = load_config(".agent/config/split-rules.yaml")
+    
     statement = req.statement
     
+    # 从配置加载关键词（支持多语言）
+    business_keywords = parse_multilang_keywords(
+        config['ui_classification']['business_keywords']
+    )
+    ui_keywords = parse_multilang_keywords(
+        config['ui_classification']['ui_only_keywords']
+    )
+    
     # 有业务逻辑的界面需求 → 建 Feature
-    business_keywords = [
-        "登录", "验证", "切换", "上传", "处理", "提交",
-        "认证", "授权", "配置", "管理"
-    ]
     if any(kw in statement for kw in business_keywords):
         return "feature"
     
     # 纯展示/交互需求 → 直接 L2
-    ui_keywords = [
-        "样式", "布局", "动画", "加载", "响应式",
-        "显示", "渲染", "嵌入", "集成"
-    ]
     if any(kw in statement for kw in ui_keywords):
         return "direct_l2"
     

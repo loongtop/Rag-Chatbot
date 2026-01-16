@@ -17,7 +17,10 @@
 | `/requirements-split` | Create split-report.md + traceability matrix | `granularity=auto/full/medium/light/direct` |
 | `/requirements-render` | Registry → body + appendices | |
 | `/requirements-validate` | Coverage/traceability/acceptance gates | |
-| `/spec` | L2 requirements → Spec tree (recursive) | `source_path=docs/L2/{module}/requirements.md` |
+| `/architecture-generate` | L2→Architecture (v0.6.3) | `type=all/overview/database/flows/api` |
+| `/architecture-validate` | Architecture traceability gates (v0.6.3) | `strict=true/false` |
+| `/architecture-render` | Registry → OpenAPI/ADR (v0.6.3) | `output_type=body/openapi/adr` |
+| `/spec` | Architecture → Spec tree (recursive) | `source_path=docs/L2/{module}/requirements.md` |
 
 ### Granularity 参数（v0.6.0）
 
@@ -160,5 +163,5 @@ Gate_Check:
 
 | Component | Version |
 |-----------|--------|
-| CAF | v0.6.0 |
-| schema_version | v0.6.0 |
+| CAF | v0.6.3 |
+| schema_version | v0.6.3 |

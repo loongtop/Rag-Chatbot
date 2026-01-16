@@ -58,16 +58,16 @@ flowchart TB
 | 阶段 | 说明 | 技术选型 | REQ 来源 |
 |------|------|----------|----------|
 | 解析 | PDF/Word/TXT 提取文本 | unstructured / python-docx | REQ-L2-API-009 |
-| 切块 | 按语义分块 | langchain RecursiveCharacterTextSplitter | |
-| Embedding | 文本向量化 | text-embedding-ada-002 / 本地模型 | REQ-L2-API-004 |
+| 切块 | 按语义分块 | {{chunking.strategy}} (见 architecture-defaults.yaml) | |
+| Embedding | 文本向量化 | {{embedding.model}} | REQ-L2-API-004 |
 | 存储 | 向量 + 元数据 | pgvector | |
 
-**切块策略**:
+**切块策略** (见 `architecture-defaults.yaml`):
 
 ```python
-chunk_size = 500      # 字符数
-chunk_overlap = 50    # 重叠
-separators = ["\n\n", "\n", "。", ".", " "]
+chunk_size = {{chunking.size}}      # 字符数
+chunk_overlap = {{chunking.overlap}}    # 重叠
+separators = {{chunking.separators}}
 ```
 
 ### 1.3 在线查询 (Query)
@@ -75,9 +75,9 @@ separators = ["\n\n", "\n", "。", ".", " "]
 | 阶段 | 说明 | 配置 | REQ 来源 |
 |------|------|------|----------|
 | Query Embedding | 问题向量化 | 同 Ingestion | REQ-L2-API-001 |
-| 检索 | Top-K 召回 | K=10 | |
-| 重排序 | 相关性排序 | Cohere Rerank / Cross-Encoder | REQ-L0-RISK-002 |
-| 上下文 | 组装 Prompt | Max 3000 tokens | |
+| 检索 | Top-K 召回 | K={{retrieval.top_k}} | |
+| 重排序 | 相关性排序 | {{retrieval.reranker}} | REQ-L0-RISK-002 |
+| 上下文 | 组装 Prompt | Max {{llm.max_context_tokens}} tokens | |
 | LLM 生成 | 回答生成 | GPT-4 / DeepSeek | REQ-L2-API-004 |
 | 引用标注 | 来源标记 | [1], [2]... | REQ-L2-API-001 |
 

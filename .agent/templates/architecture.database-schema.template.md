@@ -137,7 +137,7 @@ erDiagram
 | id | UUID | PK | 主键 | REQ-L2-API-001 |
 | document_id | UUID | FK → documents.id | 所属文档 | |
 | content | TEXT | NOT NULL | 分块内容 | |
-| embedding | VECTOR(1536) | NOT NULL | 向量嵌入 | |
+| embedding | VECTOR({{embedding.dim}}) | NOT NULL | 向量嵌入 (见 architecture-defaults.yaml) | |
 | chunk_index | INT | NOT NULL | 块序号 | |
 | metadata | JSONB | | 包含原文位置等 | |
 
@@ -199,9 +199,9 @@ WITH (m = 16, ef_construction = 64);
 
 | 参数 | 值 | 说明 |
 |------|-----|------|
-| 索引类型 | HNSW | 比 IVFFlat 更适合动态数据 |
-| 维度 | 1536 | text-embedding-ada-002 |
-| 距离函数 | cosine | 语义相似度 |
+| 索引类型 | {{vector.index_type}} | 见 architecture-defaults.yaml |
+| 维度 | {{embedding.dim}} | {{embedding.model}} |
+| 距离函数 | {{vector.distance}} | 语义相似度 |
 
 ### 3.2 普通索引
 

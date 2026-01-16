@@ -1,0 +1,109 @@
+# Architecture Defaults Configuration (CAF v0.6.3)
+#
+# This file defines default values for architecture templates.
+# Projects can override these values by creating a project-level
+# architecture-defaults.yaml file.
+#
+# Usage in templates:
+#   {{embedding_dim}} → 1536
+#   {{embedding_model}} → text-embedding-ada-002
+
+schema_version: "v0.6.3"
+
+# -----------------------------------------------------------------------------
+# Embedding Configuration
+# -----------------------------------------------------------------------------
+embedding:
+  # Vector dimension (depends on embedding model)
+  # - OpenAI text-embedding-ada-002: 1536
+  # - OpenAI text-embedding-3-small: 1536
+  # - OpenAI text-embedding-3-large: 3072
+  # - Cohere embed-english-v3.0: 1024
+  # - Local models: varies
+  dim: 1536
+  
+  # Embedding model name
+  model: "text-embedding-ada-002"
+  
+  # Batch processing
+  batch_size: 100
+
+# -----------------------------------------------------------------------------
+# Chunking Configuration
+# -----------------------------------------------------------------------------
+chunking:
+  # Strategy: recursive | sentence | semantic | fixed
+  strategy: "recursive"
+  
+  # Chunk size (characters)
+  size: 500
+  
+  # Overlap between chunks
+  overlap: 50
+  
+  # Separators for recursive chunking (in order of priority)
+  separators:
+    - "\n\n"  # Paragraphs
+    - "\n"    # Lines
+    - "。"    # Chinese sentence
+    - "."     # English sentence
+    - " "     # Words
+
+# -----------------------------------------------------------------------------
+# Vector Index Configuration  
+# -----------------------------------------------------------------------------
+vector:
+  # Index type: hnsw | ivfflat
+  # - HNSW: Better for dynamic data, higher recall
+  # - IVFFlat: Better for static data, faster training
+  index_type: "hnsw"
+  
+  # Distance function: cosine | l2 | inner_product
+  distance: "cosine"
+  
+  # HNSW parameters
+  hnsw:
+    m: 16              # Max connections per layer
+    ef_construction: 64  # Build-time search width
+
+# -----------------------------------------------------------------------------
+# Retrieval Configuration
+# -----------------------------------------------------------------------------
+retrieval:
+  # Top-K candidates for initial retrieval
+  top_k: 10
+  
+  # Score threshold (0.0 - 1.0)
+  score_threshold: 0.5
+  
+  # Reranking enabled
+  rerank: true
+  
+  # Reranker model (when rerank=true)
+  reranker: "cross-encoder"
+
+# -----------------------------------------------------------------------------
+# LLM Configuration Defaults
+# -----------------------------------------------------------------------------
+llm:
+  # Max context tokens for RAG prompt
+  max_context_tokens: 3000
+  
+  # Temperature for generation
+  temperature: 0.7
+  
+  # Max tokens for response
+  max_response_tokens: 1000
+
+# -----------------------------------------------------------------------------
+# Database Schema Defaults
+# -----------------------------------------------------------------------------
+database:
+  # UUID generation extension
+  uuid_extension: "uuid-ossp"
+  
+  # Timestamp default
+  timestamp_default: "NOW()"
+  
+  # pgvector extension
+  pgvector_extension: "vector"

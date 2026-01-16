@@ -1,4 +1,4 @@
-# Charter Agent Framework v0.6.0 详细使用指南
+# Charter Agent Framework v0.6.3 详细使用指南
 
 本文档提供从零开始使用 Charter Agent Framework 实现软件的完整、详细步骤。
 
@@ -85,10 +85,11 @@ my-awesome-project/
 ├── docs/
 │   ├── L0/           # Phase 1：系统级需求
 │   ├── L1/           # Phase 1：Feature 级需求
-│   └── L2/           # Phase 1：模块级需求 + 模块间接口契约
-├── specs/            # Phase 1.5：Spec 树（leaf 可直接写代码）
-├── src/              # Phase 2 源代码
-├── tests/            # Phase 2 测试代码
+│   ├── L2/           # Phase 1：模块级需求 + 模块间接口契约
+│   └── architecture/ # Phase 1.5：技术架构设计 (v0.6.3)
+├── specs/            # Phase 2：Spec 树（leaf 可直接写代码）
+├── src/              # Phase 3：源代码
+├── tests/            # Phase 3：测试代码
 └── charter.yaml      # 项目任务书
 ```
 
@@ -469,7 +470,10 @@ Phase 2: Code ✅ → Tests ✅
 | `/requirements-split` | 每次层级迁移前 | 生成 split-report.md（溯源覆盖矩阵） |
 | `/requirements-render` | 生成 requirements.md 后 | 从 Registry 渲染正文+附录 |
 | `/requirements-validate` | 生成 requirements.md 后 | 覆盖率/溯源/可验收检查 |
-| `/spec` | L2 完成后 | 生成 specs/SPEC-*.md + specs/spec-tree.md |
+| `/architecture-generate` | L2 完成后 | 生成 docs/architecture/*.md (v0.6.3) |
+| `/architecture-validate` | 架构生成后 | 验证架构追溯性 (v0.6.3) |
+| `/architecture-render` | 架构更新后 | 渲染 OpenAPI/ADR (v0.6.3) |
+| `/spec` | 架构完成后 | 生成 specs/SPEC-*.md + specs/spec-tree.md |
 
 ---
 

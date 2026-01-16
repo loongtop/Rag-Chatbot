@@ -5,7 +5,7 @@ description: |
   当用户说"生成架构"、"技术设计"、"数据库设计"时自动触发。
   输出 docs/architecture/ 目录下的设计文档。
 version: v0.6.3
-triggers:
+trigger_keywords:
   - "生成架构"
   - "技术设计"
   - "设计数据库"

@@ -77,9 +77,16 @@ decomposition_path: L0→L1→L2 | L0→L2 | L0→L1 | L0→L2(single)
 
 ## 6. Mapping & Split Decisions（映射与拆分决策）
 
-| SRC-ID | Decision | Downstream Output | Source | Notes |
-|--------|----------|------------------|--------|-------|
-| SRC-001 | split / keep / N/A | `REQ-Lx-000`, `interfaces.md#{name}` | `{source}` | |
+> v0.6.1: 必须为每条决策指定 `strategy` 字段
+
+| SRC-ID | Decision | Strategy | Downstream Output | Source | Rationale |
+|--------|----------|----------|------------------|--------|-----------|
+| SRC-001 | split / keep / N/A | feature / direct_l2 / inherit | `REQ-Lx-000` | `{source}` | (非 feature 时必填) |
+
+**Strategy 说明**:
+- `feature`: 创建独立 L1 Feature
+- `direct_l2`: 跳过 L1，直接分配到 L2 组件
+- `inherit`: 由所有 L1 Feature 继承（非功能需求）
 
 ## 7. Cross-Layer Traceability（跨层追溯，跳过中间层时）
 

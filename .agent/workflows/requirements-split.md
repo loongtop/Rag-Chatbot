@@ -518,3 +518,120 @@ def get_profiles(charter):
     else:
         return list(profiles)  # 多组件返回列表
 ```
+
+---
+
+## 14. L0 → L1 分类规则（v0.6.1）
+
+在 L0→L1 分解时，需判断每条 L0 需求的处理策略。
+
+### 需求分类决策树
+
+```
+L0 Requirement
+    │
+    ├─ 业务功能 (API/ADM/SHARED) ────────→ strategy: "feature"
+    │                                      创建独立 L1 Feature
+    │
+    ├─ 界面功能 (WGT/UI)
+    │       │
+    │       ├─ 有业务逻辑 ─────────────→ strategy: "feature"
+    │       │   关键词: 登录/验证/切换/上传/处理
+    │       │
+    │       └─ 纯展示/交互 ────────────→ strategy: "direct_l2"
+    │           关键词: 样式/布局/动画/加载/响应式
+    │
+    └─ 非功能需求 (PERF/SEC/STAB/UX/CON) ─→ strategy: "inherit"
+                                           由所有 Feature 继承
+```
+
+### 判定算法
+
+```python
+def classify_l0_to_l1(l0_req):
+    """
+    判断 L0 需求在 L1 层的处理策略
+    
+    Returns:
+        "feature": 创建独立 L1 Feature
+        "direct_l2": 跳过 L1，直接分配到 L2 组件
+        "inherit": 由所有 L1 Feature 继承
+    """
+    category = l0_req.id.split('-')[2]  # e.g., "WGT" from "REQ-L0-WGT-001"
+    
+    # Rule 1: 非功能需求 → 继承
+    if category in ["PERF", "SEC", "STAB", "UX", "CON"]:
+        return "inherit"
+    
+    # Rule 2: 业务功能 → 建 Feature
+    if category in ["API", "ADM", "SHARED"]:
+        return "feature"
+    
+    # Rule 3: 界面功能 → 二次判定
+    if category in ["WGT", "UI", "FE"]:
+        return classify_ui_requirement(l0_req)
+    
+    # Default: 建 Feature（保守策略）
+    return "feature"
+
+
+def classify_ui_requirement(req):
+    """
+    界面需求的 L1 决策
+    """
+    statement = req.statement
+    
+    # 有业务逻辑的界面需求 → 建 Feature
+    business_keywords = [
+        "登录", "验证", "切换", "上传", "处理", "提交",
+        "认证", "授权", "配置", "管理"
+    ]
+    if any(kw in statement for kw in business_keywords):
+        return "feature"
+    
+    # 纯展示/交互需求 → 直接 L2
+    ui_keywords = [
+        "样式", "布局", "动画", "加载", "响应式",
+        "显示", "渲染", "嵌入", "集成"
+    ]
+    if any(kw in statement for kw in ui_keywords):
+        return "direct_l2"
+    
+    # 默认建 Feature（保守策略）
+    return "feature"
+```
+
+### split-report 必填字段
+
+在 L0→L1 的 `split-report.md` 中，每条映射决策必须包含：
+
+| 字段 | 说明 | 必填 | 示例 |
+|------|------|------|------|
+| `source` | L0 REQ-ID | ✅ | `REQ-L0-WGT-001` |
+| `target` | L1 Feature 或 null | ✅ | `RAGQA` / `null` |
+| `strategy` | 处理策略 | ✅ | `feature` / `direct_l2` / `inherit` |
+| `rationale` | 决策理由 | ⚠️ 当 strategy≠feature 时必填 | "纯界面需求" |
+| `l2_target` | L2 组件（direct_l2 时必填） | ⚠️ | `chat-widget` |
+
+### 示例
+
+```markdown
+## 3.2 Widget Capabilities (direct_l2)
+
+| L0 REQ-ID | Strategy | L2 Target | Rationale |
+|-----------|----------|-----------|-----------|
+| REQ-L0-WGT-001 | direct_l2 | chat-widget | 纯嵌入/集成需求，无业务逻辑 |
+| REQ-L0-WGT-002 | feature | → L1-VOICE | 语音交互有 Provider 选择逻辑 |
+| REQ-L0-WGT-003 | direct_l2 | chat-widget | 纯界面多语言切换 |
+| REQ-L0-WGT-004 | feature | → L1-UPLOAD | 文件上传有格式/大小/解析逻辑 |
+```
+
+### Gate Check 增强
+
+| Check | 规则 |
+|-------|------|
+| Strategy 字段 | 每条 L0→L1 映射必须有 `strategy` |
+| Rationale 字段 | `direct_l2` / `inherit` 必须有 `rationale` |
+| L2 Target | `direct_l2` 必须指定目标组件 |
+| Coverage | 所有 L0 需求都有明确策略 |
+

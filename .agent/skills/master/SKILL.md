@@ -17,6 +17,7 @@ description: "Charter Agent Framework 主入口 Skill。当用户提到项目、
 | 验证 charter | charter.yaml 存在 | `/charter-validate` |
 | 冻结需求 | charter.yaml 存在 | `/charter-freeze` |
 | 分解需求 | frozen=true | requirements-split → architect |
+| **技术架构** | L2 status=done | **architecture-generator Skill** |
 | 详细设计 | L3 status=done | designer |
 | 实现代码 | design.md status=done | code-generator Skill |
 | 编写测试 | 代码已实现 | test-generator Skill |

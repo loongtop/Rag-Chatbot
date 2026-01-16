@@ -9,9 +9,9 @@
 | Agent | Phase | Role | Trigger |
 |-------|-------|------|---------|
 | **Requirements Split** | Decomposition | 可拆分性分析 & 溯源门禁 | before writing requirements/interfaces |
-| **Architect** | Decomposition | 需求分析 & 任务分解 | charter.yaml exists |
+| **Architect** | Decomposition | 需求分析 & 任务分解 | charter.yaml + freeze.frozen=true |
 | **Architecture Generator** | Architecture | 技术架构设计 (v0.6.3) | L2 + interfaces done |
-| **Spec** | Spec | 实现规格拆分（递归到 leaf） | Architecture done |
+| **Spec** | Spec | 实现规格拆分（递归到 leaf） | Architecture done + L2 requirements |
 | **Designer** | Transition | 详细设计（可选） | leaf Spec ready (or legacy L3 done) |
 | **Coder** | Implementation | 代码生成 | design.md done |
 | **Tester** | Implementation | 测试生成 | src/*{{profile.source.extensions}} exists |

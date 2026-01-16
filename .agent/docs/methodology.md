@@ -1,6 +1,6 @@
 # Development Methodology
 
-两阶段开发方法论：从需求到代码的自动化流程。
+三阶段开发方法论：从需求到架构到代码的自动化流程。
 
 ---
 
@@ -156,7 +156,7 @@ E-commerce Platform (L0)
 
 ---
 
-## Phase 2: Spec → Code Implementation
+## Phase 3: Code Implementation
 
 从 leaf Spec 到代码与测试的实现流程。
 

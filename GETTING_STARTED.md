@@ -471,8 +471,10 @@ Implementation_Report:
 确认输出类似：
 ```
 Charter: frozen ✅
-Phase 1: L0 ✅ → L1 ✅ → L2 ✅ → SPEC ✅
-Phase 2: Code ✅ → Tests ✅
+Phase 1: L0 ✅ → L1 ✅ → L2 ✅
+Phase 1.5: Architecture ✅
+Phase 2: SPEC ✅
+Phase 3: Code ✅ → Tests ✅
 ```
 
 ---

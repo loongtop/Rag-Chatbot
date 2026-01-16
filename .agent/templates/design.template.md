@@ -1,10 +1,10 @@
 ---
 status: draft
 owner: designer
-layer: L3
+layer: SPEC
 ---
 
-# Design: {function_name}
+# Design: {spec_or_function_name}
 
 ## 1. Overview
 

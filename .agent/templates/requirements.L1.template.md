@@ -5,12 +5,13 @@ layer: L1
 parent: docs/L0/requirements.md
 source_checksum: "{checksum}"
 profile: "{profile}"
-component: "{component_name}"           # v0.5.2 新增：组件名
-language_profile: "{python|typescript}" # v0.5.2 新增：语言配置
-decomposition_strategy: "full"          # v0.5.2 新增：分解策略
+feature: "{feature_name}"              # v0.6.0：L1 按业务 Feature 分组
+component: "{component_name}"          # legacy：若仍按组件拆分可填写
+language_profile: "{python|typescript}" # 可选：语言配置
+decomposition_strategy: "full"         # 可选：分解策略
 ---
 
-# L1 Requirements: {component_name}
+# L1 Requirements: {feature_name}
 
 > ⚠️ **Document Structure (Template v2.0)**
 >
@@ -21,9 +22,11 @@ decomposition_strategy: "full"          # v0.5.2 新增：分解策略
 > | Appendices | Generated | 🔒 Readonly |
 >
 > **组件信息** (v0.5.2):
-> - 组件名: `{component_name}`
+> - 组件名: `{component_name}`（可选）
 > - 语言配置: `{language_profile}`
 > - 分解策略: `{decomposition_strategy}`
+>
+> v0.6.0 约定：L1 不产出接口契约；模块间契约统一在 `docs/L2/interfaces.md` 定义。
 
 ---
 
@@ -31,16 +34,16 @@ decomposition_strategy: "full"          # v0.5.2 新增：分解策略
 
 ```requirements-registry
 # =============================================================================
-# L1 Requirements Registry - Component Level (v0.5.2)
-# Schema: v1.0 | Template: v2.0 | CAF: v0.5.2
+# L1 Requirements Registry - Feature Level (v0.6.0)
+# Schema: v1.0 | Template: v2.0 | CAF: v0.6.0
 # =============================================================================
 
-schema_version: "v0.5.2"
+schema_version: "v0.6.0"
 layer: L1
 parent: "docs/L0/requirements.md"
 source_checksum: "{checksum}"
 profile: "{profile}"
-component: "{component_name}"
+feature: "{feature_name}"
 language_profile: "{language_profile}"
 
 # -----------------------------------------------------------------------------
@@ -48,9 +51,9 @@ language_profile: "{language_profile}"
 # -----------------------------------------------------------------------------
 requirements:
   # --- 模块 1 ---
-  - id: REQ-L1-{COMP}-001
+  - id: REQ-L1-{FEAT}-001
     priority: P0
-    statement: "Component 应当提供 XXX 功能..."
+    statement: "Feature 应当提供 XXX 功能..."
     sources:
       - id: "REQ-L0-{XXX}-001"
         path: "docs/L0/requirements.md#REQ-L0-{XXX}-001"
@@ -62,9 +65,9 @@ requirements:
     derived: false
 
   # --- 模块 2 ---
-  - id: REQ-L1-{COMP}-002
+  - id: REQ-L1-{FEAT}-002
     priority: P1
-    statement: "Component 应当提供 YYY 功能..."
+    statement: "Feature 应当提供 YYY 功能..."
     sources:
       - id: "REQ-L0-{YYY}-001"
         path: "docs/L0/requirements.md#REQ-L0-{YYY}-001"
@@ -74,21 +77,6 @@ requirements:
     section: functional
     tbd_refs: []
     derived: false
-
-# -----------------------------------------------------------------------------
-# Interfaces (L1 defines component interfaces)
-# -----------------------------------------------------------------------------
-interfaces:
-  - name: "{interface_name}"
-    type: API  # API | Event | Data | Internal
-    description: "接口描述"
-    sources:
-      - path: "docs/L0/requirements.md#REQ-L0-0xx"
-    contract:
-      input: "{input_schema}"
-      output: "{output_schema}"
-    consumers: ["{other_component}"]
-    providers: ["{component_name}"]
 
 # -----------------------------------------------------------------------------
 # TBDs
@@ -144,9 +132,9 @@ exclusions: []
 
 ---
 
-## 3. 接口定义
+## 3. 模块间接口契约（L2）
 
-详见附录 D（接口表）。
+模块间 API/Event/Data 契约统一在 `docs/L2/interfaces.md` 定义；本 Feature 在 L2 分解时补齐相关条目。
 
 ---
 
@@ -180,17 +168,11 @@ exclusions: []
 
 无
 
-### 附录 D：接口表
-
-| Name | Type | Description | Consumers | Providers |
-|------|------|-------------|-----------|-----------|
-| {interface_name} | API | ... | {other} | {component} |
-
 ---
 
 ## 门禁检查
 
 - [ ] Registry 所有条目有非空 `sources[]`
 - [ ] L0 需求 100% 覆盖
-- [ ] 接口定义完整
+- [ ] 不在 L1 引入模块间接口契约（接口统一在 L2/interfaces.md）
 - [ ] 无交叉引用错位

@@ -17,16 +17,17 @@
 | `/requirements-split` | Create split-report.md + traceability matrix | `granularity=auto/full/medium/light/direct` |
 | `/requirements-render` | Registry → body + appendices | |
 | `/requirements-validate` | Coverage/traceability/acceptance gates | |
+| `/spec` | L2 requirements → Spec tree (recursive) | `source_path=docs/L2/{module}/requirements.md` |
 
-### Granularity 参数（v0.5.0）
+### Granularity 参数（v0.6.0）
 
 | 值 | 分解路径 | 适用场景 |
 |---|---------|----------|
 | `auto` | **自动评估**复杂度选择 | 默认，推荐 |
-| `full` | L0→L1→L2→L3 | 复杂系统，多模块 |
-| `medium` | L0→L2→L3 | 中等系统，跳过 L1 |
-| `light` | L0→L3 | 简单功能，跳过 L1/L2 |
-| `direct` | L0→代码 | 纯配置/胶水代码 |
+| `full` | L0→L1→L2 | 复杂系统，多模块 |
+| `medium` | L0→L2 | 中等系统，跳过 L1 |
+| `light` | L0→L1 | 简单系统，先停在 L1 |
+| `direct` | L0→L2（单模块） | 单模块/边界清晰 |
 
 ```bash
 # 自动评估（推荐）
@@ -66,10 +67,12 @@
 |-------|----------|--------------|
 | Any | `split-report.template.md` | Splitability + Traceability matrix |
 | L0 | `requirements.L0.template.md` | Registry (requirements/tbds/exclusions) + SRS body |
-| L1 | `requirements.L1.template.md` | Registry + interfaces[] |
-| L2 | `requirements.L2.template.md` | Registry + interfaces[] + module design |
+| L1 | `requirements.L1.template.md` | Feature requirements + subtasks |
+| L2 | `requirements.L2.template.md` | Module requirements |
+| L2 | `interfaces.L2.template.md` | Inter-module contracts (API/Event/Data) |
 | L2 | `execution-tracker.template.md` | Progress tracking |
-| L3 | `requirements.L3.template.md` | Registry + Function Spec + Test Spec |
+| SPEC | `spec.template.md` | Implementation spec (leaf-ready) |
+| SPEC | `spec-tree.template.md` | Spec tree + coverage matrix |
 
 ---
 
@@ -79,9 +82,9 @@
 |-------|---------|--------|
 | Requirements Split | before writing requirements/interfaces | split-report.md |
 | Architect | charter.yaml exists + `freeze.frozen=true` | requirements.md, subtasks.md |
-| Tester (P1) | L3 requirements.md `status=ready` | Test Spec (填写) |
-| Designer | L3 requirements.md `status=done` | design.md |
-| Coder | design.md `status=done` | src/**/* |
+| Spec | L2 requirements done | specs/*.md, specs/spec-tree.md |
+| Designer | leaf Spec ready (optional) | design.md |
+| Coder | leaf Spec ready (or design.md done) | src/**/* |
 | Tester (P2) | src/**/* exists | tests/**/* (实现+执行) |
 | Reviewer | tests passed | review_report.md |
 | Integrator | all subtasks done | integration_report.md |
@@ -93,12 +96,12 @@
 ```yaml
 ---
 status: draft | ready | in_progress | done
-owner: requirements-split | architect | designer | coder | tester | reviewer | integrator
-layer: L0 | L1 | L2 | L3
+owner: requirements-split | architect | spec | designer | coder | tester | reviewer | integrator
+layer: L0 | L1 | L2 | SPEC | L3(legacy)
 parent: {parent_path}
 source_checksum: "{sha256}"
 profile: "{profile}"
-schema_version: "v0.5.0"
+schema_version: "v0.6.0"
 ---
 ```
 
@@ -107,18 +110,18 @@ schema_version: "v0.5.0"
 ## Registry Block Structure
 
 ```requirements-registry
-schema_version: "v0.5.0"
-layer: L0 | L1 | L2 | L3
+schema_version: "v0.6.0"
+layer: L0 | L1 | L2 | L3(legacy)
 parent: "{parent_path}"
 requirements: [...]
 tbds: [...]
 exclusions: [...]
-interfaces: [...]  # L1/L2 only
+interfaces: [...]  # legacy：旧版在 L1/L2 内嵌；v0.6.0 推荐使用 docs/L2/interfaces.md（interfaces-registry）
 ```
 
 ---
 
-## TDD Workflow (L3)
+## (Legacy) TDD Workflow (L3)
 
 ```
 1. Architect → Function Spec (status: ready)
@@ -146,7 +149,7 @@ Gate_Check:
 1. **Freeze First**: 在 L1 前执行 `/charter-freeze`
 2. **Single Module**: 每次只推进一个 Feature/Module
 3. **Use Templates**: 使用层级特定模板 + Registry 块
-4. **TDD Mode**: L3 先 Test Spec 后实现
+4. **Specs First**: L2 完成后先 `/spec`，leaf Spec 再实现
 5. **Gate Check**: 每个模块完成后检查
 6. **Traceability First**: 先写 `split-report.md`，再写 requirements/interfaces（每条都要 Source）
 7. **Render + Validate**: 完成后执行 `/requirements-render` + `/requirements-validate`
@@ -157,5 +160,5 @@ Gate_Check:
 
 | Component | Version |
 |-----------|--------|
-| CAF | v0.5.0 |
-| schema_version | v0.5.0 |
+| CAF | v0.6.0 |
+| schema_version | v0.6.0 |

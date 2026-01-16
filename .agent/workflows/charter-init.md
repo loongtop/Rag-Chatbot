@@ -10,7 +10,7 @@ description: Initialize a new Charter Framework project
 
 1. **创建项目目录结构**
    ```bash
-   mkdir -p docs/L0 src tests
+   mkdir -p docs/L0 docs/L1 docs/L2 specs src tests
    ```
 
 2. **复制 Charter 模板**

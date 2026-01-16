@@ -1,6 +1,6 @@
 # =============================================================================
 # Requirements Registry Schema
-# Charter Agent Framework v0.5.0
+# Charter Agent Framework v0.6.0
 # =============================================================================
 #
 # Purpose: Define the structure for the embedded Registry block in requirements
@@ -8,14 +8,14 @@
 # (body text, appendices) derives from this block.
 #
 # Version Guide:
-#   - CAF version: v0.5.0 (this file's framework version)
-#   - schema_version: v0.5.0 (must match CAF version, used in requirements documents)
+#   - CAF version: v0.6.0 (this file's framework version)
+#   - schema_version: v0.6.0 (must match CAF version, used in requirements documents)
 #   - JSON Schema: draft-07 (JSON Schema specification version)
 #
 # =============================================================================
 
 $schema: "http://json-schema.org/draft-07/schema#"
-$id: "https://charter-agent-framework/schemas/requirements-registry/v0.5.0"
+$id: "https://charter-agent-framework/schemas/requirements-registry/v0.6.0"
 title: "Requirements Registry Schema"
 description: "Schema for the embedded requirements registry block (single source of truth)"
 type: object
@@ -33,13 +33,13 @@ properties:
   schema_version:
     type: string
     pattern: "^v\\d+\\.\\d+\\.\\d+$"
-    description: "Schema version (must match CAF version, e.g., v0.5.0)"
-    examples: ["v0.5.0"]
+    description: "Schema version (must match CAF version, e.g., v0.6.0)"
+    examples: ["v0.6.0"]
 
   layer:
     type: string
     enum: [L0, L1, L2, L3]
-    description: "Requirements layer (L0=System, L1=Feature, L2=Module, L3=Function)"
+    description: "Requirements layer (L0=System, L1=Feature, L2=Module, L3=Function/legacy)"
 
   parent:
     type: string
@@ -112,10 +112,10 @@ definitions:
       path:
         type: string
         description: "Path to source item. Supports YAML paths (charter.yaml#scope.must_have[0]) and REQ/TBD anchors (docs/L0/requirements.md#REQ-L0-001)"
-        pattern: "^[a-zA-Z0-9_\\-./]+#([a-zA-Z0-9_.\\[\\]-]+|REQ-L[0-3]-\\d{3}|TBD-L[0-3]-\\d{3}|interface_[a-zA-Z0-9_]+)$"
+        pattern: "^[a-zA-Z0-9_\\-./]+#([a-zA-Z0-9_.\\[\\]-]+|REQ-L[0-3](?:-[A-Z0-9]{2,10})*-(?:\\d{3}|[A-Z0-9_]{3,})|TBD-L[0-3]-\\d{3}|IFC-\\d{3}|SPEC-\\d{3}(?:-[A-Z0-9]+)*|interface_[a-zA-Z0-9_]+)$"
         examples: 
           - "charter.yaml#scope.must_have[0]"
-          - "docs/L0/requirements.md#REQ-L0-001"
+          - "docs/L0/requirements.md#REQ-L0-WGT-001"
           - "docs/L1/feature/requirements.md#TBD-L1-003"
           - "docs/L1/feature/requirements.md#interface_chat_api"
 
@@ -135,9 +135,9 @@ definitions:
     properties:
       id:
         type: string
-        pattern: "^REQ-L[0-3]-\\d{3}$"
-        description: "Unique requirement ID (e.g., REQ-L0-001)"
-        examples: ["REQ-L0-001", "REQ-L1-042", "REQ-L2-103"]
+        pattern: "^REQ-L[0-3](?:-[A-Z0-9]{2,10})*-(?:\\d{3}|[A-Z0-9_]{3,})$"
+        description: "Unique requirement ID (supports optional category prefixes, e.g., REQ-L0-WGT-001, REQ-L0-CON-TECH-ALLOWED)"
+        examples: ["REQ-L0-001", "REQ-L0-WGT-001", "REQ-L0-CON-TECH-ALLOWED", "REQ-L2-103"]
 
       priority:
         type: string
@@ -245,8 +245,8 @@ definitions:
 
       target_layer:
         type: string
-        enum: [L0, L1, L2, L3, external]
-        description: "Layer where this TBD should be resolved"
+        enum: [L0, L1, L2, SPEC, L3, external]
+        description: "Layer where this TBD should be resolved (SPEC is preferred implementation layer; L3 is legacy)"
 
       status:
         type: string

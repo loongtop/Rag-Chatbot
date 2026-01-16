@@ -1,4 +1,4 @@
-# Charter Agent Framework v0.5.0 详细使用指南
+# Charter Agent Framework v0.6.0 详细使用指南
 
 本文档提供从零开始使用 Charter Agent Framework 实现软件的完整、详细步骤。
 
@@ -83,7 +83,10 @@ cp /path/to/charter-agent-framework/GETTING_STARTED.md .
 my-awesome-project/
 ├── .agent/           # 框架文件（已复制）
 ├── docs/
-│   └── L0/           # Phase 1 文档输出
+│   ├── L0/           # Phase 1：系统级需求
+│   ├── L1/           # Phase 1：Feature 级需求
+│   └── L2/           # Phase 1：模块级需求 + 模块间接口契约
+├── specs/            # Phase 1.5：Spec 树（leaf 可直接写代码）
 ├── src/              # Phase 2 源代码
 ├── tests/            # Phase 2 测试代码
 └── charter.yaml      # 项目任务书
@@ -261,9 +264,9 @@ freeze:
 | L0 | Charter | 整个项目 | `requirements.L0.template.md` |
 | L1 | Features | 功能模块 | `requirements.L1.template.md` |
 | L2 | Modules | 子模块 | `requirements.L2.template.md` |
-| L3 | Functions | 具体函数 | `requirements.L3.template.md` |
+| SPEC | Specs | 可实现规格（可递归） | `spec.template.md` |
 
-> **v0.5.0**: 所有模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
+> **v0.6.0**: L0-L2 是需求文档层（L2 为终点）；实现粒度通过 `/spec` 递归分解到 leaf Spec。所有 requirements 模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
 
 ### Step 5.2：L0 分解（Charter → Features）
 
@@ -294,13 +297,12 @@ freeze:
 请分解 L1 功能 "{功能名}"。
 1. 在 docs/L1/{功能名}/ 创建 requirements.md（使用 requirements.L1.template.md）
    - L0→L1 必须逐条映射（每条需求必须有 Source=REQ-L0-xxx）
-2. 创建 interfaces.md 定义对外接口
-3. 创建 subtasks.md 列出 L2 子模块
+2. 创建 subtasks.md 列出 L2 子模块
+   - v0.6.0：L1 不产出模块间接口契约；接口在 L2 的 `docs/L2/interfaces.md` 统一定义
 ```
 
 **检查产出**：
 - `docs/L1/{功能名}/requirements.md` - 包含 goals, non_goals, constraints, risks
-- `docs/L1/{功能名}/interfaces.md` - 接口定义
 - `docs/L1/{功能名}/subtasks.md` - L2 子任务列表
 - `docs/L1/{功能名}/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
@@ -314,70 +316,50 @@ freeze:
 请分解 L2 模块 "{模块名}"。
 1. 在 docs/L2/{模块名}/ 创建 requirements.md（使用 requirements.L2.template.md）
    - L1→L2 可按段落/句子映射，但每条必须有 Source=REQ-L1-xxx
-2. 创建 interfaces.md 定义模块接口
-3. 创建 subtasks.md 列出 L3 函数
-4. 在 docs/L2/ 创建 execution-tracker.md 追踪进度
+2. 在 docs/L2/ 创建（或更新）interfaces.md（使用 interfaces.L2.template.md）
+   - 定义模块间 API/Event/Data 契约（providers/consumers）
+   - 每个接口条目必须有 Source（REQ-L1/REQ-L2）
+3. 在 docs/L2/ 创建 execution-tracker.md 追踪进度
 ```
 
 **检查产出**：
-- `docs/L2/{模块名}/requirements.md` - 包含 features, interfaces, data_models
+- `docs/L2/{模块名}/requirements.md` - 包含 features, data_models
+- `docs/L2/interfaces.md` - 模块间接口契约
 - `docs/L2/execution-tracker.md` - 进度追踪表
 - `docs/L2/{模块名}/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
-### Step 5.5：L3 分解（Functions - Function Spec）
+### Step 5.5：/spec 递归分解（L2 → Spec Tree）
 
-**重要规则**：每次只推进一个 L2 模块！
+**重要规则**：每次只推进一个 L2 模块（或一个非 leaf Spec）！
 
-对于 L2 subtasks.md 中列出的每个函数，告诉 AI：
+对于每个 L2 模块，告诉 AI：
 ```
-请分解 L3 函数 "{函数名}"。
-使用 requirements.L3.template.md 模板。
-只填写 Function Spec 部分（签名、职责、前置/后置条件）。
-将 status 设置为 ready。
+请运行 /spec：
+/spec source_path=docs/L2/{模块名}/requirements.md target_dir=specs
+
+要求：
+1. 从该模块的 REQ-L2-* 分解出若干 SPEC（如 SPEC-001, SPEC-002...）
+2. 对每个 Spec 判断是否 leaf（可直接写代码）
+   - 是：标记 leaf=true，并补齐 Implementation Plan + Acceptance Tests + Interfaces Impact
+   - 否：生成子 Spec（如 SPEC-001-A, SPEC-001-B...），并继续递归
+3. 生成/更新 specs/spec-tree.md（包含树视图 + 覆盖矩阵）
 ```
 
 **检查产出**：
-- `docs/L3/{函数名}/requirements.md`
-- frontmatter 中 `status: ready`
-- Function Spec 部分已填写
-- Test Spec 部分为空（等待 Tester 填写）
+- `specs/SPEC-*.md`（leaf Spec 可直接进入实现）
+- `specs/spec-tree.md`（树视图 + 覆盖矩阵）
 
 ---
 
-## 第六部分：Phase 2 - TDD 实现
+## 第六部分：Phase 2 - 实现 leaf Specs
 
-### Step 6.1：Tester Phase 1 - 编写 Test Spec
+### Step 6.1：实现 leaf Spec（Coder）
 
-对于每个 `status: ready` 的 L3 requirements.md，告诉 AI：
+对于每个 `leaf: true` 且 `status: ready/done` 的 `specs/SPEC-*.md`，告诉 AI：
 ```
-请按 tester-agent (Phase 1) 角色，为 docs/L3/{函数名}/requirements.md 补充 Test Spec。
-填写测试用例表格：正常用例、边界用例、异常用例、性能用例。
-然后将 status 从 ready 改为 done。
-```
-
-**检查产出**：
-- L3 requirements.md 中 Test Spec 部分已填写
-- frontmatter 中 `status: done`
-
-### Step 6.2：Designer - 创建 Design 文档
-
-对于每个 `status: done` 的 L3 requirements.md，告诉 AI：
-```
-请按 designer-agent 角色，根据 docs/L3/{函数名}/requirements.md 创建 design.md。
-包含：算法设计、数据结构、测试用例、性能考虑。
-```
-
-**检查产出**：
-- `docs/L3/{函数名}/design.md`
-- frontmatter 中 `status: draft` → 改为 `done`
-
-### Step 6.3：Coder - 实现代码
-
-对于每个 `status: done` 的 design.md，告诉 AI：
-```
-请按 coder-agent 角色，根据 docs/L3/{函数名}/design.md 实现代码。
+请按 coder-agent 角色，根据 specs/SPEC-xxx.md 实现代码。
 遵循 .agent/config/quality.{language_profile}.yaml 中的规范。
-代码放入 src/ 目录。
+代码放入 src/ 目录（或对应 component.path）。
 ```
 
 **检查产出**：
@@ -385,12 +367,12 @@ freeze:
 - 包含类型注解和文档字符串
 - 代码复杂度 ≤ 10
 
-### Step 6.4：Tester Phase 2 - 实现测试并运行
+### Step 6.2：实现测试并运行（Tester）
 
 对于每个新生成的源代码，告诉 AI：
 ```
-请按 tester-agent (Phase 2) 角色：
-1. 根据 design.md 的测试用例实现测试代码
+请按 tester-agent 角色：
+1. 根据 leaf Spec 的 Acceptance Tests 实现测试代码
 2. 测试代码放入 tests/ 目录
 3. 运行测试并确保通过
 4. 测试覆盖率 ≥ 95%
@@ -401,7 +383,7 @@ freeze:
 - 测试运行通过
 - 覆盖率达标
 
-### Step 6.5：Gate 检查
+### Step 6.3：Gate 检查
 
 在 AI 对话框中输入：
 ```
@@ -468,8 +450,8 @@ Implementation_Report:
 确认输出类似：
 ```
 Charter: frozen ✅
-Phase 1: L0 ✅ → L1 ✅ → L2 ✅ → L3 ✅
-Phase 2: Design ✅ → Code ✅ → Tests ✅
+Phase 1: L0 ✅ → L1 ✅ → L2 ✅ → SPEC ✅
+Phase 2: Code ✅ → Tests ✅
 ```
 
 ---
@@ -487,16 +469,17 @@ Phase 2: Design ✅ → Code ✅ → Tests ✅
 | `/requirements-split` | 每次层级迁移前 | 生成 split-report.md（溯源覆盖矩阵） |
 | `/requirements-render` | 生成 requirements.md 后 | 从 Registry 渲染正文+附录 |
 | `/requirements-validate` | 生成 requirements.md 后 | 覆盖率/溯源/可验收检查 |
+| `/spec` | L2 完成后 | 生成 specs/SPEC-*.md + specs/spec-tree.md |
 
 ---
 
 ## 附录 B：产物状态流转
 
 ```
-L3 requirements.md
-├── status: draft    (Architect 创建中)
-├── status: ready    (Function Spec 完成，等待 Tester P1)
-└── status: done     (Test Spec 完成，可触发 Designer)
+specs/SPEC-xxx.md
+├── status: draft    (Spec Agent 创建中)
+├── status: ready    (leaf=true 且 checklist 通过，可触发实现)
+└── status: done     (实现与测试完成，Gate PASS)
 
 design.md
 ├── status: draft    (Designer 创建中)
@@ -523,26 +506,24 @@ my-awesome-project/
 │   ├── L1/
 │   │   ├── UserAuth/
 │   │   │   ├── requirements.md
-│   │   │   ├── interfaces.md
 │   │   │   ├── split-report.md
 │   │   │   └── subtasks.md
 │   │   └── TaskManagement/
 │   │       └── ...
 │   ├── L2/
 │   │   ├── execution-tracker.md
+│   │   ├── interfaces.md
 │   │   ├── Login/
 │   │   │   ├── requirements.md
-│   │   │   ├── interfaces.md
 │   │   │   ├── split-report.md
 │   │   │   └── subtasks.md
 │   │   └── Register/
 │   │       └── ...
-│   └── L3/
-│       ├── validate_credentials/
-│       │   ├── requirements.md
-│       │   └── design.md
-│       └── create_session/
-│           └── ...
+├── specs/
+│   ├── spec-tree.md
+│   ├── SPEC-001.md
+│   ├── SPEC-001-A.md
+│   └── ...
 ├── src/
 │   ├── auth/
 │   │   ├── __init__.py

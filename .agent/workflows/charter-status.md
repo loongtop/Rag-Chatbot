@@ -18,15 +18,15 @@ description: Check project progress through Charter phases
    | 层级 | 检查项 | 位置 |
    |------|--------|------|
    | L0 | requirements.md, subtasks.md, split-report.md(可选) | `docs/L0/` |
-   | L1 | requirements.md, interfaces.md, subtasks.md, split-report.md(可选) | `docs/L1/*/` |
-   | L2 | requirements.md, interfaces.md, execution-tracker.md, split-report.md(可选) | `docs/L2/*/` |
-   | L3 | requirements.md (含 Function Spec + Test Spec) | `docs/L3/*/` |
+   | L1 | requirements.md, subtasks.md, split-report.md(可选) | `docs/L1/*/` |
+   | L2 | requirements.md, **interfaces.md**, execution-tracker.md, split-report.md(可选) | `docs/L2/` + `docs/L2/*/` |
+   | SPEC | SPEC-*.md, spec-tree.md | `specs/` |
 
 3. **检查 Phase 2 (实现阶段)**
    
    | 产物 | 检查项 | 位置 |
    |------|--------|------|
-   | 设计 | design.md | `docs/L3/*/` |
+   | 设计(可选) | design.md | `docs/**/` |
    | 代码 | src/**/* | 按 language_profile |
    | 测试 | tests/**/* | 按 language_profile |
 
@@ -35,15 +35,15 @@ description: Check project progress through Charter phases
    | 状态 | 含义 | 下一步 |
    |------|------|--------|
    | `draft` | 草稿 | 继续编写 |
-   | `ready` | Function Spec 完成 | Tester 填 Test Spec |
+   | `ready` | leaf Spec 就绪（可实现） | Coder 开始实现 |
    | `in_progress` | 进行中 | 等待完成 |
    | `done` | 完成 | 触发下一 Agent |
 
 5. **生成进度报告**
    ```
    Charter: frozen ✅
-   Phase 1: L0 ✅ → L1 ✅ → L2 ⏳ → L3 ❌
-   Phase 2: Design ❌ → Code ❌ → Tests ❌
+   Phase 1: L0 ✅ → L1 ✅ → L2 ⏳ → SPEC ❌
+   Phase 2: Code ❌ → Tests ❌
    ```
 
 ## 使用示例

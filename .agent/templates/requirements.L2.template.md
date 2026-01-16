@@ -26,10 +26,10 @@ module: "{module_name}"
 ```requirements-registry
 # =============================================================================
 # L2 Requirements Registry - Module Level
-# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.6.0
 # =============================================================================
 
-schema_version: "v0.5.0"
+schema_version: "v0.6.0"
 layer: L2
 parent: "docs/L1/{feature}/requirements.md"
 source_checksum: "{checksum}"
@@ -53,32 +53,6 @@ requirements:
     derived: false
 
 # -----------------------------------------------------------------------------
-# Interfaces (Module-level interface refinement)
-# -----------------------------------------------------------------------------
-interfaces:
-  - name: "{interface_name}"
-    type: API  # API | Event | Data | Internal
-    description: "模块接口描述（至少10个字符）"
-    sources:
-      - path: "docs/L1/{feature}/requirements.md#interface_name"
-    contract:
-      input: |
-        {
-          "field": "type"
-        }
-      output: |
-        {
-          "field": "type"
-        }
-      errors:
-        - code: "ERR_001"
-          description: "错误描述"
-    consumers:
-      - "{consumer_module}"
-    providers:
-      - "{provider_module}"
-
-# -----------------------------------------------------------------------------
 # TBDs
 # -----------------------------------------------------------------------------
 tbds:
@@ -88,7 +62,7 @@ tbds:
       - path: "docs/L1/{feature}/requirements.md#TBD-L1-001"
     impact: L
     owner: ""
-    target_layer: L3
+    target_layer: SPEC
     status: open
     related_reqs:
       - REQ-L2-001
@@ -116,7 +90,7 @@ _Covered by_: `REQ-L2-001`
 
 ### 1.2 依赖关系
 
-{模块依赖 - 从 Registry interfaces[] 自动生成}
+{模块依赖 - 可在本节描述，并引用 docs/L2/interfaces.md 中的接口契约条目}
 
 ---
 
@@ -126,9 +100,13 @@ _Covered by_: `REQ-L2-001`
 
 ---
 
-## 3. 接口详细设计
+## 3. 模块间接口契约（引用）
 
-{接口详细定义 - 从 Registry interfaces[] 自动生成}
+本模块与其它模块的交互契约统一在 `docs/L2/interfaces.md` 定义：
+- 本模块提供的接口：{IFC-...}
+- 本模块消费的接口：{IFC-...}
+
+> 规则：任何跨模块调用/API/Event/Data 共享都必须在 `docs/L2/interfaces.md` 中有条目，并带可追溯 Source。
 
 ---
 
@@ -158,11 +136,12 @@ _Covered by_: `REQ-L2-001`
 |--------|----------|---------|--------|-------|--------|--------|
 | {从 Registry 渲染} | | | | | | |
 
-### 附录 D：接口表
+### 附录 D：接口引用表（L2/interfaces.md）
 
-| Name | Type | Input | Output | Errors | Consumers | Providers |
-|------|------|-------|--------|--------|-----------|-----------|
-| {从 Registry 渲染} | | | | | | |
+| Interface ID | Role (provide/consume) | Notes |
+|--------------|-------------------------|-------|
+| {IFC-...} | provide | |
+| {IFC-...} | consume | |
 
 ---
 
@@ -170,5 +149,5 @@ _Covered by_: `REQ-L2-001`
 
 - [ ] Registry 所有条目有非空 `sources[]`
 - [ ] L1 需求 100% 覆盖
-- [ ] 接口 contract 完整（含 errors）
+- [ ] 相关模块间交互已在 `docs/L2/interfaces.md` 定义并可追溯
 - [ ] 无交叉引用错位

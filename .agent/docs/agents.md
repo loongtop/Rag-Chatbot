@@ -10,7 +10,8 @@
 |-------|-------|------|---------|
 | **Requirements Split** | Decomposition | 可拆分性分析 & 溯源门禁 | before writing requirements/interfaces |
 | **Architect** | Decomposition | 需求分析 & 任务分解 | charter.yaml exists |
-| **Designer** | Transition | L3 详细设计 | requirements.md (L3) done |
+| **Spec** | Spec | 实现规格拆分（递归到 leaf） | L2 requirements done |
+| **Designer** | Transition | 详细设计（可选） | leaf Spec ready (or legacy L3 done) |
 | **Coder** | Implementation | 代码生成 | design.md done |
 | **Tester** | Implementation | 测试生成 | src/*{{profile.source.extensions}} exists |
 | **Reviewer** | Implementation | 代码审查 | tests passed |
@@ -26,12 +27,17 @@
 - 门禁: 下游每条需求/接口必须带 Source，可追溯到上游
 
 ### Architect
-- 提取需求，分解任务 (L0→L1→L2→L3)
-- 定义模块间接口
-- 输出: requirements.md, interfaces.md, subtasks.md
+- 提取需求，分解需求文档层级 (L0→L1→L2)
+- 在 L2 统一定义模块间接口契约：`docs/L2/interfaces.md`
+- 输出: requirements.md, subtasks.md, interfaces.md (L2)
+
+### Spec
+- 将 L2 Requirements 分解为可实现的 Spec 树（直到 leaf）
+- 输出: `specs/SPEC-*.md` + `specs/spec-tree.md`
+- 门禁: leaf Spec 必须“可直接写代码”，且 100% 可追溯到 `REQ-L2-*`
 
 ### Designer
-- 为 L3 函数创建详细设计
+- 为 leaf Spec（或 legacy L3）创建详细设计（必要时）
 - 定义算法、数据结构、测试用例
 - 输出: design.md
 
@@ -52,7 +58,7 @@
 
 ### Integrator
 - 模块集成测试
-- 自底向上验证 (L3→L2→L1→L0)
+- 自底向上验证 (leaf Spec→L2→L1→L0，L3 为 legacy)
 - 输出: integration_report.md
 
 ---
@@ -60,7 +66,7 @@
 ## Communication Protocol
 
 ```
-Requirements Split ──split-report──► Architect ──artifacts──► Designer ──artifacts──► Coder
+Requirements Split ──split-report──► Architect ──artifacts──► Spec ──leaf specs──► Coder
                                                    │
                                               artifacts
                                                    │

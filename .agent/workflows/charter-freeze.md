@@ -25,7 +25,7 @@ description: Freeze a charter to prevent requirement drift
 - ❌ **FAIL** → **终止冻结**，输出错误信息，要求修复 `charter.yaml` 后重试
 - ⚠️ **WARNING** → 可继续，但提示用户确认是否忽略警告
 
-> 冻结一个有问题的 Charter 会导致错误传播到整个 L0→L1→L2→L3 分解链。
+> 冻结一个有问题的 Charter 会导致错误传播到整个 L0→L1→L2→SPEC 分解链（以及 legacy 的 L3 路径）。
 
 ### 1. 验证 Charter 完整性
 

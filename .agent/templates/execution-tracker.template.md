@@ -12,9 +12,9 @@ project: {project_name}
 | 指标 | 数值 |
 |------|------|
 | L2 模块总数 | 0 |
-| 已完成 | 0 |
-| 进行中 | 0 |
-| 未开始 | 0 |
+| leaf Spec 总数 | 0 |
+| leaf Spec 已完成 | 0 |
+| 模块已完成 | 0 |
 | 完成率 | 0% |
 
 ---
@@ -32,16 +32,16 @@ project: {project_name}
 
 ### Feature 1: {feature_name}
 
-| L2 Module | L3 函数数 | Designer | Coder | Tester | Reviewer | Gate |
-|-----------|----------|----------|-------|--------|----------|------|
-| Module 1.1 | 3 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
-| Module 1.2 | 2 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| L2 Module | leaf Specs | Spec | Coder | Tester | Reviewer | Gate |
+|-----------|------------|------|-------|--------|----------|------|
+| Module 1.1 | 0 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| Module 1.2 | 0 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 
 ### Feature 2: {feature_name}
 
-| L2 Module | L3 函数数 | Designer | Coder | Tester | Reviewer | Gate |
-|-----------|----------|----------|-------|--------|----------|------|
-| Module 2.1 | 4 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
+| L2 Module | leaf Specs | Spec | Coder | Tester | Reviewer | Gate |
+|-----------|------------|------|-------|--------|----------|------|
+| Module 2.1 | 0 | ⬜ | ⬜ | ⬜ | ⬜ | ⬜ |
 
 ---
 
@@ -71,7 +71,7 @@ project: {project_name}
 latest_report:
   module: ""
   date: ""
-  implemented_functions: []
+  implemented_specs: []
   tests_passed: false
   coverage: "0%"
   deviations_from_spec: []

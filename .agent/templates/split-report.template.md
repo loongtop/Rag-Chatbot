@@ -1,12 +1,12 @@
 ---
 status: draft
 owner: requirements_split
-layer_from: L0 | L1 | L2 | L3
-layer_to: L0 | L1 | L2 | L3
+layer_from: L0 | L1 | L2
+layer_to: L0 | L1 | L2
 parent: {source_path}
 target: {target_path}
 granularity: auto | full | medium | light | direct
-decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3 | L0→代码
+decomposition_path: L0→L1→L2 | L0→L2 | L0→L1 | L0→L2(single)
 ---
 
 # Split Report: {layer_from} → {layer_to}
@@ -31,10 +31,10 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3 | L0→代码
 
 - **Granularity**: `{granularity}` (auto/full/medium/light/direct)
   - `auto`: 自动评估复杂度选择路径
-  - `full`: L0→L1→L2→L3（复杂系统）
-  - `medium`: L0→L2→L3（中等系统，跳过 L1）
-  - `light`: L0→L3（简单功能，跳过 L1/L2）
-  - `direct`: L0→代码（纯配置/胶水代码）
+  - `full`: L0→L1→L2（复杂系统）
+  - `medium`: L0→L2（中等系统，跳过 L1）
+  - `light`: L0→L1（简单系统，先停在 L1）
+  - `direct`: L0→L2（单模块/边界极清晰）
 
 - **REQ-ID 分类规则** (v0.5.0):
   - 组件专属: `REQ-L0-{COMP}-*` (基于 charter.yaml#components)
@@ -81,17 +81,17 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3 | L0→代码
 |--------|----------|------------------|--------|-------|
 | SRC-001 | split / keep / N/A | `REQ-Lx-000`, `interfaces.md#{name}` | `{source}` | |
 
-## 7. Cross-Layer Traceability（跨层追溯，medium/light/direct 模式）
+## 7. Cross-Layer Traceability（跨层追溯，跳过中间层时）
 
-> 当跳过中间层时，建立 L0→L3/L0→代码 的直接追溯链
+> 当跳过中间层时，建立 L0→L2（或 L0→SPEC）的直接追溯链
 
-| Source (L0) | Target (L3) | Link Type | Notes |
+| Source (L0) | Target (L2) | Link Type | Notes |
 |-------------|-------------|-----------|-------|
-| REQ-L0-001 | REQ-L3-001 | direct | 无中间层分解 |
-| REQ-L0-002 | REQ-L3-002 | derived | 需求合并 |
+| REQ-L0-001 | REQ-L2-001 | direct | 无中间层分解 |
+| REQ-L0-002 | REQ-L2-002 | derived | 需求合并 |
 
 **追溯验证**:
-- [ ] 每个 L3 需求有且仅有 1 个 L0 来源
+- [ ] 每个目标层需求有且仅有 1 个 L0 来源
 - [ ] 追溯链完整，无断裂
 
 ## 8. Traceability Matrix（覆盖矩阵）
@@ -144,9 +144,9 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3 | L0→代码
 | REQ-L0-CON-TECH-ALLOWED | 允许: Python, TypeScript, PostgreSQL+pgvector | technology_boundary.allowed | allowed |
 | REQ-L0-CON-TECH-FORBIDDEN | 禁止: 自建 LLM 训练, Pinecone, 私有化数据库 | technology_boundary.forbidden | forbidden |
 
-## 11. 组件接口矩阵（v0.5.2 新增）
+## 11. 模块接口矩阵（L2）
 
-> L1 层级分解时，定义组件间的接口依赖关系
+> L2 层级分解时，定义模块间的接口依赖关系（最终落地到 `docs/L2/interfaces.md`）
 
 | 组件 | 提供接口 | 依赖接口 | 说明 |
 |------|----------|----------|------|

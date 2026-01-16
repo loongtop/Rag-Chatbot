@@ -15,14 +15,14 @@ description: Create split-report.md before generating requirements/interfaces wi
 split-report 用于：
 - 判断上游内容是否"可拆分"为可实现/可测试需求
 - 生成覆盖矩阵，保证可追溯
-- 自动分类 REQ-ID（v0.5.0 新增）
+- 自动分类 REQ-ID
 
 ## 参数（可选）
 
 - `source_path`：上游文档路径（默认：`charter.yaml`）
 - `target_dir`：下游产物目录（默认：`docs/L0/`）
-- `layer_from`：L0/L1/L2/L3（默认自动推断）
-- `layer_to`：L0/L1/L2/L3（默认：按 target_dir 推断）
+- `layer_from`：L0/L1/L2（L3 为 legacy，默认自动推断）
+- `layer_to`：L0/L1/L2（L3 为 legacy，默认：按 target_dir 推断）
 - `granularity`：auto/full/medium/light/direct（默认：`auto`）
 
 ## REQ-ID 自动分类规则（v0.5.0 新增）
@@ -127,17 +127,17 @@ def classify_scope_item(item, components, component_keywords):
 
 ---
 
-## 粒度模式（v0.5.0 新增）
+## 粒度模式（v0.6.0）
 
 ### Granularity 参数
 
 | 值 | 分解路径 | 适用场景 |
 |---|---------|----------|
 | `auto` | **自动评估**复杂度选择合适路径 | 默认，推荐 |
-| `full` | L0→L1→L2→L3 | 复杂系统，多模块协作 |
-| `medium` | L0→L2→L3 | 中等系统，2-3 个模块 |
-| `light` | L0→L3 | 简单功能，单一模块 |
-| `direct` | L0→代码 | 纯配置、胶水代码 |
+| `full` | L0→L1→L2 | 复杂系统，多模块协作 |
+| `medium` | L0→L2 | 中等系统，2-3 个模块（跳过 L1） |
+| `light` | L0→L1 | 简单系统（模块边界不明显时可先停在 L1） |
+| `direct` | L0→L2（单模块） | 单模块项目或边界非常清晰的场景 |
 
 ### 自动评估规则
 
@@ -150,8 +150,8 @@ def classify_scope_item(item, components, component_keywords):
     cross_deps: count_cross_module_dependencies(),
 }
 
-if scope_items > 20 OR components > 3 OR cross_deps > 2:
-    granularity = "full"
+if scope_items > 20 OR components >= 3 OR cross_deps > 2:
+    granularity = "full"  # v0.6.0: 3+ 组件强制使用 full
 elif scope_items > 10 OR components > 1:
     granularity = "medium"
 else:
@@ -161,34 +161,40 @@ else:
 ### 产物目录结构对比
 
 ```
-# full (L0→L1→L2→L3)
+# full (L0→L1→L2)
 docs/
 ├── L0/requirements.md
 ├── L1/
 │   ├── feature-a/requirements.md
 │   └── feature-b/requirements.md
 ├── L2/
-│   └── feature-a/module-x/requirements.md
-└── L3/
-    └── feature-a/module-x/function-y/requirements.md
+│   ├── module-x/requirements.md
+│   ├── interfaces.md
+│   └── execution-tracker.md
+└── (然后进入 /spec 生成 leaf Specs)
 
-# medium (L0→L2→L3)
+# medium (L0→L2)
 docs/
 ├── L0/requirements.md
 └── L2/
-    └── feature-a/module-x/requirements.md
-        └── L3/ (嵌套在 requirements.md 中)
+    ├── module-x/requirements.md
+    ├── interfaces.md
+    └── execution-tracker.md
+    └── (然后进入 /spec)
 
-# light (L0→L3)
+# light (L0→L1)
 docs/
 ├── L0/requirements.md
-└── L3/
-    └── feature-a/function-y/requirements.md
+└── L1/
+    └── feature-a/requirements.md
+    └── (再视情况进入 L2 与 /spec)
 
-# direct (L0→代码)
+# direct (L0→L2 单模块)
 docs/
 └── L0/requirements.md
-    └── 直接进入 code-generator
+└── L2/
+    ├── module-x/requirements.md
+    └── interfaces.md
 ```
 
 ## 步骤
@@ -214,7 +220,7 @@ docs/
 
 5. **生成覆盖矩阵（Traceability Matrix）**
    - 检查是否存在"上游遗漏"或"下游无来源新增"
-   - 跨层追溯：medium/light 模式下需建立 L0→L3 直接链接
+   - 跨层追溯：跳过中间层时需建立 L0→L2（或 L0→SPEC）直接链接
 
 6. **写入 `split-report.md`**
    - 使用模板：`.agent/templates/split-report.template.md`
@@ -225,17 +231,26 @@ docs/
    - 若 FAIL（strict 模式）：先补齐上游澄清/TBD，再进入下游
    - 若 FAIL（assist 模式）：警告但可继续
 
+8. **L1→L2 接口生成（v0.6.0）**
+   > 当 `layer_to=L2` 时，**必须同时生成** `docs/L2/interfaces.md`
+   
+   - 识别跨模块交互（L2 modules 之间的 API/Event/Data 依赖）
+   - 为每个交互点创建 `IFC-*` 条目
+   - 定义契约（input/output/errors）
+   - 确保每个 IFC 有至少 1 个 `sources[]` 指向 L1/L2 REQ
+   - 使用模板：`.agent/templates/interfaces.L2.template.md`
+
 ## 跨层追溯规则
 
-当跳过 L1/L2 层时，需在 split-report 中明确跨层链接：
+当跳过中间层时，需在 split-report 中明确跨层链接：
 
 ```markdown
-## 跨层追溯 (L0 → L3)
+## 跨层追溯 (L0 → L2)
 
-| L0 Requirement | L3 Requirement | 链接类型 |
+| L0 Requirement | L2 Requirement | 链接类型 |
 |----------------|----------------|----------|
-| REQ-L0-001 | REQ-L3-001 | direct |
-| REQ-L0-002 | REQ-L3-002 | derived |
+| REQ-L0-001 | REQ-L2-001 | direct |
+| REQ-L0-002 | REQ-L2-002 | derived |
 ```
 
 ## 使用示例
@@ -251,7 +266,7 @@ docs/
 /requirements-split source_path=docs/L0/requirements.md target_dir=docs/L2 granularity=medium
 
 # 轻量分解（跳过 L1/L2）
-/requirements-split source_path=docs/L0/requirements.md target_dir=docs/L3 granularity=light
+/requirements-split source_path=docs/L0/requirements.md target_dir=docs/L1 granularity=light
 
 # 直接实现（仅 L0）
 /requirements-split source_path=charter.yaml target_dir=docs/L0 granularity=direct
@@ -300,7 +315,7 @@ components:
 
 ---
 
-## 10. 自动提取 Exclusions（v0.5.1 新增）
+## 10. 自动提取 Exclusions
 
 从 `charter.yaml#scope.out_of_scope` 逐条生成 exclusions：
 
@@ -325,7 +340,7 @@ exclusions:
 
 ---
 
-## 11. 自动提取 Constraints（v0.5.1 新增）
+## 11. 自动提取 Constraints
 
 从 `charter.yaml#constraints` 自动提取所有约束：
 
@@ -389,7 +404,7 @@ def extract_constraints(charter):
 
 ---
 
-## 12. TBD target_layer 智能判断（v0.5.1 新增）
+## 12. TBD target_layer 智能判断
 
 基于 TBD 内容自动推荐 target_layer：
 
@@ -398,7 +413,7 @@ def suggest_tbd_target_layer(tbd_question, impact, related_reqs):
     """
     智能判断 TBD 应该在哪个层级解决
     
-    返回: "L0" | "L1" | "L2" | "L3"
+    返回: "L0" | "L1" | "L2" | "SPEC"（或 "L3" legacy）
     """
     
     # 规则1: 影响架构设计的高影响 TBD → L0
@@ -461,7 +476,7 @@ def resolve_tbds(open_questions, scope_items, metrics):
 
 ---
 
-## 13. 多组件 Profile 处理（v0.5.1 新增）
+## 13. 多组件 Profile 处理
 
 当 `charter.yaml#components` 包含多个技术栈时：
 

@@ -13,7 +13,7 @@ description: Render requirements document body and appendices from Registry bloc
 ```
 
 **Arguments:**
-- `layer`: L0 | L1 | L2 | L3
+- `layer`: L0 | L1 | L2 | L3(legacy)
 - `path`: (可选) 文档路径，省略时使用默认位置
 
 ## 推荐 CLI 实现

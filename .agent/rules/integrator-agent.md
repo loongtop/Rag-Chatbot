@@ -33,8 +33,8 @@ model: sonnet
 采用**自底向上**集成:
 
 ```
-L3 → L2 → L1 → L0
-(函数 → 模块 → 功能 → 系统)
+leaf Spec → L2 → L1 → L0
+(实现单元 → 模块 → 功能 → 系统)
 ```
 
 ## 验证阶段
@@ -49,9 +49,9 @@ L3 → L2 → L1 → L0
 Implementation_Report:
   module: "{module_name}"
   date: "{ISO 8601 timestamp}"
-  implemented_functions:
-    - function_1
-    - function_2
+  implemented_specs:
+    - "SPEC-001-A"
+    - "SPEC-002"
   tests_passed: true | false
   coverage: "95%"
   deviations_from_spec: []     # 与 spec 的偏差列表

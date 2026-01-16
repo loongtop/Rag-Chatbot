@@ -13,7 +13,7 @@ description: Validate requirements document coverage, traceability, acceptance, 
 ```
 
 **Arguments:**
-- `layer`: L0 | L1 | L2 | L3
+- `layer`: L0 | L1 | L2 | L3(legacy)
 - `path`: (可选) 文档路径
 - `--fix`: (可选) 自动修复简单问题（仅结构，不改内容）
 
@@ -129,14 +129,14 @@ jobs:
 - [x] Traceability: 所有需求有 Source
 - [x] Acceptance: P0/P1 有验收条件
 - [x] Consistency: 无交叉引用错误
-- [x] Schema: 符合 v0.5.0 规范
+- [x] Schema: 符合 v0.6.0 规范
 ```
 
 ## Auto-Fix Capabilities (`--fix`)
 
 | Issue | Auto-Fix Action |
 |-------|----------------|
-| Missing `schema_version` | Add `schema_version: "v0.5.0"` |
+| Missing `schema_version` | Add `schema_version: "v0.6.0"` |
 | Missing `status` on requirements | Add `status: draft` |
 | Missing `tbd_refs: []` | Add empty array |
 | Empty `acceptance[]` on P2 | No fix (allowed) |

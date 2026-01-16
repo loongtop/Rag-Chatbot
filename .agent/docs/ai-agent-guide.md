@@ -39,6 +39,10 @@
 - 生成覆盖矩阵：上游条目 → 下游 REQ/接口（或 N/A + 原因）
 - 工作流：`/requirements-split`
 
+v0.6.0 约定：
+- L1 不产出模块间接口契约
+- 模块间契约统一在 `docs/L2/interfaces.md` 定义，并同样纳入覆盖矩阵与 Source 要求
+
 ---
 
 ## Agent 触发条件
@@ -47,24 +51,22 @@
 |-------|---------|------|
 | Requirements Split | before writing requirements/interfaces | split-report.md |
 | Architect | charter.yaml + `freeze.frozen=true` | requirements.md, subtasks.md |
-| Tester (P1) | L3 requirements.md `status=ready` | Test Spec (补充) |
-| Designer | L3 requirements.md `status=done` | design.md |
-| Coder | design.md `status=done` | src/**/* |
+| Spec | L2 requirements done | specs/*.md, specs/spec-tree.md |
+| Designer | leaf Spec ready（可选） | design.md |
+| Coder | leaf Spec ready（或 design.md done） | src/**/* |
 | Tester (P2) | src/**/* 存在 | tests/**/* (实现+执行) |
 | Reviewer | tests passed | review_report.md |
 | Integrator | 所有模块完成 | integration_report.md |
 
 ---
 
-## TDD 模式
+## /spec（从需求到实现规格）
 
-L3 阶段必须采用测试先行：
+当 L2 完成后，使用 `/spec` 将 L2 requirements 递归分解为 Spec 树，直到 leaf Spec 可直接写代码：
 
-1. **Architect**: 填写 Function Spec → `status: ready`
-2. **Tester (P1)**: 填写 Test Spec → `status: done`
-3. **Designer**: 整合为 design.md
-4. **Coder**: 实现代码
-5. **Tester (P2)**: 实现测试 + 执行
+- 输入：`docs/L2/{module}/requirements.md`（必要时结合 `docs/L2/interfaces.md`）
+- 输出：`specs/SPEC-*.md` + `specs/spec-tree.md`
+- leaf 判定：必须满足输入/输出/依赖/验收清晰等条件（见 `/spec` 工作流）
 
 ---
 
@@ -75,10 +77,10 @@ L3 阶段必须采用测试先行：
 | Any | `split-report.template.md` |
 | L0 | `requirements.L0.template.md` |
 | L1 | `requirements.L1.template.md` |
-| L2 | `requirements.L2.template.md` + `execution-tracker.template.md` |
-| L3 | `requirements.L3.template.md` |
+| L2 | `requirements.L2.template.md` + `interfaces.L2.template.md` + `execution-tracker.template.md` |
+| SPEC | `spec.template.md` + `spec-tree.template.md` |
 
-> **v0.5.0 必须**: 所有模板使用 Registry 块作为唯一事实源。生成后执行 `/requirements-render` + `/requirements-validate`。
+> 所有 requirements 模板使用 Registry 块作为唯一事实源。生成后执行 `/requirements-render` + `/requirements-validate`。
 
 ---
 

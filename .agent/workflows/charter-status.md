@@ -57,7 +57,7 @@ description: Check project progress through Charter phases
    ```
    Charter: frozen ✅
    Phase 1: L0 ✅ → L1 ✅ → L2 ✅
-   Phase 1.5: Architecture ⏳  ← v0.6.3
+   Phase 1.5: Architecture ⏳
    Phase 2: SPEC ❌
    Phase 3: Code ❌ → Tests ❌
    ```

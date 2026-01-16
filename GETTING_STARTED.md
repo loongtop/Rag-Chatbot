@@ -86,7 +86,7 @@ my-awesome-project/
 │   ├── L0/           # Phase 1：系统级需求
 │   ├── L1/           # Phase 1：Feature 级需求
 │   ├── L2/           # Phase 1：模块级需求 + 模块间接口契约
-│   └── architecture/ # Phase 1.5：技术架构设计 (v0.6.3)
+│   └── architecture/ # Phase 1.5：技术架构设计
 ├── specs/            # Phase 2：Spec 树（leaf 可直接写代码）
 ├── src/              # Phase 3：源代码
 ├── tests/            # Phase 3：测试代码
@@ -329,7 +329,27 @@ freeze:
 - `docs/L2/execution-tracker.md` - 进度追踪表
 - `docs/L2/{模块名}/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
-### Step 5.5：/spec 递归分解（L2 → Spec Tree）
+### Step 5.5：架构设计（L2 → Architecture）
+
+L2 完成后，先生成架构设计文档：
+```
+请运行 /architecture-generate：
+/architecture-generate
+
+这将生成：
+- docs/architecture/overview.md (系统概览)
+- docs/architecture/database-schema.md (数据库设计)
+- docs/architecture/core-flows.md (RAG Pipeline)
+- docs/architecture/api-spec.md (API 规范)
+```
+
+**检查产出**：
+- `docs/architecture/*.md` - 架构设计文档
+- 运行 `/architecture-validate` 验证追溯性
+
+### Step 5.6：/spec 递归分解（Architecture → Spec Tree）
+
+**前置条件**：`docs/architecture/*.md` 已生成
 
 **重要规则**：每次只推进一个 L2 模块（或一个非 leaf Spec）！
 
@@ -352,7 +372,7 @@ freeze:
 
 ---
 
-## 第六部分：Phase 2 - 实现 leaf Specs
+## 第六部分：Phase 3 - 实现 leaf Specs
 
 ### Step 6.1：实现 leaf Spec（Coder）
 

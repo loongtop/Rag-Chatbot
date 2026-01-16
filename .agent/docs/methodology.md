@@ -4,11 +4,11 @@
 
 ---
 
-## Two-Phase Model (v0.6.3)
+## Three-Phase Model (v0.6.3)
 
 ```
-Phase 1: Requirements (L0-L2)       Phase 1.5: Architecture       Phase 2: Specs → Code
-────────────────────────        ──────────────────────────      ────────────────────────
+Phase 1: Requirements (L0→L2)    Phase 1.5: Architecture    Phase 2: Specs    Phase 3: Code
+───────────────────────────    ────────────────────────    ─────────────    ──────────────
 Charter.yaml
     ↓ [Freeze]
 L0 Requirements
@@ -16,19 +16,19 @@ L0 Requirements
 L1 Requirements
     ↓
 L2 Requirements + interfaces.md
-    ↓ architecture-generator           ← NEW in v0.6.3
+    ↓ /architecture-generate        ← Phase 1.5
 docs/architecture/
     ├── overview.md
     ├── database-schema.md
     ├── core-flows.md
     └── api-spec.md
-    ↓ /spec (recursive)
+    ↓ /spec (recursive)             ← Phase 2
 leaf Specs (SPEC-*)
-    ↓
+    ↓ Coder                          ← Phase 3
 src/*{{profile.source.extensions}}
-    ↓
+    ↓ Tester
 tests/*{{profile.test.extensions}}
-    ↓
+    ↓ Integrator
 integration
 ```
 

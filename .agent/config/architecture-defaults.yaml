@@ -5,8 +5,8 @@
 # architecture-defaults.yaml file.
 #
 # Usage in templates:
-#   {{embedding_dim}} → 1536
-#   {{embedding_model}} → text-embedding-ada-002
+#   {{embedding.dim}} → 1536
+#   {{embedding.model}} → text-embedding-ada-002
 
 schema_version: "v0.6.3"
 

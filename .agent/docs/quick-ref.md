@@ -20,7 +20,7 @@
 | `/architecture-generate` | L2→Architecture (v0.6.3) | `type=all/overview/database/flows/api` |
 | `/architecture-validate` | Architecture traceability gates (v0.6.3) | `strict=true/false` |
 | `/architecture-render` | Registry → OpenAPI/ADR (v0.6.3) | `output_type=body/openapi/adr` |
-| `/spec` | Architecture → Spec tree (recursive) | `source_path=docs/L2/{module}/requirements.md` |
+| `/spec` | Architecture → Spec tree (requires docs/architecture) | `source_path=docs/L2/{module}/requirements.md` |
 
 ### Granularity 参数（v0.6.0）
 

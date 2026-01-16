@@ -1,6 +1,6 @@
 # Agent Collaboration
 
-七大 Agent 协作模型：专业分工，产物驱动。
+八大 Agent 协作模型：专业分工，产物驱动。
 
 ---
 
@@ -10,7 +10,8 @@
 |-------|-------|------|---------|
 | **Requirements Split** | Decomposition | 可拆分性分析 & 溯源门禁 | before writing requirements/interfaces |
 | **Architect** | Decomposition | 需求分析 & 任务分解 | charter.yaml exists |
-| **Spec** | Spec | 实现规格拆分（递归到 leaf） | L2 requirements done |
+| **Architecture Generator** | Architecture | 技术架构设计 (v0.6.3) | L2 + interfaces done |
+| **Spec** | Spec | 实现规格拆分（递归到 leaf） | Architecture done |
 | **Designer** | Transition | 详细设计（可选） | leaf Spec ready (or legacy L3 done) |
 | **Coder** | Implementation | 代码生成 | design.md done |
 | **Tester** | Implementation | 测试生成 | src/*{{profile.source.extensions}} exists |
@@ -66,12 +67,17 @@
 ## Communication Protocol
 
 ```
-Requirements Split ──split-report──► Architect ──artifacts──► Spec ──leaf specs──► Coder
-                                                   │
-                                              artifacts
-                                                   │
-                                                   ▼
-Integrator ◄──artifacts── Reviewer ◄──artifacts── Tester
+Requirements Split ──split-report──► Architect ──L2+IFC──► Architecture Generator
+                                                                    │
+                                                               architecture
+                                                                    │
+                                                                    ▼
+                                                                  Spec ──leaf specs──► Coder
+                                                                                           │
+                                                                                      artifacts
+                                                                                           │
+                                                                                           ▼
+                                    Integrator ◄──artifacts── Reviewer ◄──artifacts── Tester
 ```
 
 **规则**:

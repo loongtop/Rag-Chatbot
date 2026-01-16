@@ -51,7 +51,8 @@ v0.6.0 约定：
 |-------|---------|------|
 | Requirements Split | before writing requirements/interfaces | split-report.md |
 | Architect | charter.yaml + `freeze.frozen=true` | requirements.md, subtasks.md |
-| Spec | L2 requirements done | specs/*.md, specs/spec-tree.md |
+| **Architecture Generator** | L2 requirements + interfaces.md done | docs/architecture/*.md (v0.6.3) |
+| Spec | Architecture done + L2 requirements | specs/*.md, specs/spec-tree.md |
 | Designer | leaf Spec ready（可选） | design.md |
 | Coder | leaf Spec ready（或 design.md done） | src/**/* |
 | Tester (P2) | src/**/* 存在 | tests/**/* (实现+执行) |
@@ -60,9 +61,25 @@ v0.6.0 约定：
 
 ---
 
+## Phase 1.5: Architecture (v0.6.3)
+
+当 L2 完成后，先使用 `/architecture-generate` 生成架构设计文档：
+
+- 输入：`docs/L2/*/requirements.md` + `docs/L2/interfaces.md`
+- 输出：`docs/architecture/*.md` (overview, database-schema, core-flows, api-spec)
+- 验证：`/architecture-validate` 检查追溯性
+- 门禁：所有 ARCH-* 必须有 sources[] 指向 REQ-* 或 IFC-*
+
+---
+
 ## /spec（从需求到实现规格）
 
-当 L2 完成后，使用 `/spec` 将 L2 requirements 递归分解为 Spec 树，直到 leaf Spec 可直接写代码：
+**前置条件** (v0.6.3)：
+1. L2 requirements 已完成 (`docs/L2/{module}/requirements.md`)
+2. L2 interfaces 已定义 (`docs/L2/interfaces.md`)
+3. **Architecture 已完成** (`docs/architecture/*.md`)
+
+使用 `/spec` 将 L2 requirements 递归分解为 Spec 树，直到 leaf Spec 可直接写代码：
 
 - 输入：`docs/L2/{module}/requirements.md`（必要时结合 `docs/L2/interfaces.md`）
 - 输出：`specs/SPEC-*.md` + `specs/spec-tree.md`
@@ -78,6 +95,7 @@ v0.6.0 约定：
 | L0 | `requirements.L0.template.md` |
 | L1 | `requirements.L1.template.md` |
 | L2 | `requirements.L2.template.md` + `interfaces.L2.template.md` + `execution-tracker.template.md` |
+| Architecture | `architecture.*.template.md` (v0.6.3) |
 | SPEC | `spec.template.md` + `spec-tree.template.md` |
 
 > 所有 requirements 模板使用 Registry 块作为唯一事实源。生成后执行 `/requirements-render` + `/requirements-validate`。

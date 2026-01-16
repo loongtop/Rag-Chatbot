@@ -1,6 +1,6 @@
 # Agent Collaboration
 
-八大 Agent 协作模型：专业分工，产物驱动。
+九大 Agent 协作模型：专业分工，产物驱动。
 
 ---
 
@@ -32,10 +32,18 @@
 - 在 L2 统一定义模块间接口契约：`docs/L2/interfaces.md`
 - 输出: requirements.md, subtasks.md, interfaces.md (L2)
 
+### Architecture Generator (v0.6.3)
+- 将 L2 需求和接口转化为技术架构设计
+- 输入: `docs/L2/*/requirements.md` + `docs/L2/interfaces.md`
+- 输出: `docs/architecture/*.md` (overview, database-schema, core-flows, api-spec)
+- 门禁: 所有 ARCH-* 必须有 sources[] 指向 REQ-* 或 IFC-*
+- 验证: `/architecture-validate`
+
 ### Spec
+- **前置条件**: Architecture 已完成 (`docs/architecture/*.md`)
 - 将 L2 Requirements 分解为可实现的 Spec 树（直到 leaf）
 - 输出: `specs/SPEC-*.md` + `specs/spec-tree.md`
-- 门禁: leaf Spec 必须“可直接写代码”，且 100% 可追溯到 `REQ-L2-*`
+- 门禁: leaf Spec 必须"可直接写代码"，且 100% 可追溯到 `REQ-L2-*`
 
 ### Designer
 - 为 leaf Spec（或 legacy L3）创建详细设计（必要时）

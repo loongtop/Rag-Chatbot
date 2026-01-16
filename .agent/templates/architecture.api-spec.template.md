@@ -1,6 +1,6 @@
 ---
 template_name: architecture.api-spec
-version: v0.6.3
+version: v0.6.5
 description: API 详细规范模板：从 IFC-* 扩展生成
 ---
 
@@ -11,7 +11,7 @@ description: API 详细规范模板：从 IFC-* 扩展生成
 ## — BEGIN REGISTRY —
 
 ```architecture-registry
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 type: "api"
 parent: "docs/L2/interfaces.md"
 

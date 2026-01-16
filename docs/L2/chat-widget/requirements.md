@@ -5,6 +5,7 @@ layer: L2
 parent: docs/L1/
 component: "chat-widget"
 profile: "typescript"
+caf_version: v0.6.5
 ---
 
 # L2 Requirements: Chat Widget
@@ -12,7 +13,7 @@ profile: "typescript"
 ## — BEGIN REGISTRY —
 
 ```requirements-registry
-schema_version: "v0.6.2"
+schema_version: "v0.6.5"
 layer: L2
 component: "chat-widget"
 profile: "typescript"
@@ -128,3 +129,32 @@ exclusions: []
 | UPLOAD | 1 | REQ-L2-WGT-005 |
 | HANDOFF | 1 | REQ-L2-WGT-006 |
 | **Total** | **6** | |
+
+---
+
+## Requirements
+
+| ID | Priority | Statement | Sources | Acceptance | Status |
+|----|----------|-----------|---------|------------|--------|
+| REQ-L2-WGT-001 | P0 | 提供可嵌入的 Widget 组件：支持 script 标签引入，提供集成示例。 | REQ-L0-WGT-001 | 2 | draft |
+| REQ-L2-WGT-003 | P1 | Widget 界面支持中英文切换。 | REQ-L0-WGT-003 | 2 | draft |
+| REQ-L2-WGT-002 | P1 | 提供邮箱登录 UI：输入邮箱、输入验证码、显示登录状态。 | REQ-L1-USRMGMT-001 | 3 | draft |
+| REQ-L2-WGT-004 | P1 | 提供语音交互 UI：录音按钮、语音播放控件。 | REQ-L1-VOICE-001 | 2 | draft |
+| REQ-L2-WGT-005 | P1 | 提供文件上传 UI：拖拽/点击上传、进度显示、格式/大小提示。 | REQ-L1-UPLOAD-001 | 3 | draft |
+| REQ-L2-WGT-006 | P1 | 提供人工/AI 切换 UI：切换按钮、队列等待提示。 | REQ-L1-HANDOFF-001 | 2 | draft |
+
+## Traceability
+
+| Requirement | Source ID | Source Path |
+|------------|-----------|-------------|
+| REQ-L2-WGT-001 | REQ-L0-WGT-001 | docs/L0/requirements.md#REQ-L0-WGT-001 |
+| REQ-L2-WGT-003 | REQ-L0-WGT-003 | docs/L0/requirements.md#REQ-L0-WGT-003 |
+| REQ-L2-WGT-002 | REQ-L1-USRMGMT-001 | docs/L1/usrmgmt/requirements.md#REQ-L1-USRMGMT-001 |
+| REQ-L2-WGT-004 | REQ-L1-VOICE-001 | docs/L1/voice/requirements.md#REQ-L1-VOICE-001 |
+| REQ-L2-WGT-005 | REQ-L1-UPLOAD-001 | docs/L1/upload/requirements.md#REQ-L1-UPLOAD-001 |
+| REQ-L2-WGT-006 | REQ-L1-HANDOFF-001 | docs/L1/handoff/requirements.md#REQ-L1-HANDOFF-001 |
+
+## Gate Check
+
+- [x] All requirements have `sources[]` (6/6)
+- [x] All P0/P1 have `acceptance[]`

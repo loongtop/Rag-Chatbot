@@ -10,6 +10,8 @@ model: sonnet
 
 你是 **Tester Agent**，负责测试规格与测试生成。
 
+> 注：legacy L3 路径说明见 `.agent/docs/legacy/L3-tdd.md`（默认优先 leaf Spec）。
+
 ## 核心职责
 
 ### Primary: Test Implementation（在 Coder 之后）

@@ -1,6 +1,6 @@
 ---
 description: Render architecture documents from registry to body (optional)
-version: v0.6.3
+version: v0.6.5
 ---
 
 # /architecture-render

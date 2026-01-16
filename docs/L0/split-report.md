@@ -7,18 +7,17 @@ parent: charter.yaml
 target: docs/L0/requirements.md
 granularity: full
 decomposition_path: L0→L1→L2
-caf_version: v0.6.2
+caf_version: v0.6.5
 ---
 
-# Split Report: Charter → L0 (v0.6.2)
+# Split Report: Charter → L0 (v0.6.5)
 
 ## 1. Summary（结论）
 
 - **Decision**: PASS
 - **Why**: Charter 已冻结（frozen=true），100% 覆盖：scope(15) + metrics(12) + constraints(4) + exclusions(4) + TBD(12) + **risks(11)** + **dependencies(10)** + **contracts(2)**
 - **Granularity Mode**: `full` (`L0→L1→L2`)
-- **CAF Version**: v0.6.2
-
+- **CAF Version**: v0.6.5
 ## 2. Inputs（输入）
 
 | Item | Path | Version | Notes |
@@ -50,7 +49,7 @@ caf_version: v0.6.2
 | **Total Score** | | 5 |
 | **Recommended Path** | | `full` (L0→L1→L2) |
 
-> v0.6.0 规则：components >= 3 强制使用 full 模式
+> v0.6.5 规则：components >= 3 强制使用 full 模式
 
 ## 5. Source Inventory（上游条目清单）
 

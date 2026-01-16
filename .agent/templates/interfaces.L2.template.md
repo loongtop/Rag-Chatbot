@@ -23,24 +23,25 @@ profile: "{profile}"
 ```interfaces-registry
 # =============================================================================
 # L2 Interfaces Registry - Inter-Module Contracts
-# Schema: v1.0 | Template: v1.0 | CAF: v0.6.0
+# Schema: v1.0 | Template: v1.0 | CAF: v0.6.5
 # =============================================================================
 
-schema_version: "v0.6.0"
+schema_version: "v0.6.5"
 layer: L2
 parent: "docs/L0/requirements.md"
 source_checksum: "{checksum}"
 profile: "{profile}"
 
 interfaces:
-  - id: "IFC-001"
-    name: "chat_completion"
+  - id: "IFC-CHAT-API"
+    name: "chat_api"
     type: "API" # API | Event | Data
     description: "模块间契约描述（至少10个字符）"
     providers: ["api-server"]
     consumers: ["chat-widget"]
     sources:
-      - path: "docs/L2/api-server/requirements.md#REQ-L2-001"
+      - id: "REQ-L2-API-001"
+        path: "docs/L2/api-server/requirements.md#REQ-L2-API-001"
     contract:
       transport: "HTTP" # HTTP | gRPC | MQ | File | InProcess
       input: |

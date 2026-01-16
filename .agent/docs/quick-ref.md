@@ -8,21 +8,26 @@
 
 | Command | Description | Parameters |
 |---------|-------------|------------|
-| `/charter-init` | Initialize new project | `--profile rag-web` |
-| `/charter-validate` | Validate charter.yaml | |
+| `/charter-init` | Initialize new project structure | `profile=rag-web` (optional) |
+| `/charter-validate` | Validate charter.yaml | `charter_path=...` (optional) |
 | `/charter-freeze` | Lock charter (before L1) | recommended `chmod a-w charter.yaml` |
 | `/charter-unfreeze` | Unlock for modifications | if needed `chmod u+w charter.yaml` |
 | `/charter-status` | Check project progress | |
 | `/charter-quality` | Run quality gates | |
-| `/requirements-split` | Create split-report.md + traceability matrix | `granularity=auto/full/medium/light/direct` |
-| `/requirements-render` | Registry → body + appendices | |
-| `/requirements-validate` | Coverage/traceability/acceptance gates | |
-| `/architecture-generate` | L2→Architecture (v0.6.3) | `type=all/overview/database/flows/api` |
-| `/architecture-validate` | Architecture traceability gates (v0.6.3) | `strict=true/false` |
-| `/architecture-render` | Registry → OpenAPI/ADR (v0.6.3) | `output_type=body/openapi/adr` |
-| `/spec` | Architecture → Spec tree (requires docs/architecture) | `source_path=docs/L2/{module}/requirements.md` |
+| `/requirements-split` | Create split-report.md + traceability matrix | `source_path=... target_dir=... granularity=auto/full/medium/light/direct layer_from=... layer_to=...` |
+| `/requirements-render` | Registry → body + appendices | `<layer> [path]` |
+| `/requirements-validate` | Coverage/traceability/acceptance gates | `<layer> [path] [--fix]` |
+| `/architecture-generate` | L2→Architecture (v0.6.5) | `type=all/overview/database/flows/api target_dir=...` |
+| `/architecture-validate` | Architecture traceability gates (v0.6.5) | `source_path=... strict=true/false` |
+| `/architecture-render` | Registry → Body/OpenAPI/ADR (v0.6.5) | `source_path=... output_type=body/openapi/adr` |
+| `/architecture-compare` | A/B compare two architecture outputs | `baseline_dir=... candidate_dir=... type=... strict=...` |
+| `/spec` | Architecture → Spec tree (requires docs/architecture) | `source_path=... target_dir=... mode=create/refine` |
 
-### Granularity 参数（v0.6.0）
+## Local Tools
+
+- `bash .agent/tools/trigger-check.sh`：扫描当前产物状态并给出推荐的下一步命令
+
+### Granularity 参数（v0.6.5）
 
 | 值 | 分解路径 | 适用场景 |
 |---|---------|----------|
@@ -37,10 +42,10 @@
 /requirements-split source_path=charter.yaml target_dir=docs/L0
 
 # 强制全链路
-/requirements-split granularity=full
+/requirements-split source_path=charter.yaml target_dir=docs/L0 granularity=full
 
 # 轻量分解
-/requirements-split granularity=light
+/requirements-split source_path=docs/L0/requirements.md target_dir=docs/L1 granularity=light
 ```
 
 ### REQ-ID 分类规则（v0.5.0）
@@ -104,7 +109,7 @@ layer: L0 | L1 | L2 | SPEC | L3(legacy)
 parent: {parent_path}
 source_checksum: "{sha256}"
 profile: "{profile}"
-schema_version: "v0.6.0"
+schema_version: "v0.6.5"
 ---
 ```
 
@@ -113,26 +118,20 @@ schema_version: "v0.6.0"
 ## Registry Block Structure
 
 ```requirements-registry
-schema_version: "v0.6.0"
+schema_version: "v0.6.5"
 layer: L0 | L1 | L2 | L3(legacy)
 parent: "{parent_path}"
 requirements: [...]
 tbds: [...]
 exclusions: [...]
-interfaces: [...]  # legacy：旧版在 L1/L2 内嵌；v0.6.0 推荐使用 docs/L2/interfaces.md（interfaces-registry）
+interfaces: [...]  # legacy：旧版在 L1/L2 内嵌；v0.6.5 推荐使用 docs/L2/interfaces.md（interfaces-registry）
 ```
 
 ---
 
 ## (Legacy) TDD Workflow (L3)
 
-```
-1. Architect → Function Spec (status: ready)
-2. Tester P1 → Test Spec (status: done)
-3. Designer → design.md
-4. Coder → 实现代码
-5. Tester P2 → 实现测试 + 运行
-```
+L3 为 legacy 路径（计划在 v0.8.0 隔离/移除）。如需使用请阅读：`.agent/docs/legacy/L3-tdd.md`。
 
 ---
 
@@ -163,5 +162,5 @@ Gate_Check:
 
 | Component | Version |
 |-----------|--------|
-| CAF | v0.6.3 |
-| schema_version | v0.6.3 |
+| CAF | v0.6.5 |
+| schema_version | v0.6.5 |

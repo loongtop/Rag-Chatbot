@@ -5,7 +5,7 @@ layer: L1
 parent: docs/L0/requirements.md
 source_checksum: "{checksum}"
 profile: "{profile}"
-feature: "{feature_name}"              # v0.6.0：L1 按业务 Feature 分组
+feature: "{feature_name}"              # v0.6.5：L1 按业务 Feature 分组
 component: "{component_name}"          # legacy：若仍按组件拆分可填写
 language_profile: "{python|typescript}" # 可选：语言配置
 decomposition_strategy: "full"         # 可选：分解策略
@@ -26,7 +26,7 @@ decomposition_strategy: "full"         # 可选：分解策略
 > - 语言配置: `{language_profile}`
 > - 分解策略: `{decomposition_strategy}`
 >
-> v0.6.0 约定：L1 不产出接口契约；模块间契约统一在 `docs/L2/interfaces.md` 定义。
+> v0.6.5 约定：L1 不产出接口契约；模块间契约统一在 `docs/L2/interfaces.md` 定义。
 
 ---
 
@@ -34,11 +34,11 @@ decomposition_strategy: "full"         # 可选：分解策略
 
 ```requirements-registry
 # =============================================================================
-# L1 Requirements Registry - Feature Level (v0.6.0)
-# Schema: v1.0 | Template: v2.0 | CAF: v0.6.0
+# L1 Requirements Registry - Feature Level (v0.6.5)
+# Schema: v1.0 | Template: v2.0 | CAF: v0.6.5
 # =============================================================================
 
-schema_version: "v0.6.0"
+schema_version: "v0.6.5"
 layer: L1
 parent: "docs/L0/requirements.md"
 source_checksum: "{checksum}"

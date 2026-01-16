@@ -3,7 +3,7 @@ status: draft
 owner: architect
 layer: L2
 type: interfaces
-caf_version: v0.6.2
+caf_version: v0.6.5
 ---
 
 # L2 Interfaces Definition
@@ -13,7 +13,7 @@ caf_version: v0.6.2
 ## — BEGIN REGISTRY —
 
 ```interfaces-registry
-schema_version: "v0.6.2"
+schema_version: "v0.6.5"
 layer: L2
 
 interfaces:

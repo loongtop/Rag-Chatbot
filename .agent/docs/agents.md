@@ -2,6 +2,8 @@
 
 九大 Agent 协作模型：专业分工，产物驱动。
 
+> 注：L3（Function Spec / TDD）为 legacy 路径；默认推荐使用 Phase 2 的 `SPEC-*`（leaf Spec）。如需使用 L3，见 `.agent/docs/legacy/L3-tdd.md`。
+
 ---
 
 ## Agent Roster
@@ -10,7 +12,7 @@
 |-------|-------|------|---------|
 | **Requirements Split** | Decomposition | 可拆分性分析 & 溯源门禁 | before writing requirements/interfaces |
 | **Architect** | Decomposition | 需求分析 & 任务分解 | charter.yaml + freeze.frozen=true |
-| **Architecture Generator** | Architecture | 技术架构设计 (v0.6.3) | L2 + interfaces done |
+| **Architecture Generator** | Architecture | 技术架构设计 (v0.6.5) | L2 + interfaces done |
 | **Spec** | Spec | 实现规格拆分（递归到 leaf） | Architecture done + L2 requirements |
 | **Designer** | Transition | 详细设计（可选） | leaf Spec ready (or legacy L3 done) |
 | **Coder** | Implementation | 代码生成 | design.md done |
@@ -32,7 +34,7 @@
 - 在 L2 统一定义模块间接口契约：`docs/L2/interfaces.md`
 - 输出: requirements.md, subtasks.md, interfaces.md (L2)
 
-### Architecture Generator (v0.6.3)
+### Architecture Generator (v0.6.5)
 - 将 L2 需求和接口转化为技术架构设计
 - 输入: `docs/L2/*/requirements.md` + `docs/L2/interfaces.md`
 - 输出: `docs/architecture/*.md` (overview, database-schema, core-flows, api-spec)

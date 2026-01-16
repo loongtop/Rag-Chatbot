@@ -13,6 +13,8 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3
 
 # L3 Requirements: {function_name}
 
+> ⚠️ **Legacy Path**：L3 为 Function Spec / TDD 旧路径；新项目默认推荐使用 Phase 2 的 `SPEC-*`（leaf Spec）。如需使用 L3，先阅读 `.agent/docs/legacy/L3-tdd.md`。
+
 > ⚠️ **Document Structure (Template v2.0)**
 >
 > | Section | Type | Edit Policy |
@@ -31,10 +33,10 @@ decomposition_path: L0→L1→L2→L3 | L0→L2→L3 | L0→L3
 ```requirements-registry
 # =============================================================================
 # L3 Requirements Registry - Function Level (Leaf Node)
-# Schema: v1.0 | Template: v2.0 | CAF: v0.5.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.6.5
 # =============================================================================
 
-schema_version: "v0.5.0"
+schema_version: "v0.6.5"
 layer: L3
 parent: "docs/L{parent_layer}/{feature}/{module}/requirements.md"
 source_checksum: "{checksum}"

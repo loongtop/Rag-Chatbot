@@ -1,6 +1,6 @@
 ---
 template_name: architecture.database-schema
-version: v0.6.3
+version: v0.6.5
 description: 数据库设计模板：实体模型、索引策略、迁移版本
 ---
 
@@ -11,7 +11,7 @@ description: 数据库设计模板：实体模型、索引策略、迁移版本
 ## — BEGIN REGISTRY —
 
 ```architecture-registry
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 type: "database"
 parent: "docs/L2/api-server/requirements.md"
 

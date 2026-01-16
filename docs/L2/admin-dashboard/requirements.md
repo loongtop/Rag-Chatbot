@@ -5,6 +5,7 @@ layer: L2
 parent: docs/L1/
 component: "admin-dashboard"
 profile: "typescript"
+caf_version: v0.6.5
 ---
 
 # L2 Requirements: Admin Dashboard
@@ -12,7 +13,7 @@ profile: "typescript"
 ## — BEGIN REGISTRY —
 
 ```requirements-registry
-schema_version: "v0.6.2"
+schema_version: "v0.6.5"
 layer: L2
 component: "admin-dashboard"
 profile: "typescript"
@@ -91,3 +92,28 @@ exclusions: []
 | ADMGMT | 3 | REQ-L2-ADM-001 ~ 003 |
 | HANDOFF | 1 | REQ-L2-ADM-004 |
 | **Total** | **4** | |
+
+---
+
+## Requirements
+
+| ID | Priority | Statement | Sources | Acceptance | Status |
+|----|----------|-----------|---------|------------|--------|
+| REQ-L2-ADM-001 | P0 | 提供产品数据管理 UI：JSON 上传/替换/查看/搜索。 | REQ-L1-ADMGMT-001 | 3 | draft |
+| REQ-L2-ADM-002 | P0 | 提供知识库管理 UI：文档上传/列表/索引状态/日志。 | REQ-L1-ADMGMT-002 | 3 | draft |
+| REQ-L2-ADM-003 | P0 | 提供后台统一管理界面：侧边栏导航、权限控制入口。 | REQ-L1-ADMGMT-003 | 3 | draft |
+| REQ-L2-ADM-004 | P1 | 提供客服工作台 UI：转接队列、对话接入、处理完成。 | REQ-L1-HANDOFF-001 | 3 | draft |
+
+## Traceability
+
+| Requirement | Source ID | Source Path |
+|------------|-----------|-------------|
+| REQ-L2-ADM-001 | REQ-L1-ADMGMT-001 | docs/L1/admgmt/requirements.md#REQ-L1-ADMGMT-001 |
+| REQ-L2-ADM-002 | REQ-L1-ADMGMT-002 | docs/L1/admgmt/requirements.md#REQ-L1-ADMGMT-002 |
+| REQ-L2-ADM-003 | REQ-L1-ADMGMT-003 | docs/L1/admgmt/requirements.md#REQ-L1-ADMGMT-003 |
+| REQ-L2-ADM-004 | REQ-L1-HANDOFF-001 | docs/L1/handoff/requirements.md#REQ-L1-HANDOFF-001 |
+
+## Gate Check
+
+- [x] All requirements have `sources[]` (4/4)
+- [x] All P0/P1 have `acceptance[]`

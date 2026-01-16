@@ -21,7 +21,7 @@ description: Check project progress through Charter phases
    | L1 | requirements.md, subtasks.md, split-report.md(可选) | `docs/L1/*/` |
    | L2 | requirements.md, **interfaces.md**, execution-tracker.md, split-report.md(可选) | `docs/L2/` + `docs/L2/*/` |
 
-3. **检查 Phase 1.5 (架构阶段)** ← v0.6.3 新增
+3. **检查 Phase 1.5 (架构阶段)** ← v0.6.5
    
    | 检查项 | 位置 |
    |--------|------|

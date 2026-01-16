@@ -1,0 +1,54 @@
+meta:
+  id: "EX-MIN-20260116-001"
+  name: "notes-cli"
+  owner: "Example"
+  version: "0.1"
+  description: "Minimal single-module example for Charter Agent Framework v0.6.5"
+
+objective:
+  problems:
+    - "[PROB-001] 团队缺少一个可本地保存的简易笔记工具"
+  business_goals:
+    - "[GOAL-001] 1 分钟内完成新增与查询笔记"
+
+scope:
+  must_have:
+    - "[SCOPE-MH-001] 支持新增笔记（content + created_at）并持久化到本地 JSON 文件"
+    - "[SCOPE-MH-002] 支持列出全部笔记（按 created_at 倒序）"
+  out_of_scope:
+    - "[SCOPE-OOS-001] 不做云同步/多端登录"
+    - "[SCOPE-OOS-002] 不做全文检索"
+
+deliverables:
+  mandatory:
+    - "[DELIV-001] 可运行的 Python 模块（src/）"
+    - "[DELIV-002] 单元测试（tests/）"
+    - "[DELIV-003] 文档产物（docs/ + specs/）"
+
+quality_requirements:
+  code:
+    test_coverage: "95%"
+    type_coverage: "100%"
+    complexity_limit: 10
+    documentation: "required"
+  performance:
+    response_time_p95: "50ms"
+    throughput: "N/A"
+    memory_limit: "128MB"
+  security:
+    vulnerability_scan: "recommended"
+    dependency_audit: "recommended"
+    secrets_detection: "required"
+
+language_profile: python
+
+traceability:
+  mode: "strict"
+  anchor_style: "id_prefix"
+
+freeze:
+  frozen: true
+  checksum: "0000000000000000000000000000000000000000000000000000000000000000"
+  frozen_at: "2026-01-16T00:00:00Z"
+  frozen_by: "Example"
+

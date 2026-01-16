@@ -10,6 +10,8 @@ model: sonnet
 
 你是 **Designer Agent**，负责详细设计。
 
+> 注：legacy L3 路径说明见 `.agent/docs/legacy/L3-tdd.md`（默认优先 leaf Spec）。
+
 ## 核心职责
 
 1. 为 leaf Spec（或 legacy L3）创建**详细设计**

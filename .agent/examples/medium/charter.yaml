@@ -1,0 +1,41 @@
+meta:
+  id: "EX-MED-20260116-001"
+  name: "rag-web-demo"
+  owner: "Example"
+  version: "0.1"
+
+objective:
+  problems:
+    - "[PROB-001] 用户无法快速从产品资料中获取准确回答"
+  business_goals:
+    - "[GOAL-001] 提升自助问答转化率"
+
+scope:
+  must_have:
+    - "[SCOPE-MH-001] 提供 RAG 问答能力（带来源引用）"
+    - "[SCOPE-MH-002] 提供可嵌入网站的 Chatbot Widget"
+    - "[SCOPE-MH-003] 提供后台上传产品资料并触发索引"
+  out_of_scope:
+    - "[SCOPE-OOS-001] 不做自建模型训练"
+
+deliverables:
+  mandatory:
+    - "[DELIV-001] docs/L0-L2 + docs/architecture + specs"
+
+quality_requirements:
+  code:
+    test_coverage: "95%"
+    type_coverage: "100%"
+    complexity_limit: 10
+    documentation: "required"
+
+language_profile: python
+
+traceability:
+  mode: "strict"
+
+freeze:
+  frozen: true
+  checksum: "0000000000000000000000000000000000000000000000000000000000000000"
+  frozen_at: "2026-01-16T00:00:00Z"
+  frozen_by: "Example"

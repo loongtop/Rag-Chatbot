@@ -4,7 +4,7 @@ description: |
   从 L2 需求和接口定义生成架构设计文档。
   当用户说"生成架构"、"技术设计"、"数据库设计"时自动触发。
   输出 docs/architecture/ 目录下的设计文档。
-version: v0.6.3
+version: v0.6.5
 trigger_keywords:
   - "生成架构"
   - "技术设计"
@@ -53,8 +53,10 @@ Charter → L0 → L1 → L2 → [Architecture] → /spec → Code
 |------|------|
 | `docs/architecture/overview.md` | 系统概览：组件边界、部署拓扑、信任边界 |
 | `docs/architecture/database-schema.md` | 数据库设计：实体模型、索引策略、迁移版本 |
-| `docs/architecture/core-flows.md` | 核心流程：RAG Pipeline、业务流程 |
+| `docs/architecture/core-flows.md` | 核心流程：业务流程/关键链路（如有 RAG 则包含 RAG Pipeline） |
 | `docs/architecture/api-spec.md` | API 详细规范：从 IFC-* 扩展 |
+
+> 默认输出目录为 `docs/architecture/`，对比验证时建议通过 `/architecture-generate target_dir=...` 输出到候选目录，避免重命名 `docs/`。
 
 ## 架构 Registry 格式
 
@@ -64,7 +66,7 @@ Charter → L0 → L1 → L2 → [Architecture] → /spec → Code
 ## — BEGIN REGISTRY —
 
 ```architecture-registry
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 type: "overview"  # overview | database | flows | api
 
 items:
@@ -147,6 +149,9 @@ items:
 
 # 验证架构文档
 /architecture-validate
+
+# A/B 对比（可选）
+/architecture-compare baseline_dir=docs/architecture candidate_dir=docs/architecture.__candidate__
 ```
 
 ## 版本历史
@@ -154,3 +159,4 @@ items:
 | 版本 | 变更 |
 |------|------|
 | v0.6.3 | 初始版本，增加 Phase 1.5: Architecture |
+| v0.6.5 | 版本号升级（不改变输入/输出约定） |

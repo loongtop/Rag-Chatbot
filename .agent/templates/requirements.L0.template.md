@@ -26,10 +26,10 @@ profile: "{profile}"
 ```requirements-registry
 # =============================================================================
 # Requirements Registry (Single Source of Truth)
-# Schema: v1.0 | Template: v2.0 | CAF: v0.6.0
+# Schema: v1.0 | Template: v2.0 | CAF: v0.6.5
 # =============================================================================
 
-schema_version: "v0.6.0"
+schema_version: "v0.6.5"
 layer: L0
 parent: "charter.yaml"
 source_checksum: "{checksum}"
@@ -444,7 +444,7 @@ exclusions:
   - source:
       path: "charter.yaml#freeze"
     reason: "Freeze metadata, not a deliverable requirement"
-    category: meta
+    category: process_config
 ```
 
 ## — END REGISTRY —
@@ -460,7 +460,7 @@ exclusions:
 
 ### 1.1 目的
 
-本文档定义了 {system_name} 的 L0（系统级）需求规格说明，是下游 L1/L2/L3 需求分解的唯一事实来源。
+本文档定义了 {system_name} 的 L0（系统级）需求规格说明，是下游 L1/L2 需求分解与 Spec 树（Phase 2）的唯一事实来源（L3 为 legacy）。
 
 本文档的预期读者包括：项目发起人、产品经理、架构师、开发团队、测试团队。
 

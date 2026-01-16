@@ -27,7 +27,7 @@ model: sonnet
 | L1 | Features | `docs/L1/{feature}/requirements.md`, `docs/L1/{feature}/subtasks.md` | `requirements.L1.template.md` |
 | L2 | Modules | `docs/L2/{module}/requirements.md`, `docs/L2/execution-tracker.md`, `docs/L2/interfaces.md` | `requirements.L2.template.md` + `interfaces.L2.template.md` |
 
-> 说明：L3（Function Spec / TDD）保留为 legacy 路径；推荐使用 `/spec` 生成 leaf Specs 作为实现起点。
+> 说明：L3（Function Spec / TDD）保留为 legacy 路径；推荐使用 `/spec` 生成 leaf Specs 作为实现起点。L3 细节见 `.agent/docs/legacy/L3-tdd.md`。
 
 ## 前置检查
 

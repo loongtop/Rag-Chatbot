@@ -22,14 +22,14 @@ description: Decompose L2 requirements into a recursive implementation Spec tree
   - `create`：从 L2 创建顶层 Spec
   - `refine`：对非 leaf Spec 继续拆分
 
-## 入口条件（v0.6.3）
+## 入口条件（v0.6.5）
 
 > `/spec` 是从 **需求层（L0-L2）** 到 **实现层（Spec→Code）** 的桥梁
 
 **前置条件**：
 1. L2 requirements 已完成（`docs/L2/{module}/requirements.md` 存在）
 2. L2 interfaces 已定义（`docs/L2/interfaces.md` 存在）
-3. **Architecture 已完成**（`docs/architecture/*.md` 存在）← v0.6.3 新增
+3. **Architecture 已完成**（`docs/architecture/*.md` 存在）← v0.6.5
 4. 所有 P0/P1 TBD 已解决或有明确 fallback
 
 **触发方式**：

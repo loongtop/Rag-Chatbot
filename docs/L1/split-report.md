@@ -6,10 +6,10 @@ layer_to: L1
 parent: docs/L0/requirements.md
 target: docs/L1/
 granularity: full
-caf_version: v0.6.2
+caf_version: v0.6.5
 ---
 
-# Split Report: L0 → L1 (v0.6.2)
+# Split Report: L0 → L1 (v0.6.5)
 
 ## 1. Summary
 

@@ -1,6 +1,6 @@
 ---
 template_name: architecture.core-flows
-version: v0.6.3
+version: v0.6.5
 description: 核心流程模板：RAG Pipeline、业务流程
 ---
 
@@ -11,7 +11,7 @@ description: 核心流程模板：RAG Pipeline、业务流程
 ## — BEGIN REGISTRY —
 
 ```architecture-registry
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 type: "flows"
 parent: "docs/L2/api-server/requirements.md"
 

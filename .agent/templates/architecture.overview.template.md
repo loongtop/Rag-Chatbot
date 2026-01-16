@@ -1,6 +1,6 @@
 ---
 template_name: architecture.overview
-version: v0.6.3
+version: v0.6.5
 description: 系统概览模板：组件边界、部署拓扑、信任边界
 ---
 
@@ -11,7 +11,7 @@ description: 系统概览模板：组件边界、部署拓扑、信任边界
 ## — BEGIN REGISTRY —
 
 ```architecture-registry
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 type: "overview"
 parent: "docs/L2/interfaces.md"
 

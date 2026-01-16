@@ -1,6 +1,6 @@
 ---
 description: Validate architecture documents for traceability and completeness
-version: v0.6.3
+version: v0.6.5
 ---
 
 # /architecture-validate
@@ -28,7 +28,7 @@ version: v0.6.3
 
 ````
 ```architecture-registry
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 items:
   - id: ARCH-*-NNN
     statement: "..."
@@ -138,6 +138,8 @@ None
 
 # 指定路径
 /architecture-validate source_path=docs/design
+
+# A/B 对比阶段建议 strict=false，并配合 /architecture-compare
 ```
 
 ## 与 requirements-validate 的关系

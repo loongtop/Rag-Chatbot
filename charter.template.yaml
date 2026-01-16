@@ -1,9 +1,12 @@
 # =========================================================================
 # Project Charter Template
-# Charter Agent Framework v0.6.0
+# Charter Agent Framework v0.6.5
 # =========================================================================
+# SPDX-License-Identifier: Apache-2.0 OR MIT
+# Copyright (c) 2026 loongtop
+#
 # 使用方法:
-# 1. 复制此文件，重命名为 [项目名].charter.yaml
+# 1. 复制此文件，重命名为 charter.yaml
 # 2. 填写每个板块的占位符
 # 3. 删除不需要的注释
 #

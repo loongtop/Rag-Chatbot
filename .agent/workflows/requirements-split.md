@@ -127,7 +127,7 @@ def classify_scope_item(item, components, component_keywords):
 
 ---
 
-## 粒度模式（v0.6.0）
+## 粒度模式（v0.6.5）
 
 ### Granularity 参数
 
@@ -151,7 +151,7 @@ def classify_scope_item(item, components, component_keywords):
 }
 
 if scope_items > 20 OR components >= 3 OR cross_deps > 2:
-    granularity = "full"  # v0.6.0: 3+ 组件强制使用 full
+    granularity = "full"  # v0.6.5: 3+ 组件强制使用 full
 elif scope_items > 10 OR components > 1:
     granularity = "medium"
 else:
@@ -231,7 +231,7 @@ docs/
    - 若 FAIL（strict 模式）：先补齐上游澄清/TBD，再进入下游
    - 若 FAIL（assist 模式）：警告但可继续
 
-8. **L1→L2 接口生成（v0.6.0）**
+8. **L1→L2 接口生成（v0.6.5）**
    > 当 `layer_to=L2` 时，**必须同时生成** `docs/L2/interfaces.md`
    
    - 识别跨模块交互（L2 modules 之间的 API/Event/Data 依赖）
@@ -874,5 +874,4 @@ Charter → L0 的完整门禁检查：
 | **Risks 覆盖** | `risks[]` 100% 映射到 REQ-L0-RISK-* | ✅ |
 | **Dependencies 覆盖** | `dependencies.*[]` 100% 映射到 REQ-L0-DEP-* | ✅ |
 | **Contracts 覆盖** | `*_contract` 100% 映射到 IFC/TBD | ✅ |
-
 

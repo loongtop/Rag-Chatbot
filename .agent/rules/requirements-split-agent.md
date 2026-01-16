@@ -12,7 +12,7 @@ model: sonnet
 
 > 设计目标：验证工程架构的可用性——从 `charter.yaml` → L0 → L1 → L2(+interfaces) 的拆分链路稳定、可重复、可审计。
 >
-> v0.6.0 约定：**L0-L2 是需求文档层**；模块间接口契约在 **L2 统一产出**（`docs/L2/interfaces.md`）；实现粒度由 `/spec` 继续分解。
+> v0.6.5 约定：**L0-L2 是需求文档层**；模块间接口契约在 **L2 统一产出**（`docs/L2/interfaces.md`）；实现粒度由 `/spec` 继续分解。
 
 ## 核心职责
 

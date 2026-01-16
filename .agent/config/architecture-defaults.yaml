@@ -1,4 +1,4 @@
-# Architecture Defaults Configuration (CAF v0.6.3)
+# Architecture Defaults Configuration (CAF v0.6.5)
 #
 # This file defines default values for architecture templates.
 # Projects can override these values by creating a project-level
@@ -8,7 +8,7 @@
 #   {{embedding.dim}} → 1536
 #   {{embedding.model}} → text-embedding-ada-002
 
-schema_version: "v0.6.3"
+schema_version: "v0.6.5"
 
 # -----------------------------------------------------------------------------
 # Embedding Configuration

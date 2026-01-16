@@ -2,83 +2,27 @@
 # ⚠️ DEPRECATED - Quality Standards Configuration (Legacy)
 # =============================================================================
 #
-# DEPRECATED: 此文件已弃用，仅保留用于向后兼容。
+# DEPRECATED: 此文件已弃用，仅保留用于向后兼容（提供默认门禁阈值与迁移指引）。
 #
-# 新项目应通过 `charter.yaml` 中的 language_profile 选择语言配置：
-#   - `.agent/config/quality.python.yaml` (Python)
-#   - `.agent/config/quality.cpp.yaml` (C++)
-#   - `.agent/config/quality.java.yaml` (Java)
-#   - `.agent/config/quality.swift.yaml` (Swift)
+# 新项目应使用语言配置文件（由 `charter.yaml` 的 `language_profile` 或 `components[].language_profile` 选择）：
+# - `.agent/config/quality.python.yaml`
+# - `.agent/config/quality.java.yaml`
+# - `.agent/config/quality.cpp.yaml`
+# - `.agent/config/quality.swift.yaml`
 #
-# 多组件/单体仓库项目应在 `charter.yaml` 中定义 `components`，并按组件运行检查。
-#
-# 此文件将在 v1.0.0 中移除。
+# 计划：此文件将在 v1.0.0 移除。
 # =============================================================================
 
 version: "0.1"
+deprecated: true
+removed_in: "v1.0.0"
 
-# 代码质量要求
-code_quality:
-  test_coverage:
-    minimum: 95
-    target: 100
-    
-  complexity:
-    max_cyclomatic: 10
-    max_cognitive: 15
-    max_function_lines: 50
-    max_file_lines: 500
-    
-  type_coverage: 100
-  
-  documentation:
-    docstrings: required
-    examples: recommended
+replaced_by:
+  python: ".agent/config/quality.python.yaml"
+  java: ".agent/config/quality.java.yaml"
+  cpp: ".agent/config/quality.cpp.yaml"
+  swift: ".agent/config/quality.swift.yaml"
 
-# 质量检查工具
-tools:
-  testing:
-    - name: pytest
-      command: "pytest --cov=src --cov-fail-under=95"
-      required: true
-      
-  linting:
-    - name: ruff
-      command: "ruff check src tests"
-      required: true
-      
-  type_checking:
-    - name: mypy
-      command: "mypy src"
-      required: true
-      
-  security:
-    - name: bandit
-      command: "bandit -r src"
-      required: true
-    - name: safety
-      command: "safety check"
-      required: false
-
-# 测试类型要求
-test_requirements:
-  functional: 2      # 最少 2 个功能测试
-  boundary: 4        # 最少 4 个边界测试
-  exception: 3       # 最少 3 个异常测试
-  performance: 1     # 最少 1 个性能测试
-
-# 审查清单
-review_checklist:
-  code_quality:
-    - "复杂度 ≤ 10"
-    - "无重复代码 (DRY)"
-    - "命名清晰"
-    - "单一职责 (SRP)"
-  security:
-    - "无硬编码密钥"
-    - "输入验证完整"
-    - "SQL注入防护"
-  performance:
-    - "无明显瓶颈"
-    - "适当缓存"
-    - "查询优化"
+defaults:
+  test_coverage_minimum: 95
+  complexity_limit: 10

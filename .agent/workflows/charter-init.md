@@ -6,6 +6,12 @@ description: Initialize a new Charter Framework project
 
 初始化一个新的 Charter Framework 项目。
 
+## 参数（可选）
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `profile` | string | (空) | SRS 章节 profile（用于生成 requirements 时减少 N/A 噪声），参见 `.agent/config/srs-profiles.yaml` |
+
 ## 步骤
 
 1. **创建项目目录结构**
@@ -38,6 +44,11 @@ description: Initialize a new Charter Framework project
 
 ```
 /charter-init
+```
+
+或选择 SRS profile：
+```
+/charter-init profile=rag-web
 ```
 
 然后按提示编辑 charter.yaml。

@@ -2,9 +2,11 @@
 
 三阶段开发方法论：从需求到架构到代码的自动化流程。
 
+> 本文侧重“方法论/设计原则”；按步骤操作请阅读仓库根目录的 `GETTING_STARTED.md`。
+
 ---
 
-## Three-Phase Model (v0.6.3)
+## Three-Phase Model (v0.6.5)
 
 ```
 Phase 1: Requirements (L0→L2)    Phase 1.5: Architecture    Phase 2: Specs    Phase 3: Code
@@ -55,11 +57,10 @@ integration
 | L0 | Charter | requirements.md, subtasks.md | `requirements.L0.template.md` | - |
 | L1 | Features | requirements.md, subtasks.md | `requirements.L1.template.md` | Optional |
 | L2 | Modules | requirements.md, **interfaces.md**, **execution-tracker.md** | `requirements.L2.template.md` + `interfaces.L2.template.md` | Optional |
-| SPEC | Specs | specs/*.md, specs/spec-tree.md | `spec.template.md` + `spec-tree.template.md` | Required |
 
-> 说明：L3（Function Spec / TDD）保留为 legacy 路径；推荐使用 `SPEC-*` 作为实现起点。
+> 说明：Phase 1 的终点是 L2。实现粒度由 Phase 2 的 Spec 树（`SPEC-*`）承接。
 
-### 自适应分解粒度（v0.6.0）
+### 自适应分解粒度（v0.6.5）
 
 ```yaml
 granularity 参数:
@@ -79,7 +80,7 @@ granularity 参数:
     "cross_deps": count_cross_module_dependencies(),
 }
 
-if scope_items > 20 OR components >= 3 OR cross_deps > 2:  # v0.6.0
+if scope_items > 20 OR components >= 3 OR cross_deps > 2:  # v0.6.5
     granularity = "full"
 elif scope_items > 10 OR components > 1:
     granularity = "medium"
@@ -156,6 +157,58 @@ E-commerce Platform (L0)
 
 ---
 
+## Phase 1.5: Architecture (v0.6.5)
+
+Phase 1.5 的目标是将 “L2 需求 + 接口契约” 变成 **可追溯、可验证、可落地的架构设计**，以避免从需求直接跳到实现的断层。
+
+**输入**：
+- `docs/L2/*/requirements.md`
+- `docs/L2/interfaces.md`
+- `charter.yaml`（技术边界与约束）
+
+**输出**（建议固定在 `docs/architecture/`）：
+- `overview.md`：组件边界、部署、信任边界、关键约束落地
+- `database-schema.md`：数据模型、索引/约束、迁移策略
+- `core-flows.md`：关键链路（如 RAG pipeline）、异常与降级
+- `api-spec.md`：鉴权、错误码、端点与契约摘要
+
+**溯源门禁（核心规则）**：
+- 每个 `ARCH-*` 必须包含 `sources[]`，指向 `REQ-L2-*` 或 `IFC-*`
+- 架构不得引入“无来源的新需求”；新增内容必须以 “设计决策/权衡” 形式表达，并绑定来源
+
+**工作流**：
+- 生成：`/architecture-generate`
+- 验证：`/architecture-validate`
+- 渲染（可选）：`/architecture-render`
+- A/B 对比（可选）：`/architecture-compare`
+
+---
+
+## Phase 2: Specs (Recursive)
+
+Phase 2 将 L2（以及架构）进一步分解为 **可直接实现的 leaf Spec**，并用 Spec 树把实现单元组织起来。
+
+**输入**：
+- L2 模块需求：`docs/L2/{module}/requirements.md`
+- 架构设计：`docs/architecture/*.md`
+- 或非 leaf Spec：`specs/SPEC-*.md`（继续递归）
+
+**输出**：
+- `specs/SPEC-*.md`：递归 Spec（含 leaf=true/false）
+- `specs/spec-tree.md`：树视图 + 覆盖矩阵（REQ-L2-* → SPEC-*）
+
+**leaf Spec 的定义（必须满足才可进入 Phase 3）**：
+- 接口/输入输出/错误语义明确（或明确 N/A）
+- 依赖与契约明确（引用 `docs/L2/interfaces.md`）
+- 可验收：包含可执行的验收标准/测试点
+- 可实现：范围可在一次小迭代/PR 内完成
+- 无阻塞性 TBD（impact=H），或给出明确 fallback
+
+**工作流**：
+- `/spec`（从 L2 或非 leaf Spec 递归分解）
+
+---
+
 ## Phase 3: Code Implementation
 
 从 leaf Spec 到代码与测试的实现流程。
@@ -176,9 +229,11 @@ integration_report.md (YAML 结构化)
 
 ---
 
-##（Legacy）TDD 模式（L3）
+## Legacy: TDD 模式（L3）
 
 如需 Function-level 的 TDD，可使用 legacy 的 L3 模板与流程；推荐优先使用 leaf Spec 替代。
+
+详情见：`.agent/docs/legacy/L3-tdd.md`（含模板与触发规则）。
 
 ---
 

@@ -1,0 +1,40 @@
+name: CAF Quality
+
+on:
+  push:
+    paths:
+      - "charter.yaml"
+      - "docs/**"
+      - "specs/**"
+      - ".agent/**"
+  pull_request:
+    paths:
+      - "charter.yaml"
+      - "docs/**"
+      - "specs/**"
+      - ".agent/**"
+  workflow_dispatch: {}
+
+jobs:
+  caf-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install CAF validator deps
+        run: python -m pip install --upgrade pip pyyaml jsonschema
+      - name: Validate CAF examples (schema + traceability)
+        run: |
+          python3 .agent/tools/caf_validate.py \
+            --strict \
+            --project-root .agent/examples/minimal \
+            --docs-dir .agent/examples/minimal/docs \
+            --arch-dir .agent/examples/minimal/docs/architecture
+
+          python3 .agent/tools/caf_validate.py \
+            --strict \
+            --project-root .agent/examples/medium \
+            --docs-dir .agent/examples/medium/docs \
+            --arch-dir .agent/examples/medium/docs/architecture

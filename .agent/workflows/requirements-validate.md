@@ -129,14 +129,14 @@ jobs:
 - [x] Traceability: 所有需求有 Source
 - [x] Acceptance: P0/P1 有验收条件
 - [x] Consistency: 无交叉引用错误
-- [x] Schema: 符合 v0.6.0 规范
+- [x] Schema: 符合 v0.6.5 规范
 ```
 
 ## Auto-Fix Capabilities (`--fix`)
 
 | Issue | Auto-Fix Action |
 |-------|----------------|
-| Missing `schema_version` | Add `schema_version: "v0.6.0"` |
+| Missing `schema_version` | Add `schema_version: "v0.6.5"` |
 | Missing `status` on requirements | Add `status: draft` |
 | Missing `tbd_refs: []` | Add empty array |
 | Empty `acceptance[]` on P2 | No fix (allowed) |

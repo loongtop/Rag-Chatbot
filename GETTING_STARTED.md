@@ -1,6 +1,11 @@
-# Charter Agent Framework v0.6.3 详细使用指南
+# Charter Agent Framework v0.6.5 详细使用指南
 
 本文档提供从零开始使用 Charter Agent Framework 实现软件的完整、详细步骤。
+
+> 入口建议：
+> - 只想按步骤落地：阅读本文件
+> - 想理解框架设计原则：阅读 `.agent/docs/methodology.md`
+> - 想快速查命令与参数：阅读 `.agent/docs/quick-ref.md`
 
 ---
 
@@ -26,17 +31,18 @@
 
 ### Step 1.3：获取 Charter Framework
 
-```bash
-# 方式 A：克隆仓库
-git clone https://github.com/loongtop/charter-agent-framework.git
+本仓库已内置 Charter Agent Framework v0.6.5 的核心文件（可直接使用）：
+- `.agent/`：规则、模板、工作流、Schema、工具与示例
+- `charter.template.yaml`：Charter 模板
+- `GETTING_STARTED.md`：本操作手册
 
-# 方式 B：下载 zip
-# 从 GitHub 下载并解压
-```
+如果你要在**另一个新项目**中使用 CAF，只需将上述文件复制到目标项目根目录即可。
 
 ---
 
 ## 第二部分：项目初始化
+
+> 如果你已经在一个包含 `.agent/` 的项目仓库中（例如本仓库），可跳过 Step 2.1–2.2，直接从 Step 2.3 或 Step 2.4 开始。
 
 ### Step 2.1：创建新项目目录
 
@@ -54,14 +60,12 @@ git init
 ### Step 2.2：复制框架文件到项目
 
 ```bash
-# 复制 .agent 目录（包含所有规则、模板、工作流）
-cp -r /path/to/charter-agent-framework/.agent .
+# 将 CAF 框架文件拷贝到你的新项目根目录（示例路径请替换）
+cp -r /path/to/CAF/.agent .
+cp /path/to/CAF/charter.template.yaml ./charter.yaml
 
-# 复制 charter 模板并重命名
-cp /path/to/charter-agent-framework/charter.template.yaml ./charter.yaml
-
-# （可选）复制入门指南
-cp /path/to/charter-agent-framework/GETTING_STARTED.md .
+# （可选）将本手册一并带走（也可直接阅读 CAF 仓库的最新版本）
+cp /path/to/CAF/GETTING_STARTED.md .
 ```
 
 ### Step 2.3：在 AI 编辑器中打开项目
@@ -92,6 +96,15 @@ my-awesome-project/
 ├── tests/            # Phase 3：测试代码
 └── charter.yaml      # 项目任务书
 ```
+
+### Step 2.5：（可选）快速自检“下一步该做什么”
+
+在终端运行：
+```bash
+bash .agent/tools/trigger-check.sh .
+```
+
+该脚本会根据当前产物状态给出推荐的下一步命令（例如提示先生成 Architecture 或先生成 Specs）。
 
 ---
 
@@ -256,7 +269,7 @@ freeze:
 
 ---
 
-## 第五部分：Phase 1 - 递归分解
+## 第五部分：Phase 1 - Requirements（L0→L2）
 
 ### Step 5.1：理解分解层级
 
@@ -267,9 +280,9 @@ freeze:
 | L2 | Modules | 子模块 | `requirements.L2.template.md` |
 | SPEC | Specs | 可实现规格（可递归） | `spec.template.md` |
 
-> **v0.6.0**: L0-L2 是需求文档层（L2 为终点）；实现粒度通过 `/spec` 递归分解到 leaf Spec。所有 requirements 模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
+> **v0.6.5**: L0-L2 是需求文档层（L2 为终点）；实现粒度通过 Phase 2 的 `/spec` 递归分解到 leaf Spec。所有 requirements 模板使用 Registry 块作为唯一事实源。生成后必须执行 `/requirements-render` + `/requirements-validate`。
 
-### Step 5.2：L0 分解（Charter → Features）
+### Step 5.2：L0 分解（Charter → L0 Requirements）
 
 告诉 AI：
 ```
@@ -299,7 +312,7 @@ freeze:
 1. 在 docs/L1/{功能名}/ 创建 requirements.md（使用 requirements.L1.template.md）
    - L0→L1 必须逐条映射（每条需求必须有 Source=REQ-L0-xxx）
 2. 创建 subtasks.md 列出 L2 子模块
-   - v0.6.0：L1 不产出模块间接口契约；接口在 L2 的 `docs/L2/interfaces.md` 统一定义
+   - v0.6.5：L1 不产出模块间接口契约；接口在 L2 的 `docs/L2/interfaces.md` 统一定义
 ```
 
 **检查产出**：
@@ -329,7 +342,16 @@ freeze:
 - `docs/L2/execution-tracker.md` - 进度追踪表
 - `docs/L2/{模块名}/split-report.md` - 拆分报告（覆盖矩阵、TBD）
 
-### Step 5.5：架构设计（L2 → Architecture）
+**Phase 1 完成条件（建议）**：
+- `docs/L0/requirements.md`（+ split-report + validate 通过）
+- `docs/L1/*/requirements.md`（如使用 L1）
+- `docs/L2/*/requirements.md` + `docs/L2/interfaces.md` + `docs/L2/execution-tracker.md`
+
+---
+
+## 第六部分：Phase 1.5 - Architecture（L2 → Architecture）
+
+### Step 6.1：生成架构设计（/architecture-generate）
 
 L2 完成后，先生成架构设计文档：
 ```
@@ -339,17 +361,32 @@ L2 完成后，先生成架构设计文档：
 这将生成：
 - docs/architecture/overview.md (系统概览)
 - docs/architecture/database-schema.md (数据库设计)
-- docs/architecture/core-flows.md (RAG Pipeline)
+- docs/architecture/core-flows.md (核心流程/关键链路)
 - docs/architecture/api-spec.md (API 规范)
 ```
 
 **检查产出**：
 - `docs/architecture/*.md` - 架构设计文档
-- 运行 `/architecture-validate` 验证追溯性
 
-### Step 5.6：/spec 递归分解（Architecture → Spec Tree）
+### Step 6.2：验证架构追溯（/architecture-validate）
 
-**前置条件**：`docs/architecture/*.md` 已生成
+```
+/architecture-validate
+```
+
+**版本改进验证（可选）**：不要重命名 `docs/`，用 `target_dir` 生成候选输出并对比：
+```
+/architecture-generate target_dir=docs/architecture.__candidate__
+/architecture-compare baseline_dir=docs/architecture candidate_dir=docs/architecture.__candidate__
+```
+
+---
+
+## 第七部分：Phase 2 - Specs（/spec 递归分解）
+
+### Step 7.1：生成 Spec Tree（Architecture → Specs）
+
+**前置条件**：`docs/architecture/*.md` 已生成，且对应模块的 `docs/L2/{模块名}/requirements.md` 已完成。
 
 **重要规则**：每次只推进一个 L2 模块（或一个非 leaf Spec）！
 
@@ -372,9 +409,9 @@ L2 完成后，先生成架构设计文档：
 
 ---
 
-## 第六部分：Phase 3 - 实现 leaf Specs
+## 第八部分：Phase 3 - Code & Tests（实现 leaf Specs）
 
-### Step 6.1：实现 leaf Spec（Coder）
+### Step 8.1：实现 leaf Spec（Coder）
 
 对于每个 `leaf: true` 且 `status: ready/done` 的 `specs/SPEC-*.md`，告诉 AI：
 ```
@@ -388,7 +425,7 @@ L2 完成后，先生成架构设计文档：
 - 包含类型注解和文档字符串
 - 代码复杂度 ≤ 10
 
-### Step 6.2：实现测试并运行（Tester）
+### Step 8.2：实现测试并运行（Tester）
 
 对于每个新生成的源代码，告诉 AI：
 ```
@@ -404,7 +441,7 @@ L2 完成后，先生成架构设计文档：
 - 测试运行通过
 - 覆盖率达标
 
-### Step 6.3：Gate 检查
+### Step 8.3：Gate 检查（/charter-quality）
 
 在 AI 对话框中输入：
 ```
@@ -423,18 +460,18 @@ L2 完成后，先生成架构设计文档：
 - 修复问题
 - 重新运行 `/charter-quality`
 
-### Step 6.6：更新进度
+### Step 8.4：更新进度并迭代
 
 1. 运行 `/charter-status` 查看整体进度
 2. 更新 `docs/L2/execution-tracker.md`，标记当前模块为完成
 3. 选择下一个 L2 模块
-4. 重复 Step 5.5 - Step 6.5
+4. 重复 Step 6.1 - Step 8.3
 
 ---
 
-## 第七部分：集成与完成
+## 第九部分：集成与完成
 
-### Step 7.1：Reviewer 代码审查
+### Step 9.1：Reviewer 代码审查
 
 当一个 L2 模块的所有函数都通过 Gate 后，告诉 AI：
 ```
@@ -443,7 +480,7 @@ L2 完成后，先生成架构设计文档：
 生成 review_report.md。
 ```
 
-### Step 7.2：Integrator 集成测试
+### Step 9.2：Integrator 集成测试
 
 当所有 L2 模块都审查通过后，告诉 AI：
 ```
@@ -462,7 +499,7 @@ Implementation_Report:
   gate_check: PASS
 ```
 
-### Step 7.3：最终验证
+### Step 9.3：最终验证
 
 ```
 /charter-status
@@ -492,9 +529,10 @@ Phase 3: Code ✅ → Tests ✅
 | `/requirements-split` | 每次层级迁移前 | 生成 split-report.md（溯源覆盖矩阵） |
 | `/requirements-render` | 生成 requirements.md 后 | 从 Registry 渲染正文+附录 |
 | `/requirements-validate` | 生成 requirements.md 后 | 覆盖率/溯源/可验收检查 |
-| `/architecture-generate` | L2 完成后 | 生成 docs/architecture/*.md (v0.6.3) |
-| `/architecture-validate` | 架构生成后 | 验证架构追溯性 (v0.6.3) |
-| `/architecture-render` | 架构更新后 | 渲染 OpenAPI/ADR (v0.6.3) |
+| `/architecture-generate` | L2 完成后 | 生成 docs/architecture/*.md (v0.6.5) |
+| `/architecture-validate` | 架构生成后 | 验证架构追溯性 (v0.6.5) |
+| `/architecture-render` | 架构更新后 | 渲染 OpenAPI/ADR (v0.6.5) |
+| `/architecture-compare` | 架构 A/B 对比时 | 对比两次架构输出（不改 docs/） |
 | `/spec` | 架构完成后 | 生成 specs/SPEC-*.md + specs/spec-tree.md |
 
 ---
@@ -597,3 +635,22 @@ my-awesome-project/
 - 覆盖率不足 → 添加更多测试
 - Linting 失败 → 按规范修正代码
 - 类型检查失败 → 补充类型注解
+
+### Q5: 不确定下一步该跑什么命令？
+
+运行本地自检工具（只读，不会修改文件）：
+```bash
+bash .agent/tools/trigger-check.sh .
+```
+
+它会根据当前目录下的产物（L0/L1/L2、Architecture、Specs、src/tests）给出推荐的下一步工作流。
+
+---
+
+## 附录 E：端到端示例项目
+
+示例目录：`.agent/examples/`
+
+- `minimal/`：最小端到端示例（含 `src/` + `tests/`）
+- `medium/`：中等复杂度示例（多模块 + interfaces + architecture + specs）
+- `enterprise/`：多组件/多语言 Charter 示例（侧重 components 结构）

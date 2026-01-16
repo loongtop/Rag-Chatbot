@@ -1,6 +1,6 @@
 ---
 description: Generate architecture design documents from L2 requirements and interfaces
-version: v0.6.3
+version: v0.6.5
 ---
 
 # /architecture-generate
@@ -98,6 +98,9 @@ vector:
 
 # 指定输出目录
 /architecture-generate target_dir=docs/design
+
+# A/B 对比：生成候选输出（不重命名 docs/）
+/architecture-generate target_dir=docs/architecture.__candidate__
 ```
 
 ## Gate Check 规则

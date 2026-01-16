@@ -6,10 +6,10 @@ layer_to: L2
 parent: docs/L1/
 target: docs/L2/
 granularity: full
-caf_version: v0.6.2
+caf_version: v0.6.5
 ---
 
-# Split Report: L1 → L2 (v0.6.2)
+# Split Report: L1 → L2 (v0.6.5)
 
 ## 1. Summary
 

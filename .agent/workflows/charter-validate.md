@@ -6,6 +6,12 @@ description: Validate charter.yaml format and completeness
 
 验证 charter.yaml 的格式和完整性。
 
+## 参数（可选）
+
+| 参数 | 类型 | 默认值 | 说明 |
+|------|------|--------|------|
+| `charter_path` | string | `charter.yaml` | Charter 文件路径 |
+
 ## 步骤
 
 1. **读取 charter.yaml**

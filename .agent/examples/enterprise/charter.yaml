@@ -1,0 +1,52 @@
+meta:
+  id: "EX-ENT-20260116-001"
+  name: "enterprise-demo"
+  owner: "Example"
+  version: "0.1"
+
+objective:
+  problems:
+    - "[PROB-001] 多团队协作下需求与交付物难以对齐"
+  business_goals:
+    - "[GOAL-001] 通过溯源与门禁降低返工成本"
+
+scope:
+  must_have:
+    - "[SCOPE-MH-001] 提供 Web UI + Backend API + Core Engine 的端到端能力"
+  out_of_scope:
+    - "[SCOPE-OOS-001] 不做本示例范围外的产品细节"
+
+deliverables:
+  mandatory:
+    - "[DELIV-001] docs/spec/code 产物可追溯"
+
+quality_requirements:
+  code:
+    test_coverage: "95%"
+    type_coverage: "100%"
+    complexity_limit: 10
+    documentation: "required"
+
+components:
+  - name: "backend-api"
+    language_profile: python
+    path: "services/backend-api"
+  - name: "web-ui"
+    language_profile: java
+    path: "apps/web-ui"
+  - name: "core-engine"
+    language_profile: cpp
+    path: "libs/core-engine"
+  - name: "ios-app"
+    language_profile: swift
+    path: "apps/ios-app"
+
+traceability:
+  mode: "strict"
+
+freeze:
+  frozen: true
+  checksum: "0000000000000000000000000000000000000000000000000000000000000000"
+  frozen_at: "2026-01-16T00:00:00Z"
+  frozen_by: "Example"
+

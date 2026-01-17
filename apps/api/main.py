@@ -90,12 +90,20 @@ def create_app() -> FastAPI:
     setup_middleware(app)
     setup_exception_handlers(app)
     
-    # Register routers
-    # TODO: Add routers as they are implemented
-    # from apps.api.api.chat import router as chat_router
-    # from apps.api.api.admin import router as admin_router
-    # app.include_router(chat_router, prefix="/api")
-    # app.include_router(admin_router, prefix="/api/admin")
+    # Register API routers
+    from apps.api.api.chat import router as chat_router
+    from apps.api.api.auth import router as auth_router
+    from apps.api.api.handoff import router as handoff_router
+    from apps.api.api.voice import router as voice_router
+    from apps.api.api.upload import router as upload_router
+    from apps.api.api.admin import router as admin_router
+    
+    app.include_router(chat_router, prefix="/api")
+    app.include_router(auth_router, prefix="/api")
+    app.include_router(handoff_router, prefix="/api")
+    app.include_router(voice_router, prefix="/api")
+    app.include_router(upload_router, prefix="/api")
+    app.include_router(admin_router, prefix="/api")
     
     # Health check endpoint
     @app.get("/health", tags=["health"])

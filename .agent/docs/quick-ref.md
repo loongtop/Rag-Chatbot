@@ -22,6 +22,8 @@
 | `/architecture-render` | Registry → Body/OpenAPI/ADR (v0.6.5) | `source_path=... output_type=body/openapi/adr` |
 | `/architecture-compare` | A/B compare two architecture outputs | `baseline_dir=... candidate_dir=... type=... strict=...` |
 | `/spec` | Architecture → Spec tree (requires docs/architecture) | `source_path=... target_dir=... mode=create/refine` |
+| `/test` | Run tests via tester-agent (v0.6.5) | `mode=full/design/generate/run/report` |
+| `/review` | Code review via reviewer-agent (v0.6.5) | `mode=full/lint/security` |
 
 ## Local Tools
 
@@ -93,7 +95,7 @@
 | Spec | L2 requirements done | specs/*.md, specs/spec-tree.md |
 | Designer | leaf Spec ready (optional) | design.md |
 | Coder | leaf Spec ready (or design.md done) | src/**/* |
-| Tester (P2) | src/**/* exists | tests/**/* (实现+执行) |
+| Tester | `/test` or "测试" keyword | 调用 modules (design→generate→run→report) |
 | Reviewer | tests passed | review_report.md |
 | Integrator | all subtasks done | integration_report.md |
 

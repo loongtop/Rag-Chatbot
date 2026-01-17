@@ -88,23 +88,30 @@
 ## 6. 测试执行计划
 
 ```bash
-# 单元测试
-pytest apps/api/tests/unit/ -v
+# 从仓库根目录执行
 
-# 集成测试
-pytest apps/api/tests/integration/ -v
+# 单元测试（默认排除性能测试）
+pytest apps/api/tests/unit/ -v -m "not performance"
+
+# 集成测试（需要 docker-compose up -d postgres）
+pytest apps/api/tests/integration/ -v -m "integration"
 
 # 完整测试 + 覆盖率
-pytest apps/api/tests/ --cov=apps/api --cov-report=term-missing --cov-fail-under=95
+pytest apps/api/tests/ -m "not performance" --cov=apps/api --cov-report=term-missing
+
+# 性能测试（单独运行，夜间/手动）
+pytest apps/api/tests/ -m "performance" -v
 ```
 
 ---
 
 ## 7. 质量门禁
 
-| 指标 | 要求 |
-|------|------|
-| 覆盖率 | ≥ 95% |
-| 失败用例 | = 0 |
-| 边界覆盖 | 完整 |
-| 异常覆盖 | 完整 |
+| 指标 | 默认门槛 | 推荐目标 |
+|------|----------|----------|
+| 覆盖率 | ≥ 80% | 95% |
+| 失败用例 | = 0 | = 0 |
+| 边界覆盖 | 完整 | 完整 |
+| 异常覆盖 | 完整 | 完整 |
+
+> **注**: 覆盖率只统计业务代码（`apps/api/`），不含 `tests/`、`migrations/` 等

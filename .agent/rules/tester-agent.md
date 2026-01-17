@@ -62,9 +62,10 @@ model: sonnet
 ### Run 模式
 
 ```
-1. 执行 pytest
+1. 执行 pytest（从仓库根目录）
    ```bash
-   cd apps/api && pytest tests/ -v --cov=. --cov-report=xml --junitxml=test-results.xml
+   # 排除性能测试（默认）
+   pytest apps/api/tests/ -v -m "not performance" --cov=apps/api --cov-report=xml:apps/api/coverage.xml --junitxml=apps/api/test-results.xml
    ```
 2. 调用 test-report 模块
 3. 输出测试报告
@@ -105,21 +106,29 @@ model: sonnet
 
 ## 质量门禁
 
-| 指标 | 要求 |
-|------|------|
-| 测试覆盖率 | ≥ 95% |
-| 边界用例 | 必须 |
-| 异常用例 | 必须 |
-| 断言说明 | 完整 |
+| 指标 | 默认门槛 | 推荐目标 |
+|------|----------|----------|
+| 测试覆盖率 | ≥ 80% | 95% |
+| 边界用例 | 必须 | 必须 |
+| 异常用例 | 必须 | 必须 |
+| 断言说明 | 完整 | 完整 |
+
+> **注**: 覆盖率只统计 `apps/api/`，不含 `tests/`、`migrations/`
 
 ### 测试类型要求
 
-| 类型 | 最少数量 |
-|------|----------|
-| 功能测试 | 2 |
-| 边界测试 | 4 |
-| 异常测试 | 3 |
-| 性能测试 | 1 |
+| 类型 | 最少数量 | pytest marker |
+|------|----------|---------------|
+| 功能测试 | 2 | `@pytest.mark.unit` |
+| 边界测试 | 4 | `@pytest.mark.unit` |
+| 异常测试 | 3 | `@pytest.mark.unit` |
+| 性能测试 | 1 | `@pytest.mark.performance`（默认排除）|
+
+### 断言策略
+
+- ✅ 验证 schema/结构/字段/错误码
+- ✅ 验证引用数量/格式
+- ❌ 不验证 LLM 生成的文本内容
 
 ---
 

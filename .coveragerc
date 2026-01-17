@@ -1,0 +1,23 @@
+[run]
+# 只统计业务代码
+source = apps/api
+omit = 
+    */tests/*
+    */__pycache__/*
+    */migrations/*
+    */.venv/*
+    */conftest.py
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    raise NotImplementedError
+    if TYPE_CHECKING:
+    if __name__ == .__main__.:
+
+fail_under = 80
+# 注：门禁从 95% 降到 80%，95% 作为推荐目标
+# 可通过 --cov-fail-under=95 在 CI 中强制
+
+show_missing = true

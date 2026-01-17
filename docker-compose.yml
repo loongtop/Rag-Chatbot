@@ -1,0 +1,65 @@
+# Docker Compose for RAG Chatbot Development
+# 
+# Usage:
+#   docker-compose up -d postgres redis
+#   (then run the API server locally)
+
+services:
+  # PostgreSQL with pgvector extension
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: ragchat-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ragchat
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and rate limiting (optional for dev)
+  redis:
+    image: redis:7-alpine
+    container_name: ragchat-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # API Server (optional - for containerized development)
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+    container_name: ragchat-api
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ragchat
+      REDIS_URL: redis://redis:6379
+      DEBUG: "true"
+      ENVIRONMENT: dev
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./apps/api:/app
+    command: uvicorn apps.api.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  postgres_data:
+  redis_data:

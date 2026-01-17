@@ -8,8 +8,8 @@
 
 ## 输入
 
-- `test-results.xml`（JUnit XML）
-- `coverage.xml`（Coverage XML）
+- `apps/{component}/test-results.xml`（JUnit XML）
+- `apps/{component}/coverage.xml`（Coverage XML）
 - pytest 终端输出
 
 ## 输出

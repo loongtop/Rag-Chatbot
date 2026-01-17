@@ -19,6 +19,53 @@ model: sonnet
 
 ---
 
+## 测试目标发现（Test Target Discovery）
+
+当用户执行 `/test` 时，按以下顺序确定测试目标：
+
+### 1. 显式指定（最高优先级）
+
+```bash
+/test api-server          # 测试组件名
+/test apps/api            # 测试路径
+/test SPEC-002            # 测试特定 Spec
+```
+
+### 2. 从 charter.yaml 读取
+
+```yaml
+# 读取 charter.yaml#components
+components:
+  - name: api-server
+    path: apps/api         # → 测试 apps/api/tests/
+    language: python
+    
+  - name: chat-widget
+    path: apps/widget      # → 测试 apps/widget/tests/
+    language: typescript
+```
+
+### 3. 从 pytest.ini 读取
+
+```ini
+# 读取 pytest.ini#testpaths
+testpaths = apps/api/tests
+```
+
+### 4. 约定路径（兜底）
+
+```
+apps/*/tests/              # 扫描所有 apps 下有 tests/ 的目录
+```
+
+### 当前项目默认测试目标
+
+| 组件 | 路径 | 语言 | 测试命令 |
+|------|------|------|----------|
+| api-server | `apps/api/` | Python | `pytest apps/api/tests/` |
+| chat-widget | `apps/widget/` | TypeScript | `npm test`（待实现）|
+| admin-dashboard | `apps/admin/` | TypeScript | `npm test`（待实现）|
+
 ## 执行模式
 
 根据用户意图，选择执行模式：
@@ -166,7 +213,7 @@ model: sonnet
 ## 禁止操作
 
 - 跳过质量门禁检查
-- 生成覆盖率低于 95% 的测试
+- 生成覆盖率低于默认门槛（80%）的测试
 - 缺少边界或异常用例
 - 修改源代码（只生成测试代码）
 

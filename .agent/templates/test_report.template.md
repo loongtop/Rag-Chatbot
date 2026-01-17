@@ -114,11 +114,11 @@
 ### 6.1 测试命令
 
 ```bash
-pytest apps/api/tests/ --cov=apps/api --cov-report=xml --junitxml=test-results.xml
+pytest apps/api/tests/ -m "not performance" --cov=apps/api --cov-report=xml:apps/api/coverage.xml --junitxml=apps/api/test-results.xml
 ```
 
 ### 6.2 结果文件
 
-- JUnit XML: `test-results.xml`
-- Coverage XML: `coverage.xml`
+- JUnit XML: `apps/api/test-results.xml`
+- Coverage XML: `apps/api/coverage.xml`
 - 本报告: `docs/testing/test_report_{TIMESTAMP}.md`

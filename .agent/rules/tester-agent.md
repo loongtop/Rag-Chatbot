@@ -84,11 +84,29 @@ apps/*/tests/              # 扫描所有 apps 下有 tests/ 的目录
 
 ### Full 模式（完整流程）
 
+> ⚠️ 注意：`/test` 会生成测试代码，建议按以下门禁顺序执行
+
+**推荐顺序（需生成测试时）**:
 ```
-1. 调用 test-design 模块 → 生成测试计划
-2. 调用 test-generate 模块 → 生成测试代码
-3. 执行 pytest → 运行测试
-4. 调用 test-report 模块 → 生成报告
+/test design      → 生成测试计划
+/test generate    → 生成测试代码
+/review           → 审查源代码 + 测试代码
+/test run         → 运行测试
+```
+
+**快速顺序（仅运行已有测试）**:
+```
+/review           → 审查源代码
+/test run         → 运行测试
+```
+
+**`/test` 一键执行时的内部流程**:
+```
+1. test-design 模块 → 生成测试计划
+2. test-generate 模块 → 生成测试代码
+3. [提醒] 建议运行 /review 审查新生成的测试代码
+4. pytest → 运行测试
+5. test-report 模块 → 生成报告
 ```
 
 ### Design 模式

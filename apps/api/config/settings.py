@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     app_name: str = "RAG Chatbot API"
     app_version: str = "0.1.0"
     debug: bool = False
-    environment: Literal["dev", "staging", "production"] = "dev"
+    environment: Literal["dev", "staging", "production", "test"] = "dev"
 
     # ==========================================================================
     # Server

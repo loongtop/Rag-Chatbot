@@ -36,6 +36,10 @@ description: 测试流程 - 激活 tester-agent 执行测试
 /review           → 审查源代码
 /test run         → 运行测试
 ```
+
+## 示例
+
+```
 /test                    → 完整流程
 /test design SPEC-002    → 为 SPEC-002 设计测试
 /test run                → 运行现有测试

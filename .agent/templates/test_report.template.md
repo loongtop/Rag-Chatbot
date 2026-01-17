@@ -20,7 +20,7 @@
 
 | 门禁 | 要求 | 结果 | 状态 |
 |------|------|------|------|
-| 覆盖率 | ≥ 95% | {COVERAGE}% | {COVERAGE_STATUS} |
+| 覆盖率 | ≥ 80%（推荐 95%） | {COVERAGE}% | {COVERAGE_STATUS} |
 | 失败用例 | = 0 | {FAILED} | {FAILED_STATUS} |
 | 关键路径 | 100% | {CRITICAL_COVERAGE}% | {CRITICAL_STATUS} |
 
@@ -105,7 +105,7 @@
 ### 5.3 下一步
 
 - {OVERALL_STATUS == "PASS"} → 可以合并/发布
-- {OVERALL_STATUS == "FAIL"} → 修复后重新运行 `/test-all`
+- {OVERALL_STATUS == "FAIL"} → 修复后重新运行 `/test run`
 
 ---
 

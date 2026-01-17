@@ -21,13 +21,18 @@ model: sonnet
 
 ### Charter Freeze 检查
 
-- 如果 `charter.yaml` 的 `frozen: false`，提醒用户先执行 `/charter-freeze`
+- 如果 `charter.yaml#freeze.frozen: false`，提醒用户先执行 `/charter-freeze`
 
 ### Design 检查
 
 - 若输入为 `design.md`：检查 `status` 是否为 `done`
-- 若输入为 leaf Spec：检查 frontmatter 中 `leaf: true` 且 `status: ready|done`
+- 若输入为 leaf Spec：检查 frontmatter 中 `leaf: true` 且 `status: ready|done|draft`*
 - 若两者都不存在：提示先完成 `/spec`（或完成设计）
+
+> \* **关于 draft 状态**：若 Spec 仍为 `status: draft`，需满足以下条件方可实现：
+> - Leaf Checklist 已手动确认（各项无阻塞）
+> - 用户明确指定该 Spec
+> - 实现完成后应将 Spec 状态更新为 `done`
 
 ## 质量标准
 
@@ -101,7 +106,8 @@ model: sonnet
 
 ## 边界与限制
 
-- 只根据 design.md 生成代码，不修改设计
+- 根据 **leaf Spec**（推荐）或 design.md（可选）生成代码，不修改源文档
+- 若需变更接口契约，先更新 `docs/L2/interfaces.md`，再改代码
 - 不负责测试生成（由 Tester Agent 负责）
 - 不负责代码审查（由 Reviewer Agent 负责）
 - 遵循项目结构，不擅自改变目录组织

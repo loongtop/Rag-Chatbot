@@ -15,6 +15,7 @@ caf_version: v0.6.5
 ```requirements-registry
 schema_version: "v0.6.5"
 layer: L2
+parent: "docs/L1/split-report.md"
 component: "chat-widget"
 profile: "typescript"
 

@@ -14,6 +14,7 @@ caf_version: v0.6.5
 ```requirements-registry
 schema_version: "v0.6.5"
 layer: L1
+parent: "docs/L0/requirements.md"
 feature: "prdrec"
 
 requirements:

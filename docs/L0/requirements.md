@@ -839,18 +839,26 @@ tbds:
 # Exclusions
 # -----------------------------------------------------------------------------
 exclusions:
-  - source: "SCOPE-OOS-001"
-    reason: "不做完整认证/账号体系（仅提供邮箱验证码登录）"
-    category: scope
-  - source: "SCOPE-OOS-002"
-    reason: "订单处理和支付功能"
-    category: scope
-  - source: "SCOPE-OOS-005"
-    reason: "知识库自动爬取/同步（V0.1 仅手动上传）"
+  - source:
+      id: "SCOPE-OOS-001"
+      path: "charter.yaml#scope.out_of_scope[0]"
+    reason: "不做完整认证/账号体系，v0.1 仅提供邮箱验证码登录作为最小能力。"
+    category: out_of_scope
+  - source:
+      id: "SCOPE-OOS-002"
+      path: "charter.yaml#scope.out_of_scope[1]"
+    reason: "订单处理与支付不在 v0.1 范围，避免引入交易合规与支付对接成本。"
+    category: out_of_scope
+  - source:
+      id: "SCOPE-OOS-005"
+      path: "charter.yaml#scope.out_of_scope[2]"
+    reason: "知识库自动爬取/同步推迟到后续版本，v0.1 仅支持手动上传与替换。"
     category: deferred
-  - source: "SCOPE-OOS-006"
-    reason: "自建 LLM 训练"
-    category: scope
+  - source:
+      id: "SCOPE-OOS-006"
+      path: "charter.yaml#scope.out_of_scope[3]"
+    reason: "不做自建 LLM 训练，v0.1 采用可配置的在线或本地推理服务即可。"
+    category: out_of_scope
 ```
 
 ## — END REGISTRY —

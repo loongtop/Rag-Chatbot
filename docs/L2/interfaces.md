@@ -38,6 +38,7 @@ interfaces:
         request:
           - "message: string"
           - "session_id?: string"
+          - "language?: 'zh' | 'en' (default: 'zh')"
           - "context?: { productId?, skuId?, url? }"
         response:
           - "answer: string"
@@ -50,6 +51,7 @@ interfaces:
         request:
           - "query: string"
           - "top_n?: number (default: 3)"
+          - "language?: 'zh' | 'en' (default: 'zh')"
         response:
           - "products: Product[]"
           - "reasons: string[]"
@@ -59,6 +61,7 @@ interfaces:
         description: "产品比较"
         request:
           - "product_ids: string[] (2-4)"
+          - "language?: 'zh' | 'en' (default: 'zh')"
         response:
           - "comparison: ComparisonTable"
         
@@ -87,6 +90,15 @@ interfaces:
           - "session_id: string"
         response:
           - "queue_position: number"
+
+      - method: GET
+        path: "/api/handoff/queue"
+        description: "查询转接队列状态"
+        request:
+          - "session_id: string"
+        response:
+          - "status: 'pending' | 'active' | 'resolved' | 'cancelled' | 'timeout'"
+          - "queue_position?: number"
         
       - method: POST
         path: "/api/voice/stt"
@@ -111,6 +123,7 @@ interfaces:
           - "file: File"
         response:
           - "extracted_content: string"
+          - "document_id?: string"
 
   # ===========================================================================
   # IFC-ADMIN-API: Admin Dashboard ↔ API Server
@@ -148,6 +161,16 @@ interfaces:
           - "file: File"
         response:
           - "doc_id: string"
+
+      - method: GET
+        path: "/api/admin/docs"
+        description: "查询文档列表"
+        request:
+          - "query?: string"
+          - "page?: number"
+        response:
+          - "docs: Document[]"
+          - "total: number"
         
       - method: POST
         path: "/api/admin/index/rebuild"
@@ -167,14 +190,28 @@ interfaces:
         description: "客服队列"
         response:
           - "queue: HandoffRequest[]"
-        
+
       - method: POST
-        path: "/api/admin/handoff/:id/accept"
+        path: "/api/admin/handoff/{id}/accept"
         description: "接入对话"
+        response:
+          - "status: 'active'"
         
       - method: POST
-        path: "/api/admin/handoff/:id/complete"
+        path: "/api/admin/handoff/{id}/complete"
         description: "完成对话"
+        response:
+          - "status: 'resolved'"
+
+      - method: GET
+        path: "/api/admin/logs"
+        description: "操作审计日志"
+        request:
+          - "scope?: string"
+          - "page?: number"
+        response:
+          - "logs: AuditLog[]"
+          - "total: number"
 
   # ===========================================================================
   # IFC-PRODUCT-DATA: 产品数据契约

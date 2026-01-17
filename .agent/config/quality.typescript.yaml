@@ -1,0 +1,43 @@
+# TypeScript Quality Profile
+language: typescript
+version: "5.0+"
+
+source:
+  extensions: [".ts", ".tsx"]
+  structure: |
+    apps/{component}/src/
+    ├── components/
+    │   └── {Component}.tsx
+    ├── pages/
+    │   └── {Page}.tsx
+    ├── api/
+    │   └── {endpoint}.ts
+    ├── hooks/
+    │   └── use{Hook}.ts
+    ├── utils/
+    │   └── {util}.ts
+    └── index.tsx
+
+test:
+  extensions: [".test.ts", ".test.tsx", ".spec.ts"]
+  structure: |
+    apps/{component}/tests/
+    ├── unit/{module}.test.ts
+    ├── integration/{feature}.test.ts
+    └── e2e/{flow}.spec.ts
+
+commands:
+  test: "npm test -- --coverage --coverageThreshold='{\"global\":{\"branches\":95,\"functions\":95,\"lines\":95}}'"
+  lint: "eslint src --ext .ts,.tsx"
+  typecheck: "tsc --noEmit"
+  security: "npm audit"
+
+dependencies:
+  install: "npm install --save-dev typescript eslint @typescript-eslint/parser @typescript-eslint/eslint-plugin jest @types/jest ts-jest"
+
+style:
+  guide: "Airbnb TypeScript"
+  linter: "eslint"
+  type_annotations: required
+  docstrings: "JSDoc recommended"
+  formatter: "prettier"

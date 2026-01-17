@@ -15,6 +15,7 @@ caf_version: v0.6.5
 ```requirements-registry
 schema_version: "v0.6.5"
 layer: L2
+parent: "docs/L1/split-report.md"
 component: "admin-dashboard"
 profile: "typescript"
 
@@ -71,7 +72,7 @@ requirements:
       - id: "REQ-L1-HANDOFF-001"
         path: "docs/L1/handoff/requirements.md#REQ-L1-HANDOFF-001"
     acceptance:
-      - "队列列表"
+      - "客服队列列表"
       - "接入对话功能"
       - "对话完成标记"
     status: draft

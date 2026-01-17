@@ -1,6 +1,6 @@
 ---
 name: "test-generator"
-description: "根据 design.md 和生成的代码自动生成测试用例。当用户说\"生成测试\"、\"写测试\"时自动触发。"
+description: "根据测试计划、leaf Spec 或 design.md 自动生成测试用例。当用户说\"生成测试\"、\"写测试\"时自动触发。"
 trigger_keywords:
   - "生成测试"
   - "写测试"
@@ -10,18 +10,19 @@ trigger_keywords:
 
 # Test Generator Skill
 
-根据设计文档和生成的代码自动生成测试。
+根据测试计划、leaf Spec 或 design.md 自动生成测试代码。
 
-## 触发条件
+## 触发条件（按优先级）
 
-- `design.md` 存在且 `status=done`
-- 代码文件已生成
-- 或用户明确要求"生成测试"、"写测试"
+1. **优先**: `docs/testing/test_plan_*.md` 存在（由 `test-designer` 生成）
+2. **次选**: leaf Spec 存在 (`specs/SPEC-*.md`, `leaf: true`) 且有 Acceptance Tests
+3. **备选**: `design.md` 存在且 `status=done`
+4. 或用户明确要求"生成测试"、"写测试"
 
 ## 前置检查
 
-1. 检查 `design.md` 的 `Test Spec` 部分是否完整
-2. 如果 Test Spec 为空，提示先完成 Test Spec
+1. 检查输入源是否存在
+2. 检查代码文件是否已生成
 3. 检查测试目录结构
 
 ## 执行步骤

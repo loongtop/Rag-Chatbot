@@ -213,6 +213,8 @@ Phase 2 将 L2（以及架构）进一步分解为 **可直接实现的 leaf Spe
 
 从 leaf Spec 到代码与测试的实现流程。
 
+> **详细指南**：参见 [implementation-strategy.md](implementation-strategy.md) 了解"三段式实现策略"（约束对齐 → 骨架落地 → Leaf 巡检/拆分 → 编码循环）。
+
 ```
 leaf Spec (`specs/SPEC-*.md`, leaf=true)
     ↓ (optional) Designer

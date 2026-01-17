@@ -155,6 +155,7 @@ Gate_Check:
 5. **Gate Check**: 每个模块完成后检查
 6. **Traceability First**: 先写 `split-report.md`，再写 requirements/interfaces（每条都要 Source）
 7. **Render + Validate**: 完成后执行 `/requirements-render` + `/requirements-validate`
+8. **Three-Phase Implementation**: 进入 Phase 3 前参见 [implementation-strategy.md](implementation-strategy.md)
 
 ---
 
